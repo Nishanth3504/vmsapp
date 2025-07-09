@@ -1,0 +1,202 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      {{ (isEditMode ? 'EDIT_FOLLOW_UP_REQUEST' : 'CREATE_FOLLOW_UP_REQUEST') | translate }}
+    </ion-title>
+    <ion-buttons class="userIcon" slot="end" routerLink="/followup-list">
+      <ion-img src="assets/images/view-complaint-white.svg"></ion-img>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="createViolationWrapp formStackedStyles m-top" [fullscreen]="true" overflow-scroll="true" scroll=true
+  has-bouncing="true">
+
+
+
+  <form [formGroup]="followupform">
+    <!-- class="complaintContentcard" -->
+    <ion-card>
+      <ion-card-content class="createViolationGrid-column">
+        <ion-grid>
+
+
+          <ion-item class="no-ripple">
+            <ion-label position="stacked">{{'NAME' | translate}} *</ion-label>
+            <ion-input placeholder=" {{'ENTER' | translate}} {{'NAME' | translate}} " formControlName="name"
+              [ngClass]="{ 'is-invalid ': (!submitted && form.name.errors) || (form.name.touched && form.name.errors) } ">
+            </ion-input>
+          </ion-item>
+          <div *ngIf="!submitted||(form.name.touched && form.name.invalid)">
+            <small class="form-text error-message" *ngIf="form.name.errors"> {{'NAME' | translate}} {{'IS_REQUIRED' | translate}} </small>
+          </div>
+
+          <ion-item>
+            <ion-label position="stacked"> {{'MOBILE_NUMBER' | translate}} *</ion-label>
+            <ion-input type="tel" maxlength="10" placeholder="{{'ENTER' | translate}} {{'MOBILE_NUMBER' | translate}}" formControlName="mobile_no"
+              [ngClass]="{ 'is-invalid ': (!submitted && form.mobile_no.errors) || (form.mobile_no.touched && form.mobile_no.errors) } ">
+            </ion-input>
+          </ion-item>
+          <div *ngIf="!submitted||(form.mobile_no.touched && form.mobile_no.invalid)">
+            <small class="form-text error-message" *ngIf="form.mobile_no.errors"> {{'MOBILE_NUMBER' | translate}} {{'IS_REQUIRED' | translate}}</small>
+          </div>
+
+          <ion-item class="no-ripple">
+            <ion-label position="stacked"> {{'AREA_NAME' | translate}} *</ion-label>
+            <ionic-selectable #areaChangeComponent 
+            formControlName="area" 
+            [modalCssClass]="setLanguage==='ar' ? 'ar' : ''"
+            [items]="listAreas" 
+            itemValueField="area_id"
+            (onClear)="onClearArea($event)"
+            [itemTextField]="setLanguage==='ar' ? 'name_ar' : 'name_eng'"
+             [canSearch]="true"
+            closeButtonSlot="end" 
+            (onChange)="selectArea($event)"
+            placeholder=" {{'SELECT' | translate }} {{'AREA_NAME' | translate}} "
+            [ngClass]="{ 'is-invalid': (!submitted && form.area.errors) || (form.area.touched && form.area.errors) }">
+            </ionic-selectable>
+          </ion-item>
+          <div *ngIf="!submitted||(form.area.touched && form.area.invalid)">
+            <small class="form-text error-message" *ngIf="form.area.errors"> {{'AREA_NAME' | translate}} {{'IS_REQUIRED' | translate}} </small>
+          </div>
+
+          <ion-item class="no-ripple" *ngIf="isEditMode"  >
+            <ion-label position="stacked">{{'GEOLOCATION' | translate}}</ion-label>
+            <ion-input readonly="true" placeholder=" {{'ENTER' | translate}} {{'GEOLOCATION' | translate}} " formControlName="geo_location"
+              [ngClass]="{ 'is-invalid ': (!submitted && form.geo_location.errors) || (form.geo_location.touched && form.geo_location.errors) } ">
+            </ion-input>
+          </ion-item>
+          <div *ngIf="!submitted||(form.geo_location.touched && form.geo_location.invalid)">
+            <small class="form-text error-message" *ngIf="form.geo_location.errors"> {{'GEOLOCATION' | translate}} {{'IS_REQUIRED' | translate}}</small>
+          </div>
+
+          <ion-item class="no-ripple">
+            <ion-label position="stacked">{{'CATEGORY_TYPE' | translate}} *</ion-label>
+            <ion-select placeholder=" {{'SELECT' | translate}} {{'CATEGORY_TYPE' | translate}} " formControlName="category_type"
+              [ngClass]="{ 'is-invalid ': (!submitted && form.category_type.errors) || (form.category_type.touched && form.category_type.errors) } ">
+              <ion-select-option [value]="row.id" *ngFor="let row of FollowupCategoryData"> {{setLanguage === 'ar' ? row.name_ar : row.name_eng}} </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <div *ngIf="!submitted||(form.category_type.touched && form.category_type.invalid)">
+            <small class="form-text error-message" *ngIf="form.category_type.errors"> {{'CATEGORY_TYPE' | translate}}  {{'IS_REQUIRED' | translate}} </small>
+          </div>
+
+          <ion-item class="no-ripple">
+            <ion-label position="stacked">{{'SERVICE_TYPE' | translate}} *</ion-label>
+            <ion-select placeholder=" {{'SELECT' | translate}} {{'SERVICE_TYPE' | translate}} " formControlName="service_type"
+              [ngClass]="{ 'is-invalid ': (!submitted && form.service_type.errors) || (form.service_type.touched && form.service_type.errors) } ">
+              <ion-select-option [value]="row.id" *ngFor="let row of FollowupServiceData"> {{setLanguage === 'ar' ? row.name_ar : row.name_eng}} </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <div *ngIf="!submitted||(form.service_type.touched && form.service_type.invalid)">
+            <small class="form-text error-message" *ngIf="form.service_type.errors">{{'SERVICE_TYPE' | translate}} {{'IS_REQUIRED' | translate}}</small>
+          </div>
+
+          <ion-item class="no-ripple">
+            <ion-label position="stacked">{{'RECIPIENT_NAME' | translate}} </ion-label>
+            <ion-select placeholder=" {{'SELECT' | translate}} {{'RECIPIENT_PERSON ' | translate}} " formControlName="recipient_name"
+              [ngClass]="{ 'is-invalid ': (!submitted && form.recipient_name.errors) || (form.recipient_name.touched && form.recipient_name.errors) } ">
+              <ion-select-option [value]="row.user_id" *ngFor="let row of InspectorlistData"> {{row.first_name}} {{row.last_name}} </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <div *ngIf="!submitted||(form.recipient_name.touched && form.recipient_name.invalid)">
+            <small class="form-text error-message" *ngIf="form.recipient_name.errors"> {{'RECIPIENT_PERSON' | translate }} {{ 'IS_REQUIRED' | translate }}</small>
+          </div>
+
+          <!-- <ion-item class="no-ripple">
+            <ion-label position="stacked">{{'ARRIVAL_TIME' | translate}} </ion-label>
+            <ion-input type="time" placeholder=" {{'ENTER' | translate}} {{'ARRIVAL_TIME' | translate}} " formControlName="arrival_time"
+              [ngClass]="{ 'is-invalid ': (!submitted && form.arrival_time.errors) || (form.arrival_time.touched && form.arrival_time.errors) } ">
+            </ion-input>
+          </ion-item>
+          <div *ngIf="!submitted||(form.arrival_time.touched && form.arrival_time.invalid)">
+            <small class="form-text error-message" *ngIf="form.arrival_time.errors">{{'ARRIVAL_TIME' | translate}} {{'IS_REQUIRED' | translate}}</small>
+          </div> -->
+
+          <ion-item class="no-ripple">
+            <ion-label position="stacked">{{'DATE' | translate}}</ion-label>
+            <ion-input type="date" placeholder="{{'ENTER' | translate}} {{'DATE' | translate}}" formControlName="request_date" ></ion-input>
+          </ion-item>
+
+
+            <ion-item class="no-ripple">
+              <ion-label position="stacked">{{'TIME' | translate}} </ion-label>
+              <ion-input type="time" placeholder=" {{'ENTER' | translate}} {{'TIME' | translate}} " formControlName="request_time">
+              </ion-input>
+            </ion-item>
+            <!-- <div *ngIf="!submitted||(form.arrival_time.touched && form.arrival_time.invalid)">
+              <small class="form-text error-message" *ngIf="form.arrival_time.errors">{{'ARRIVAL_TIME' | translate}} {{'IS_REQUIRED'
+                | translate}}</small>
+            </div> -->
+
+          <ion-item class="no-ripple">
+            <ion-label position="stacked">{{'RESPONSIBILITY_TYPE' | translate}} *</ion-label>
+            <ion-select placeholder=" {{'SELECT' | translate}} {{'RESPONSIBILITY_TYPE' | translate}} " formControlName="responsibility_type"
+              [ngClass]="{ 'is-invalid ': (!submitted && form.responsibility_type.errors) || (form.responsibility_type.touched && form.responsibility_type.errors) } ">
+              <ion-select-option [value]="row.id" *ngFor="let row of responsibilityTypeData">{{setLanguage === 'ar' ? row.name_ar : row.name_eng}}  </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <div *ngIf="!submitted||(form.responsibility_type.touched && form.responsibility_type.invalid)">
+            <small class="form-text error-message" *ngIf="form.responsibility_type.errors">{{'RESPONSIBILITY_TYPE' | translate}}  {{'IS_REQUIRED' | translate}}</small>
+          </div>
+
+          <ion-item class="no-ripple">
+            <ion-label position="stacked">{{'RESPONSIBILITY_DEPARTMENT' | translate}} *</ion-label>
+            <ion-select placeholder=" {{'SELECT' | translate}} {{'RESPONSIBILITY_DEPARTMENT' | translate}} " formControlName="responsible_department"
+              [ngClass]="{ 'is-invalid ': (!submitted && form.responsible_department.errors) || (form.responsible_department.touched && form.responsible_department.errors) } ">
+              <ion-select-option [value]="row.id" *ngFor="let row of responsibilityDepartmentData"> {{setLanguage === 'ar' ? row.name_ar : row.name_eng}} </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <div *ngIf="!submitted||(form.responsible_department.touched && form.responsible_department.invalid)">
+            <small class="form-text error-message" *ngIf="form.responsible_department.errors">{{'RESPONSIBILITY_DEPARTMENT' | translate}} {{'IS_REQUIRED' | translate}}</small>
+          </div>
+
+          <ion-item class="no-ripple">
+            <ion-label position="stacked">{{'ACTION_TYPE' | translate}} *</ion-label>
+            <ion-select placeholder=" {{'SELECT' | translate}} {{'ACTION_TYPE' | translate}} " formControlName="action_type"
+              [ngClass]="{ 'is-invalid ': (!submitted && form.action_type.errors) || (form.action_type.touched && form.action_type.errors) } ">
+              <ion-select-option [value]="row.id" *ngFor="let row of FollowupActionTypeData"> {{setLanguage === 'ar' ? row.name_ar : row.name_eng}} </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <div *ngIf="!submitted||(form.action_type.touched && form.action_type.invalid)">
+            <small class="form-text error-message" *ngIf="form.action_type.errors">{{'ACTION_TYPE' | translate}} {{'IS_REQUIRED' | translate}}</small>
+          </div>
+
+          <ion-item>
+            <ion-label position="stacked"> {{'COMMENTS' | translate}} </ion-label>
+            <ion-textarea rows="4" cols="20" placeholder="{{'ENTER' | translate}} {{'COMMENTS' | translate}}" formControlName="comments"
+              [ngClass]="{ 'is-invalid ': (!submitted && form.comments.errors) || (form.comments.touched && form.comments.errors) } ">
+            </ion-textarea>
+          </ion-item>
+          <div *ngIf="!submitted||(form.comments.touched && form.comments.invalid)">
+            <small class="form-text error-message" *ngIf="form.comments.errors">{{'COMMENTS' | translate}} {{'IS_REQUIRED' | translate}} </small>
+          </div>
+
+                <ion-item *ngIf="isEditMode">
+                <ion-label position="stacked">{{'STATUS' | translate}} </ion-label>
+                <ion-select placeholder=" {{'SELECT' | translate}} {{'STATUS' | translate}} " formControlName="status"
+                  [ngClass]="{ 'is-invalid ': (!submitted && form.status.errors) || (form.status.touched && form.status.errors) } ">
+                  <ion-select-option *ngFor="let data of statusData" [value]="data">{{data}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <div *ngIf="!submitted||(form.status.touched && form.status.invalid)">
+                <small class="form-text error-message" *ngIf="form.status.errors">select an option</small>
+              </div>
+      
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+  </form>
+</ion-content>
+
+<ion-footer class="ion-no-border ionFooter">
+  <ion-item lines="none">
+    <ion-button (click)="onSubmit()" expand="block" size="large" class="linearGradientGreen">
+      {{ (isEditMode ? 'UPDATE' : 'CREATE') | translate }} 
+    </ion-button>
+  </ion-item>
+</ion-footer>

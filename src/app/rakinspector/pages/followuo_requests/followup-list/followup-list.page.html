@@ -1,0 +1,94 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'FOLLOW_UP_REQUESTS' | translate }}</ion-title>
+  </ion-toolbar>
+
+  <ion-toolbar class="searchBlock">
+    <ion-searchbar showCancelButton="never" (ionInput)="SearchFollowups($event)"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="searchWrapp m-top">
+  <ng-container *ngIf = "followupListData.length > 0">
+    <ion-card class="complaintsListCard" *ngFor="let row of followupListData">
+      <ion-item lines="none">
+        <ion-label class="ion-text-wrap comlistLabel">
+          <div class="idComplaint">
+            <ion-row>
+              <ion-col> <ion-text>
+                  <h2>{{row.reference_number}}</h2>
+                </ion-text> </ion-col>
+              <ion-col> <ion-text>
+                  <p>{{row.created_on|date:'dd-MM-yyyy hh:mm'}}</p>
+                </ion-text></ion-col>
+            </ion-row>
+          </div>
+  
+          <ion-grid class="complaintsContBlock">
+            <ion-row>
+              <ion-col size="5">
+                <ion-text>
+                  <h6> {{'CREATED_BY' | translate}}  </h6>
+                </ion-text>
+                <ion-text>
+                  <h3>{{row.createByFirstName}} {{row.createByLastName}}</h3>
+                </ion-text>
+              </ion-col>
+  
+
+  
+              <ion-col size="4">
+                <ion-text>
+                  <h6> {{'AREA_NAME' | translate}} </h6>
+                </ion-text>
+                <ion-text>
+                  <h3>{{setLanguage==='ar' ? row.areaArName : row.areaEngName}}</h3>
+                </ion-text>
+              </ion-col>
+  
+              <ion-col size="4">
+                <ion-text>
+                  <h6> {{'STATUS' | translate}} </h6>
+                </ion-text>
+                <ion-text>
+                  <h3  class="ion-text-left">
+                    <ion-icon name="ellipse" [ngStyle]="{'color': getStatusColor(row.status)}"></ion-icon>
+                    <span [ngStyle]="{'color': getStatusColor(row.status)}">{{row.status == 'Accepted'?  'Approved' : row.status}}</span>
+                  </h3>
+                </ion-text>
+              </ion-col>
+
+              <ion-col class="innerStyle">
+                <div class="ion-float-end viewEditBt">
+                <ion-text class="ion-text-right" (click)="toviewFollowup(row.id)"> {{'VIEW' | translate}} </ion-text> 
+                <ion-text *ngIf="row.status !== 'Closed' && user_type !== '12'" class="ion-text-right"  (click)="toeditFollowup(row.id)" > <span>|</span> {{'EDIT' | translate}} </ion-text>
+                <!-- <ion-text class="ion-text-right" *ngIf="row.status !=='Completed' && user_type == '12'" (click)="toupdateFollowup(row.id)" > <span>|</span>  {{'UPDATE' | translate}} </ion-text> -->
+              </div>
+              </ion-col>
+  
+            </ion-row>
+          </ion-grid>
+        </ion-label>
+      </ion-item>
+    </ion-card>
+  </ng-container>
+
+  <ng-container *ngIf="followupListData.length == 0">
+    <ion-text class="noData"> {{'NO_RECORDS_FOUND' | translate}} </ion-text>
+  </ng-container>
+
+
+  <ion-fab *ngIf="hasMenuAccess('create_follow_up_request')" vertical="bottom" horizontal="end" slot="fixed" class="fabIonStyles">
+    <ion-fab-button routerLink="/followup-request">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMoreComplaints($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more complaints...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll> 
+</ion-content>

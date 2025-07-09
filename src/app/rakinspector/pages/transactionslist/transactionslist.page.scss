@@ -1,0 +1,10 @@
+.nodatacss {
+    display: table;
+    width: 100%;
+    height: 100%;
+  }
+  .nodatablockcss {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+  }

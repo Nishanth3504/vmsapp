@@ -1,0 +1,128 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{'SEARCH' | translate}}</ion-title>
+  </ion-toolbar>
+
+  <ion-toolbar class="searchBlock">
+    <ion-searchbar showCancelButton="never" (ionInput)="searchViolation($event)"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="tranListWrapp m-top">
+  <ng-container *ngIf="list">
+    <ion-card class="tranListCard" *ngFor="let row of list">
+      <ion-item lines="none">
+        <ion-avatar slot="start">
+          <div class="iAvatarLetter" *ngIf="row.side_type === '1'">IV</div>
+          <div class="iAvatarLetter" *ngIf="row.side_type === '2'">CV</div>
+          <div class="iAvatarLetter" *ngIf="row.side_type === '3'">VV</div>
+        </ion-avatar>
+  
+        <ion-label class="ion-text-wrap">
+          <div class="idTranList">
+            <ion-text>{{row.reference_number}}</ion-text>
+            <ion-text class="dateTranList"> - {{row.created_on | date: 'MMM d, y' : 'UTC'}}</ion-text>
+          </div>
+          <div class="typeCategory">
+            <ion-grid class="fineATranListBlock">
+              <ion-row>
+  
+                <!-- *ngIf="row.side_type === '1'" -->
+  
+                <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="row.side_type === '1'">
+                  <ion-text>
+                    <h4>{{'VIOLATION_TYPE' | translate }}</h4>
+                  </ion-text>
+                  <ion-text>
+                    <h3>{{'INDIVIDUAL_VIOLATION' | translate}}</h3>
+                  </ion-text>
+                </ion-col>
+  
+                <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="row.side_type === '2'">
+                  <ion-text>
+                    <h4>{{'VIOLATION_TYPE' | translate }}</h4>
+                  </ion-text>
+                  <ion-text>
+                    <h3>{{'COMMERCIAL_VIOLATION' | translate}}</h3>
+                  </ion-text>
+                </ion-col>
+  
+                <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="row.side_type === '3'">
+                  <ion-text>
+                    <h4>{{'VIOLATION_TYPE' | translate }}</h4>
+                  </ion-text>
+                  <ion-text>
+                    <h3>{{'VEHICLE_EVIOLATION' | translate}}</h3>
+                  </ion-text>
+                </ion-col>
+  
+                <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6">
+                  <ion-text>
+                    <h4>{{'VIOLATION_CATEGORY' | translate}}</h4>
+                  </ion-text>
+                  <ion-text>
+                    <h5>{{setLanguage==='ar' ? row.description : row.description_eng}}</h5>
+                  </ion-text>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+          <div class="actionBts">
+            <!-- <ion-button class="actBt pendingbt">{{row.payment_status}}</ion-button> -->
+            <div class="iconBtBlock">
+  
+              <ion-button *ngIf="row.status" class="iconBt" >
+                <div [ngClass]="getClassOf(row.status)">
+                  <ion-icon name="ellipse-outline" ></ion-icon>
+                </div>
+              </ion-button>
+           
+              <ion-button class="iconBt" *ngIf="user_type == 12" routerLink="/edittransactionlist/{{row.id}}" >
+                <ion-icon name="create-outline"></ion-icon>
+              </ion-button>
+  
+             
+                <ion-button *ngIf="!row.status && user_type == 12" class="iconBt" routerLink="/editviolation/{{row.id}}">
+                    <ion-icon name="receipt-outline"></ion-icon>
+                </ion-button>
+  
+                <ion-button class="iconBt" *ngIf="!row.status && user_type == 12" (click)="cancelviolation(row.id)">
+                    <ion-icon name="close-outline"></ion-icon>
+                </ion-button>
+                
+              <ion-button class="iconBt" routerLink="/violationdetails/{{row.id}}">
+                <ion-icon name="eye-outline"></ion-icon>
+              </ion-button>
+              <ion-button class="iconBt" (click)="viewMapModal(row.fine_place)" *ngIf="row.fine_place != ''">
+                <ion-icon name="globe-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        </ion-label>
+      </ion-item>     
+    </ion-card>
+  </ng-container>
+
+
+  <ng-container *ngIf="!list.length">
+    <div class="nodatacss">
+      <div class="nodatablockcss">
+        {{'NO_RECORDS_FOUND' | translate}}  
+      </div>
+   </div>  
+  </ng-container>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button routerLink="/createviolation">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMoreViolation($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more violations...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

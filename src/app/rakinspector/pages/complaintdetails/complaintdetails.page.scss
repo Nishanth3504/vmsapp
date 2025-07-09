@@ -1,0 +1,45 @@
+ion-card {
+    padding: 16px;
+    margin-bottom: 16px;
+    background: #f8f8f8;
+    border-radius: 8px;
+  
+    ion-text {
+      display: block;
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 8px;
+    }
+  
+    .violationDocumentRow {
+      ion-col {
+        padding: 8px;
+        
+        ion-img-viewer {
+          width: 100%;
+          height: auto;
+          border-radius: 4px;
+          box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+        }
+      }
+  
+      .noFound {
+        color: #888;
+        font-size: 14px;
+        text-align: center;
+        width: 100%;
+      }
+    }
+  
+    ion-button {
+      --background: #3880ff;
+      --border-radius: 4px;
+      --color: #fff;
+      --padding-start: 12px;
+      --padding-end: 12px;
+      margin-top: 10px;
+      text-transform: uppercase;
+      font-size: 14px;
+    }
+  }
+  

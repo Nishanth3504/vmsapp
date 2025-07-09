@@ -1,0 +1,87 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="transactionslist"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{'AMEND_REQUEST' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content  class="createViolationWrapp formStackedStyles m-top">
+
+  <form [formGroup]="amend_request">
+    <ion-card>
+      <ion-card-content class="createViolationGrid-column">
+      
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12">
+                <ion-item>
+                  <ion-label position="stacked">{{'AMEND_MESSAGE' | translate }} *</ion-label>
+                  <ion-textarea rows="3" cols="20" placeholder="Enter Amend Message" formControlName="amend_message" [ngClass]="{ 'is-invalid': (submitted && form.amend_message.errors) || (form.amend_message.touched && form.amend_message.errors) }">
+               </ion-textarea>
+            
+                </ion-item>
+                <div *ngIf="submitted||(form.amend_message.touched && form.amend_message.invalid)">
+                  <small class="form-text error-message" *ngIf="form.amend_message.errors"> Amend Message is
+                    required</small>
+                </div>
+              </ion-col>
+
+
+              <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" >
+                <ion-item>
+                  <ion-label position="stacked">{{'UPLOAD_IMAGES_FORMATS' | translate }}</ion-label>
+
+  
+                  <div class="ionButtonCamara">
+                    <ion-button (click)="getImageFromGallery()">{{'FROM_GALLERY' | translate}}</ion-button>
+                  </div>
+  
+                </ion-item>
+                <div class="iontextBottomInput">
+                  <ion-text color="dark">
+                  </ion-text>
+                  <ion-grid class="camImgDisplay">
+                    <ion-row>
+                      <ion-col size="6" sizeLg="3" sizeMd="3" sizeSm="6"
+                         no-padding no-margin
+                        class="ion-align-self-start">
+                        <div class="camImgDisplayPosition">
+                          <ion-item>
+                            <ion-img-viewer title="images" scheme="dark" src="{{imageBase +editImg}}"
+                              *ngIf="editImg && offline != true">
+                            </ion-img-viewer>
+
+                            <ion-img-viewer title="images" scheme="dark" src="{{offlineImg}}"
+                            *ngIf="offline == true">
+                          </ion-img-viewer>
+                            </ion-item>
+                          <ion-buttons *ngIf="editImg != ''" (click)="onDelete(photos)" class="camImgDeleteIcon" >
+                            <ion-icon name="trash"></ion-icon>
+                          </ion-buttons>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </div>
+              </ion-col>
+           
+            </ion-row>
+          </ion-grid>
+      
+      
+        </ion-card-content>
+    </ion-card>
+
+  </form>
+</ion-content>
+
+
+
+<ion-footer class="ion-no-border ionFooter">
+  <ion-item lines="none">
+    <ion-button (click)="onSubmit()" expand="block" size="large" class="linearGradientGreen">
+      Submit</ion-button>
+  </ion-item>
+</ion-footer>

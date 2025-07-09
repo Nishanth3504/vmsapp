@@ -1,0 +1,91 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="creategeneral"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Incidents List</ion-title>
+  </ion-toolbar>
+
+
+</ion-header>
+
+<ion-content class="searchWrapp m-top">
+  <ion-card class="complaintsListCard" *ngFor="let row of listComplaints">
+    <ion-item lines="none">
+      <ion-label class="ion-text-wrap comlistLabel">
+        <div class="idComplaint">
+          <ion-row>
+            <ion-col> <ion-text>
+                <h2>{{row.reference_number}}</h2>
+              </ion-text> </ion-col>
+            <ion-col> <ion-text>
+                <p>{{row.created_on|date:'dd-MM-yyyy hh:mm'}}</p>
+              </ion-text></ion-col>
+          </ion-row>
+        </div>
+
+        <ion-grid class="complaintsContBlock">
+          <ion-row>
+            <ion-col size="5">
+              <ion-text>
+                <h6>Agency</h6>
+              </ion-text>
+              <ion-text>
+                <h3>{{row.agency_name_en}}</h3>
+              </ion-text>
+            </ion-col>
+
+            <ion-col size="3">
+              <ion-text>
+                <h6>Complaint Type</h6>
+              </ion-text>
+              <ion-text>
+                <h3>{{row.complaint_type_en}}</h3>
+              </ion-text>
+            </ion-col>
+
+            <ion-col size="4">
+              <ion-text>
+                <h6>Area Name</h6>
+              </ion-text>
+              <ion-text>
+                <h3>{{row.area_name}}</h3>
+              </ion-text>
+            </ion-col>
+
+            <ion-col size="4">
+              <ion-text>
+                <h6>Priority</h6>
+              </ion-text>
+              <ion-text>
+                <h3>{{row.priority}}</h3>
+              </ion-text>
+            </ion-col>
+
+            <ion-col size="12">
+              <ion-text>
+                <h6>Description</h6>
+              </ion-text>
+              <ion-text>
+                <h3>{{row.description}} </h3>
+              </ion-text>
+            </ion-col>
+
+            <ion-col size="12">
+              <div class="actionBts">
+                <div class="iconBtBlock">
+                  <ion-button class="iconBt" (click)="viewMapModal(row.complaint_lat_lang)">
+                    <ion-icon name="globe-outline"></ion-icon>
+                  </ion-button>
+                  <ion-button class="iconBt" routerLink="/complaintdetail/{{row.id}}">
+                    <ion-icon name="eye-outline"></ion-icon>
+                  </ion-button>
+                </div>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-label>
+    </ion-item>
+  </ion-card>
+</ion-content>

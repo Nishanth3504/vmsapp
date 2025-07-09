@@ -1,0 +1,12 @@
+{
+  "name": "vms",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular",
+  "proxies": [{
+    "path": "/api",
+    "proxyUrl": "https://rpwebapps.us/clients/vms-live/webservice/v1/ViolationsApi/"
+  }]
+  
+}

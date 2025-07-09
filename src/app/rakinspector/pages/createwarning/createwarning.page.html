@@ -1,0 +1,1133 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title> {{'CREATE_WARNING' | translate}} </ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content class="createViolationWrapp formStackedStyles m-top" [ngStyle]="{'opacity': Opacity}" [fullscreen]="true">
+  <form [formGroup]="createWarning" id="createform" enctype="multipart/form-data">
+    <ion-card>
+
+      <ion-card-header>
+        <ion-card-title>{{'ADD_RAQAB_WARNING_SUBTITLE' | translate }}</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content class="createViolationGrid-column">
+
+
+        <ion-grid>
+          <ion-row>
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6">
+              <ion-item class="no-ripple">
+                <ion-label position="stacked">{{'WARNING_TYPE' | translate }} *</ion-label>
+                <ion-select placeholder="{{'SELECT' | translate }} {{'WARNING_TYPE' | translate }}" #svtSelected
+                  (ionChange)="svtypeValue($event)" formControlName="voilationType"
+                  [ngClass]="{ 'is-invalid ': (!submitted && form.voilationType.errors) || (form.voilationType.touched && form.voilationType.errors) } "
+                  [interfaceOptions]="setLanguage==='ar' ?{cssClass: 'ar'}:''">
+                  <ion-select-option *ngFor="let row of voilationType" [value]="row.side_type_code">{{setLanguage==='ar'
+                    ?
+                    row.name_ar : row.name_eng}}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+              <div *ngIf="!submitted||(form.voilationType.touched && form.voilationType.invalid)">
+                <small class="form-text error-message" *ngIf="form.voilationType.errors"> {{'WARNING_TYPE_REQUIRED' |
+                  translate }}</small>
+              </div>
+            </ion-col>
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6">
+              <ion-item>
+                <ion-label position="stacked">{{'WARNING_SPECIFICATION' | translate}} <ng-container>*</ng-container></ion-label>
+                <ion-select 
+                  placeholder="{{'SELECT' | translate}} {{'WARNING_SPECIFICATION' | translate}}"   
+                  formControlName="warningSpecification"
+                  (ionChange)="handleWarningSpecification($event)"
+                  [interfaceOptions]="setLanguage==='ar' ?{cssClass: 'ar'}:''"
+                  [ngClass]="{ 'is-invalid': (!submitted && form.warningSpecification.errors) || (form.warningSpecification.touched && form.warningSpecification.errors) }"
+                  >
+                  <ion-select-option *ngFor="let row of specificationList" [value]="row">
+                    {{setLanguage==='ar' ? row.name_ar : row.name}}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+              <div *ngIf="!submitted||(form.warningSpecification.touched && form.warningSpecification.invalid)">
+                <small class="form-text error-message" *ngIf="form.warningSpecification.errors">
+                  {{'WARNING_SPECIFICATION_REQUIRED' | translate}}
+                </small>
+              </div>
+            </ion-col>
+
+
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6">
+              <ion-item class="no-ripple">
+                <ion-label position="stacked">{{'WARNING_CATEGORY' | translate}} *</ion-label>
+                <ion-select placeholder="{{'SELECT' | translate}} {{'WARNING_CATEGORY' | translate}}"
+                  [interfaceOptions]="setLanguage==='ar' ?{cssClass: 'ar'}:''" formControlName="violationCategory"
+                  (ionChange)="violationCategoryChange($event)" #violationCategorySelected
+                  [ngClass]="{ 'is-invalid': (!submitted && form.violationCategory.errors) || (form.violationCategory.touched && form.violationCategory.errors) }">
+                  <ion-select-option *ngFor="let row of violCategoryList" [value]="row">
+                    {{setLanguage==='ar' ? row.description : row.description_eng}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <div *ngIf="!submitted||(form.violationCategory.touched && form.violationCategory.invalid)">
+                <small class="form-text error-message"
+                  *ngIf="form.violationCategory.errors">{{'WARNING_CATEGORY_REQUIRED' | translate}}</small>
+              </div>
+            </ion-col>
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" style="display: none;">
+              <ion-item>
+
+                <ion-label position="stacked">{{'WARNING_TITLE' | translate }} </ion-label>
+                <ng-container>
+                  <ionic-selectable #violationTitleComponent [(ngModel)]="selectVioTitle"
+                    (click)="violationTitleClicked()" formControlName="voilationTitle" [items]="voilationTitleData"
+                    itemValueField="title_id" [modalCssClass]="setLanguage==='ar' ? 'ar' : ''"
+                    itemTextField="violation_eng_title" [canSearch]="true" [canClear]="onClear"
+                    (onSearchFail)="onSearchFail($event,'vTitle')" (onChange)="portChange($event, 'vTitle')"
+                    (onSearchSuccess)="onSearchSuccess($event)" closeButtonSlot="end"
+                    (onClear)="onClearViolationTitle($event)"
+                    [ngClass]="{ 'is-invalid': (!submitted && form.voilationTitle.errors) || (form.voilationTitle.touched && form.voilationTitle.errors) }"
+                    placeholder="{{'SELECT' | translate }} {{'WARNING_TITLE' | translate }} .">
+
+
+                    <ng-template ionicSelectableAddItemTemplate let-port="selectVioTitle">
+
+                      <ion-list>
+                        <ion-item>
+                          {{'NOT_FOUND_WOULD_YOU_LICK' | translate }}
+                        </ion-item>
+                      </ion-list>
+                      <ion-footer>
+                        <ion-toolbar>
+                          <ion-row>
+                            <ion-col>
+                              <ion-button expand="block" no-margin
+                                (click)="violationTitleComponent.searchText='';violationTitleComponent.close();">
+                                {{'CANCEL' | translate }}
+                              </ion-button>
+                            </ion-col>
+                            <ion-col>
+                              <ion-button expand="block" no-margin (click)="addPort('vTitle')">
+                                {{'ADD' | translate }}
+                              </ion-button>
+                            </ion-col>
+                          </ion-row>
+                        </ion-toolbar>
+                      </ion-footer>
+                    </ng-template>
+                    <ng-template ionicSelectableSearchFailTemplate>
+                      <ion-list>
+                        <ion-item>
+                          {{'NOT_FOUND_WOULD_YOU_LICK' | translate }}
+                        </ion-item>
+                      </ion-list>
+                      <ion-footer style="position: absolute;bottom: 0;">
+                        <ion-toolbar>
+                          <ion-row>
+                            <ion-col>
+                              <ion-button expand="block" no-margin
+                                (click)="violationTitleComponent.searchText='';violationTitleComponent.close();">
+                                {{'CANCEL' | translate }}
+                              </ion-button>
+                            </ion-col>
+                            <ion-col>
+                              <ion-button expand="block" no-margin (click)="addPort('vTitle')">
+                                {{'ADD' | translate }}
+                              </ion-button>
+                            </ion-col>
+                          </ion-row>
+                        </ion-toolbar>
+                      </ion-footer>
+                    </ng-template>
+                  </ionic-selectable>
+                </ng-container>
+
+              </ion-item>
+              <div *ngIf="!submitted||(form.voilationTitle.touched && form.voilationTitle.invalid)">
+                <small class="form-text error-message" *ngIf="form.voilationTitle.errors">
+                  {{'WARNING_TITLE_REQUIRED' | translate }}</small>
+              </div>
+            </ion-col>
+
+            <!-- End DED Code -->
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="!isVehicle && isIndividual">
+              <ion-item>
+                <ion-label position="stacked">
+                  {{'INDIVIDUAL_SIDE_CODE'| translate }} </ion-label>
+                <ng-container>
+                  <ionic-selectable #sideCodeComponent [(ngModel)]="selectSidecodeTitle" formControlName="sideCode"
+                    [modalCssClass]="setLanguage==='ar' ? 'ar' : ''" [items]="sideCode" itemValueField="side_code_id"
+                    itemTextField="description" [canSearch]="true" (onClear)="onClearSidecodeTitle($event)"
+                    [canClear]="true" (onChange)="portChange($event, 'sTitle')" (onSearch)="searchSideCodes($event)"
+                    [hasVirtualScroll]="true" closeButtonSlot="end"
+                    [ngClass]="{ 'is-invalid': (!submitted && form.sideCode.errors) || (form.sideCode.touched && form.sideCode.errors) }"
+                    placeholder="  {{'INDIVIDUAL_SIDE_CODE'| translate }}.">
+                    <!-- (onSearch)="searchsitecode($event)" (onClear)="onClearSiteCodeSearch($event)" -->
+                    <ng-template ionicSelectableSearchFailTemplate>
+                      <ion-list>
+                        <ion-item>
+                          {{'NOT_FOUND' | translate }}.
+                        </ion-item>
+                      </ion-list>
+                    </ng-template>
+                  </ionic-selectable>
+                </ng-container>
+
+              </ion-item>
+              <div *ngIf="!submitted||(form.sideCode.touched && form.sideCode.invalid)">
+                <small class="form-text error-message" *ngIf="form.sideCode.errors">
+                  {{'INDIVIDUAL_SIDE_CODE'| translate }} {{'IS_REQUIRED' | translate }}</small>
+              </div>
+            </ion-col>
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="!isVehicle && isCommercial">
+              <ion-item>
+                <ion-label position="stacked">
+                  {{'COMMERCIAL_SIDE_CODE'| translate }} </ion-label>
+                <ng-container>
+                  <ionic-selectable #sideCodeComponent [(ngModel)]="selectSidecodeTitle" formControlName="sideCode"
+                    [modalCssClass]="setLanguage==='ar' ? 'ar' : ''" [items]="sideCode" itemValueField="side_code_id"
+                    itemTextField="description_eng" [canSearch]="true" (onClear)="onClearSidecodeTitle($event)"
+                    [canClear]="true" (onChange)="portChange($event, 'sTitle')" (onSearch)="searchSideCodes($event)"
+                    [hasVirtualScroll]="true" closeButtonSlot="end"
+                    [ngClass]="{ 'is-invalid': (!submitted && form.sideCode.errors) || (form.sideCode.touched && form.sideCode.errors) }"
+                    placeholder="  {{'COMMERCIAL_SIDE_CODE'| translate }}.">
+                    <!-- (onSearch)="searchsitecode($event)" (onClear)="onClearSiteCodeSearch($event)" -->
+                    <ng-template ionicSelectableSearchFailTemplate>
+                      <ion-list>
+                        <ion-item>
+                          {{'NOT_FOUND' | translate }}.
+                        </ion-item>
+                      </ion-list>
+                    </ng-template>
+                  </ionic-selectable>
+                </ng-container>
+
+              </ion-item>
+              <div *ngIf="!submitted||(form.sideCode.touched && form.sideCode.invalid)">
+                <small class="form-text error-message" *ngIf="form.sideCode.errors">
+                  {{'COMMERCIAL_SIDE_CODE'| translate }} {{'IS_REQUIRED' | translate }}</small>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+
+        <!-- Individual Violation -->
+
+        <ion-grid *ngIf="isIndividual">
+          <ion-row>
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6">
+              <ion-item>
+                <ion-label position="stacked">{{'DOCUMENT_TYPE' | translate }} *</ion-label>
+                <ion-select [value]="selectedSourceValDocument" placeholder="{{'SELECT_DOCUMENT_TYPE' | translate }}"
+                  formControlName="documentType" (ionChange)="selectDocumentType($event)"
+                  [interfaceOptions]="setLanguage==='ar' ?{cssClass: 'ar'}:''"
+                  [ngClass]="{ 'is-invalid': (!submitted && form.documentType.errors) || (form.documentType.touched && form.documentType.errors) }">
+                  <ion-select-option [value]="row.id" *ngFor="let row of documentList">{{setLanguage === 'ar' ?
+                    row.name_arb : row.name_eng}}
+                  </ion-select-option>
+
+                </ion-select>
+              </ion-item>
+              <div *ngIf="!submitted||(form.documentType.touched && form.documentType.invalid)">
+                <small class="form-text error-message" *ngIf="form.documentType.errors">{{'DOCUMENT_TYPE_REQUIRED' |
+                  translate }}</small>
+              </div>
+            </ion-col>
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6">
+              <ion-item>
+                <ion-label position="stacked"> {{'DOCUMENT_NO' | translate }}<ng-container *ngIf="isIndividual">*
+                  </ng-container></ion-label>
+
+                <ionic-selectable #documnetNumberComponent formControlName="documentNo" [(ngModel)]="document"
+                  [modalCssClass]="setLanguage==='ar' ? 'ar' : ''" [items]="documentNumbersList"
+                  itemValueField="document_no" itemTextField="document_no" [canSearch]="true" [canClear]="onClear"
+                  (onSearchFail)="onDocumentSearchFail($event)" (onChange)="documentNumberChange($event)"
+                  (onSearchSuccess)="onDocumentSearchSuccess($event)" closeButtonSlot="end"
+                  (onClear)="onCleardocumnetNumber($event)"
+                  [ngClass]="{ 'is-invalid': (!submitted && form.documentNo.errors) || (form.documentNo.touched && form.documentNo.errors) }"
+                  placeholder="{{'ENTER_DOCUMENT_NO' | translate }}.">
+                  <ng-template ionicSelectableAddItemTemplate let-port="value">
+
+                    <ion-list>
+                      <ion-item>
+                        {{'NOT_FOUND_WOULD_YOU_LICK' | translate }}
+                      </ion-item>
+                    </ion-list>
+
+                    <ion-footer>
+                      <ion-toolbar>
+                        <ion-row>
+                          <ion-col>
+                            <ion-button expand="block" no-margin (click)="documnetNumberComponent.close()">
+                              {{'CANCEL' | translate }}
+                            </ion-button>
+                          </ion-col>
+                          <ion-col>
+                            <ion-button expand="block" no-margin (click)="addDocument()">
+                              {{'ADD' | translate }}
+                            </ion-button>
+                          </ion-col>
+                        </ion-row>
+                      </ion-toolbar>
+                    </ion-footer>
+                  </ng-template>
+                  <ng-template ionicSelectableSearchFailTemplate>
+                    <ion-list>
+                      <ion-item>
+                        {{'NOT_FOUND_WOULD_YOU_LICK' | translate }}
+                      </ion-item>
+                    </ion-list>
+
+                    <ion-footer style="position: absolute;bottom: 0;">
+                      <ion-toolbar>
+                        <ion-row>
+                          <ion-col>
+                            <ion-button expand="block" no-margin (click)="documnetNumberComponent.close()">
+                              {{'CANCEL' | translate }}
+                            </ion-button>
+                          </ion-col>
+                          <ion-col>
+                            <ion-button expand="block" no-margin (click)="addDocument()">
+                              {{'ADD' | translate }}
+                            </ion-button>
+                          </ion-col>
+                        </ion-row>
+                      </ion-toolbar>
+                    </ion-footer>
+                  </ng-template>
+                </ionic-selectable>
+                <!-- </ng-container> -->
+
+              </ion-item>
+              <div *ngIf="!submitted||(form.documentNo.touched && form.documentNo.invalid)">
+                <small class="form-text error-message" *ngIf="form.documentNo.errors">{{'DOCUMENT_NO_REQUIRED' |
+                  translate }}</small>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <ion-grid *ngIf="isCommercial">
+          <ion-row>
+            <!-- Commercial License -->
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="isCommercial">
+              <ion-item>
+                <ion-label position="stacked">{{'LICENSE_NO' | translate }} *</ion-label>
+
+                <ionic-selectable #licenseNumberComponent formControlName="licenseNo" [(ngModel)]="license"
+                  [modalCssClass]="setLanguage==='ar' ? 'ar' : ''" [items]="licenseNumberList"
+                  (onChange)="licenseNumberChange($event)" itemValueField="license_no" itemTextField="license_no"
+                  [canSearch]="true" [canClear]="onClear" closeButtonSlot="end" (onClear)="onClearlicenseNo($event)"
+                  [ngClass]="{ 'is-invalid': (!submitted && form.licenseNo.errors) || (form.licenseNo.touched && form.licenseNo.errors) }"
+                  placeholder="{{'ENTER_LICENSE_NO' | translate }}.">
+                  <ng-template ionicSelectableAddItemTemplate let-port="value">
+                    <ion-list>
+                      <ion-item>
+                        {{'NOT_FOUND_WOULD_YOU_LICK' | translate }}
+                      </ion-item>
+                    </ion-list>
+
+                    <ion-footer>
+                      <ion-toolbar>
+                        <ion-row>
+                          <ion-col>
+                            <ion-button expand="block" no-margin (click)="licenseNumberComponent.close()">
+                              {{'CANCEL' | translate }}
+                            </ion-button>
+                          </ion-col>
+                          <ion-col>
+                            <ion-button expand="block" no-margin (click)="addLicense()">
+                              {{'ADD' | translate }}
+                            </ion-button>
+                          </ion-col>
+                          <ion-col>
+                            <ion-button expand="block" no-margin (click)="Search($event)">
+                              Search
+                            </ion-button>
+                          </ion-col>
+                        </ion-row>
+                      </ion-toolbar>
+                    </ion-footer>
+                  </ng-template>
+                  <ng-template ionicSelectableSearchFailTemplate>
+                    <ion-list>
+                      <ion-item>
+                        {{'NOT_FOUND_WOULD_YOU_LICK' | translate }}
+                      </ion-item>
+                    </ion-list>
+
+                    <ion-footer style="position: absolute;bottom: 0;">
+                      <ion-toolbar>
+                        <ion-row>
+                          <ion-col>
+                            <ion-button expand="block" no-margin (click)="licenseNumberComponent.close()">
+                              {{'CANCEL' | translate }}
+                            </ion-button>
+                          </ion-col>
+                          <ion-col>
+                            <ion-button expand="block" no-margin (click)="addLicense()">
+                              {{'ADD' | translate }}
+                            </ion-button>
+                          </ion-col>
+                          <ion-col>
+                            <ion-button expand="block" no-margin (click)="Search(licenseNumberComponent.searchText)">
+                              Search
+                            </ion-button>
+                          </ion-col>
+                        </ion-row>
+                      </ion-toolbar>
+                    </ion-footer>
+                  </ng-template>
+                </ionic-selectable>
+                <!-- </ng-container> -->
+              </ion-item>
+              <div *ngIf="!submitted||(form.licenseNo.touched && form.licenseNo.invalid)">
+                <small class="form-text error-message" *ngIf="form.licenseNo.errors">{{'LICENSE_NO_REQUIRED' | translate
+                  }}</small>
+              </div>
+              <!-- Commercial License End -->
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <!-- Vehicle no label *ngIf="commparamvalue=='0'"-->
+        <ion-grid>
+          <ion-row>
+            <ion-col size="12" *ngIf="!isVehicle && svtSelected.value!=0 && svtSelected.value!=1">
+              <ion-item>
+                <ion-label position="stacked">
+                  {{(svtSelected.value==1?'INDIVIDUAL_SIDE_CODE_DESCRIPTION':svtSelected.value==2?'COMMERCIAL_SIDE_CODE_DESCRIPTION':svtSelected.value==3?'VEHICLE_SIDE_CODE_DESCRIPTION':'SIDE_CODE_DESCRIPTION'
+                  )| translate }} *</ion-label>
+                <ion-textarea rows="3" cols="20" placeholder="{{'ENTER_DESCRIPTION' | translate }}"
+                  formControlName="sideCodeDescription"
+                  [ngClass]="{ 'is-invalid': (!submitted && form.sideCodeDescription.errors) || (form.sideCodeDescription.touched && form.sideCodeDescription.errors) }">
+                </ion-textarea>
+              </ion-item>
+
+              <div *ngIf="!submitted ||(form.sideCodeDescription.touched && form.sideCodeDescription.invalid)">
+                <small class="form-text error-message"
+                  *ngIf="form.sideCodeDescription.errors">{{(svtSelected.value==1?'INDIVIDUAL_SIDE_CODE_DESCRIPTION':svtSelected.value==2?'COMMERCIAL_SIDE_CODE_DESCRIPTION':svtSelected.value==3?'VEHICLE_SIDE_CODE_DESCRIPTION':'SIDE_CODE_DESCRIPTION'
+                  )| translate }} {{'IS_REQUIRED' | translate }} </small>
+              </div>
+              <!-- Vehicle -->
+            </ion-col>
+
+            <!-- Individual Violation End-->
+
+
+          </ion-row>
+        </ion-grid>
+
+        <!-- Vehicle -->
+
+        <ion-grid *ngIf="isVehicle">
+          <ion-row>
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="showVehicleClass">
+              <ion-item>
+                <ion-label position="stacked">{{'VEHICLE_CLASS' | translate}} *</ion-label>
+                <ion-select  placeholder="select vehicle class"
+                formControlName="vehicle_class_type" 
+                [interfaceOptions]="setLanguage==='ar' ?{cssClass: 'ar'}:''"
+                [ngClass]="{ 'is-invalid': (!submitted && form.vehicle_class_type.errors) || (form.vehicle_class_type.touched && form.vehicle_class_type.errors) }">
+                <ion-select-option *ngFor="let row of vehicleClassData" [value]="row.id">
+                  {{setLanguage ==='ar' ? row.name_ar : row.name_eng}} 
+                </ion-select-option>
+              </ion-select>
+              </ion-item>
+
+              <div *ngIf="!submitted ||(form.vehicle_class_type.touched && form.vehicle_class_type.invalid)">
+                <small class="form-text error-message"
+                  *ngIf="form.vehicle_class_type.errors">{{ 'VEHICLE_CLASS' | translate }} {{'IS_REQUIRED' | translate }} </small>
+              </div>
+            </ion-col>
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6">
+              <ion-item>
+                <ion-label position="stacked">{{'PLATE_NO' | translate}} *</ion-label>
+
+                <ionic-selectable #plateNumberComponent formControlName="plateNo" [(ngModel)]="plateNumber"
+                  [modalCssClass]="setLanguage==='ar' ? 'ar' : ''" [items]="plateCodeList"
+                  itemValueField="license_plate_no" itemTextField="license_plate_no" [canSearch]="true"
+                  [canClear]="onClear" (onSelect)="onSelectplateno($event)" (onSearchFail)="onPlateNoSearchFail($event)"
+                  (onChange)="plateNumberChange($event)" (onSearchSuccess)="onPlateNoSearchSuccess($event)"
+                  closeButtonSlot="end" (onClear)="onClearplateNumber($event)"
+                  [ngClass]="{ 'is-invalid': (!submitted && form.plateNo.errors) || (form.plateNo.touched && form.plateNo.errors) }"
+                  placeholder="{{'ENTER_PLATENO' | translate}}.">
+                  <!-- ionicSelectableAddItemTemplate let-port="value" -->
+                  <ng-template>
+
+                    <ion-list>
+                      <ion-item>
+                        {{'NOT_FOUND_WOULD_YOU_LICK' | translate }}
+                      </ion-item>
+                    </ion-list>
+
+                    <ion-footer>
+                      <ion-toolbar>
+                        <ion-row>
+                          <ion-col>
+                            <ion-button expand="block" no-margin (click)="plateNumberComponent.close()">
+                              {{'CANCEL' | translate }}
+                            </ion-button>
+                          </ion-col>
+                          <ion-col>
+                            <ion-button expand="block" no-margin (click)="addPlateNo()">
+                              {{'ADD' | translate }}
+                            </ion-button>
+                          </ion-col>
+                        </ion-row>
+                      </ion-toolbar>
+                    </ion-footer>
+                  </ng-template>
+                  <ng-template ionicSelectableSearchFailTemplate>
+                    <ion-list>
+                      <ion-item>
+                        {{'NOT_FOUND_WOULD_YOU_LICK' | translate }}
+                      </ion-item>
+                    </ion-list>
+
+                    <ion-footer style="position: absolute;bottom: 0;">
+                      <ion-toolbar>
+                        <ion-row>
+                          <ion-col>
+                            <ion-button expand="block" no-margin (click)="plateNumberComponent.close()">
+                              {{'CANCEL' | translate }}
+                            </ion-button>
+                          </ion-col>
+                          <ion-col>
+                            <ion-button expand="block" no-margin (click)="addPlateNo()">
+                              {{'ADD' | translate }}
+                            </ion-button>
+                          </ion-col>
+                        </ion-row>
+                      </ion-toolbar>
+                    </ion-footer>
+                  </ng-template>
+                  <ng-template ionicSelectableFooterTemplate>
+
+                    <ion-footer style="position: absolute;bottom: 0;">
+                      <ion-toolbar>
+                        <ion-row>
+                          <ion-col>
+                            <ion-button expand="block" no-margin (click)="plateNumberComponent.close()">
+                              {{'CANCEL' | translate }}
+                            </ion-button>
+                          </ion-col>
+                          <ion-col>
+                            <ion-button expand="block" no-margin (click)="addPlateNo()">
+                              {{'ADD' | translate }}
+                            </ion-button>
+                          </ion-col>
+
+                        </ion-row>
+                      </ion-toolbar>
+                    </ion-footer>
+                  </ng-template>
+                </ionic-selectable>
+              </ion-item>
+              <div *ngIf="!submitted||(form.plateNo.touched && form.plateNo.invalid)">
+                <small class="form-text error-message" *ngIf="form.plateNo.errors">{{'PLATENO_REQUIRED' |
+                  translate}}</small>
+              </div>
+            </ion-col>
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6">
+              <ion-item>
+                <ion-label position="stacked">{{'PLATE_SOURCE' | translate}} *</ion-label>
+                <ion-select #source [value]="selectedSourceVal" placeholder="{{'SELECT_PLATE_SOURCE' | translate}}"
+                  (ionChange)="getSourceValue($event)" formControlName="plateSource"
+                  [interfaceOptions]="setLanguage==='ar' ?{cssClass: 'ar'}:''"
+                  [ngClass]="{ 'is-invalid': (!submitted && form.plateSource.errors) || (form.plateSource.touched && form.plateSource.errors) }">
+                  <ion-select-option *ngFor="let row of plateSourceList"
+                    [value]="row">
+                    {{setLanguage==='ar' ? row.name_ar : row.name_eng}}
+                  </ion-select-option>
+                </ion-select>
+                <!-- (ionChange)="plateSourceValueChange(selectedSourceVal)" -->
+
+              </ion-item>
+              <div *ngIf="!submitted||(form.plateSource.touched && form.plateSource.invalid)">
+                <small class="form-text error-message" *ngIf="form.plateSource.errors">{{'PLATE_SOURCE_REQUIRED' |
+                  translate}}</small>
+              </div>
+            </ion-col>
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="isPlateSourceselectedOther">
+              <ion-item>
+                <!-- <ion-label position="stacked">{{'RECIPIENT_PERSON ' | translate}} <ng-container
+                    *ngIf="!isCommercial">*</ng-container></ion-label> -->
+                <ion-input placeholder="{{'ENTER_PLATE_SOURCE' | translate}}" formControlName="other_plate_source"
+                  [ngClass]="{ 'is-invalid': (!submitted && form.other_plate_source.errors) || (form.other_plate_source.touched && form.other_plate_source.errors) }">
+                </ion-input>
+              </ion-item>
+              <div *ngIf="!submitted||(form.other_plate_source.touched && form.other_plate_source.invalid)">
+                <small class="form-text error-message" *ngIf="form.other_plate_source.errors">{{'PLATE_SOURCE_REQUIRED'
+                  | translate}}</small>
+              </div>
+            </ion-col>
+
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="!isPlateSourceselectedOther">
+              <ion-item>
+                <ion-label position="stacked">{{'PLATE_CATEGORY' | translate}} *</ion-label>
+                <ion-select placeholder="{{'SELECT_PLATE_CATEGORY' | translate}}" (ionChange)="platecategoryId($event)"
+                  formControlName="plateCategory" [interfaceOptions]="setLanguage==='ar' ?{cssClass: 'ar'}:''"
+                  [ngClass]="{ 'is-invalid': (!submitted && form.plateCategory.errors) || (form.plateCategory.touched && form.plateCategory.errors) }">
+                  <ion-select-option *ngFor="let row of plateCategoryData"
+                    [value]="row">
+                    {{setLanguage==='ar' ? row.name_ar : row.name_eng}}
+                  </ion-select-option>
+                </ion-select>
+
+              </ion-item>
+              <div *ngIf="!submitted||(form.plateCategory.touched && form.plateCategory.invalid)">
+                <small class="form-text error-message" *ngIf="form.plateCategory.errors">{{'PLATE_CATEGORY_REQUIRED' |
+                  translate}}</small>
+              </div>
+            </ion-col>
+
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="!isPlateSourceselectedOther">
+              <ion-item>
+                <ion-label position="stacked">{{'PLATE_CODE' | translate}} *</ion-label>
+                <!-- <ion-input placeholder="Enter Plate Code" formControlName="plateCode"></ion-input> -->
+                <ion-select #platecodesrc (ionChange)="platecodechange(platecodesrc.value)"
+                  placeholder="{{'SELECT_PLATE_CODE' | translate}}" [value]="selectedPlateCode"
+                  [interfaceOptions]="setLanguage==='ar' ?{cssClass: 'ar'}:''" formControlName="plateCode"
+                  [ngClass]="{ 'is-invalid': (!submitted && form.plateCode.errors) || (form.plateCode.touched && form.plateCode.errors) }">
+                  <ion-select-option *ngFor="let row of plateCodeDataList"
+                    [value]="sourceId === '1' ? row.aber_code : row.raqab_code">
+                    {{setLanguage==='ar' ? row.raqab_desc_arb : row.raqab_desc_eng}}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+              <div *ngIf="!submitted||(form.plateCode.touched && form.plateCode.invalid)">
+                <small class="form-text error-message" *ngIf="form.plateCode.errors">{{'PLATE_CODE_REQUIRED' |
+                  translate}}</small>
+              </div>
+            </ion-col>
+
+  
+          </ion-row>
+        </ion-grid>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="createViolation">
+              <ion-item class="no-ripple">
+                <ion-label position="stacked">{{'FINE_CODE ' | translate}} *</ion-label>
+
+                <ionic-selectable #fineCodeComponent formControlName="fineCode"
+                  [modalCssClass]="setLanguage==='ar' ? 'ar' : ''" [(ngModel)]="finecode" [items]="fineCodeList"
+                  itemValueField="fine_code_id" (onClear)="onClearfineCode($event)"
+                  [itemTextField]="setLanguage==='ar' ? 'description' : 'description_eng'" [canSearch]="true"
+                  closeButtonSlot="end" (onChange)="fineCodeChange($event)"
+                  [ngClass]="{ 'is-invalid': (!submitted && form.fineCode.errors) || (form.fineCode.touched && form.fineCode.errors) }">
+                </ionic-selectable>
+                <!-- (ionChange)="fineCodeChange($event)" -->
+              </ion-item>
+              <div *ngIf="!submitted||(form.fineCode.touched && form.fineCode.invalid)">
+                <small class="form-text error-message" *ngIf="form.fineCode.errors"> {{'FINE_CODE_REQUIRED' |
+                  translate}}</small>
+              </div>
+            </ion-col>
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="createViolation && !defaultwarning">
+              <ion-item class="no-ripple">
+                <ion-label position="stacked">{{'WARNING_DURATION' | translate}} *</ion-label>
+                <ion-select placeholder=" {{'WARNING_DURATION' | translate}}" (ionChange)="durationValue($event)"
+                  formControlName="warningDuration"
+                  [ngClass]="{ 'is-invalid ': (!submitted && form.warningDuration.errors) || (form.warningDuration.touched && form.warningDuration.errors) } ">
+                  <ion-select-option *ngFor="let data of durationData" [value]="data.id">
+                    {{data.hours}}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+              <div *ngIf="!submitted||(form.warningDuration.touched && form.warningDuration.invalid)">
+                <small class="form-text error-message" *ngIf="form.warningDuration.errors">
+                  {{'WARNING_DURATION_REQUIRED' |
+                  translate }}</small>
+              </div>
+            </ion-col>
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="createViolation && defaultwarning">
+              <ion-item class="no-ripple">
+                <ion-label position="stacked">{{'WARNING_DURATION' | translate}} *</ion-label>
+                <ion-input formControlName="fc_warning_hours_title" type="readonly" readonly="true" >
+                  
+              </ion-input>
+              </ion-item>
+            </ion-col>
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="isAnimalhitCountData ">
+              <ion-item>
+                <ion-label position="stacked">{{'ANIMAL_HIT_COUNT' | translate}} *</ion-label>
+                <ion-input placeholder="{{'SELECT_ANIMAL_HIT_COUNT' | translate}} *" formControlName="animalhitCount"
+                  [ngClass]="{ 'is-invalid': (!submitted && form.animalhitCount.errors) || (form.animalhitCount.touched && form.animalhitCount.errors) }">
+                </ion-input>
+              </ion-item>
+              <div *ngIf="!submitted||(form.animalhitCount.touched && form.animalhitCount.invalid)">
+                <small class="form-text error-message" *ngIf="form.animalhitCount.errors"> {{'ANIMAL_HIT_COUNT_REQUIRED'
+                  | translate}}</small>
+              </div>
+            </ion-col>
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="elementVisible">
+              <ion-item>
+                <ion-label position="stacked">{{'FINE_PLACE' | translate}}</ion-label>
+                <ion-input placeholder="{{'ENTER_FINE_PLACE' | translate}}" formControlName="finePlace"
+                  [ngClass]="{ 'is-invalid': (!submitted && form.finePlace.errors) || (form.finePlace.touched && form.finePlace.errors) }">
+                </ion-input>
+
+                <ion-button clear slot="end" size="small" color="medium" class="inputInsideBt" (click)="viewMapModal()">
+                  {{'VIEWMAP' | translate}}
+                </ion-button>
+              </ion-item>
+            </ion-col>
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="finecodecount && createViolation ">
+              <ion-item>
+                <ion-label position="stacked">{{'FINE_CODE_COUNT' | translate}} *</ion-label>
+                <ion-input type="tel" maxlength="2" placeholder="{{'FINE_CODE_COUNT_PLACEHOLDER' | translate}}"
+                  formControlName="finecodecount"
+                  [ngClass]="{ 'is-invalid': (!submitted && form.finecodecount.errors) || (form.finecodecount.touched && form.finecodecount.errors) }">
+                </ion-input>
+              </ion-item>
+              <div *ngIf="!submitted||(form.finecodecount.touched && form.finecodecount.invalid)">
+                <small class="form-text error-message" *ngIf="form.finecodecount.errors">{{'FINE_CODE_COUNT_REQUIRED'
+                  | translate}}</small>
+              </div>
+              <div *ngIf="!submitted||form.finecodecount?.hasError('lessThanOne') && form.finecodecount.touched">
+                <small class="form-text error-message" *ngIf="form.finecodecount.errors">Count should be more than
+                  0.</small>
+              </div>
+            </ion-col>
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6">
+              <ion-item class="no-ripple">
+                <ion-label position="stacked">{{'AREA' | translate}} *</ion-label>
+                <ionic-selectable #areaComponent formControlName="area" [modalCssClass]="setLanguage==='ar' ? 'ar' : ''"
+                  [items]="areaList" itemValueField="area_id" (onClear)="onClearArea($event)"
+                  [itemTextField]="setLanguage==='ar' ? 'name_ar' : 'name_eng'" [canSearch]="true" closeButtonSlot="end"
+                  (onChange)="AreaChange($event)" placeholder="Select Area"
+                  [ngClass]="{ 'is-invalid': (!submitted && form.area.errors) || (form.area.touched && form.area.errors) }">
+                </ionic-selectable>
+              </ion-item>
+              <div *ngIf="!submitted||(form.area.touched && form.area.invalid)">
+                <small class="form-text error-message" *ngIf="form.area.errors">{{'AREA_REQUIRED' | translate}}</small>
+              </div>
+            </ion-col>
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6">
+              <ion-item>
+                <ion-label position="stacked">{{'RECIPIENT_PERSON ' | translate}} <ng-container
+                    *ngIf="!isCommercial">*</ng-container></ion-label>
+                <ion-input placeholder="{{'ENTER_RECIPIENT_PERSON' | translate}}" formControlName="recipientPerson"
+                  [ngClass]="{ 'is-invalid': (!submitted && form.recipientPerson.errors) || (form.recipientPerson.touched && form.recipientPerson.errors) }">
+                </ion-input>
+              </ion-item>
+              <div *ngIf="!submitted||(form.recipientPerson.touched && form.recipientPerson.invalid)">
+                <small class="form-text error-message" *ngIf="form.recipientPerson.errors">{{'RECIPIENT_PERSON_REQUIRED'
+                  | translate}}</small>
+              </div>
+            </ion-col>
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="!isIndividual">
+              <ion-item>
+                <ion-label position="stacked">{{'RESERVED_CODE' | translate}} <ng-container
+                    >*</ng-container></ion-label>
+                <ion-select placeholder="{{'SELECT_RESERVED_CODE' | translate}}" formControlName="reservedCode"
+                  [value]="reservedCode" [interfaceOptions]="setLanguage==='ar' ?{cssClass: 'ar'}:''"
+                  [ngClass]="{ 'is-invalid': (!submitted && form.reservedCode.errors) || (form.reservedCode.touched && form.reservedCode.errors) }" (ionChange)="handleReservation($event)">
+                  <ion-select-option *ngFor="let row of reservedCodeList" [value]="row">
+                    {{setLanguage==='ar' ? row.name_arb : row.name_eng}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <div *ngIf="!submitted||(form.reservedCode.touched && form.reservedCode.invalid)">
+                <small class="form-text error-message" *ngIf="form.reservedCode.errors">
+                  <!-- <small class="form-text error-message"> -->
+                  {{'RESERVED_CODE_REQUIRED' |
+                  translate}}
+                </small>
+              </div>
+            </ion-col>
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="!isIndividual && showReservation">
+              <ion-item>
+                <ion-label position="stacked">{{'RESERVATION_SITES' | translate}} <ng-container
+                    *ngIf="!isIndividual">*</ng-container></ion-label>
+                <ion-select placeholder="{{'SELECT_RESERVATION_SITES' | translate}}"
+                  (ionChange)="reservationsiteChange($event)" formControlName="reservationSites"
+                   [interfaceOptions]="setLanguage==='ar' ?{cssClass: 'ar'}:''"
+                  [ngClass]="{ 'is-invalid': (!submitted && form.reservationSites.errors) || (form.reservationSites.touched && form.reservationSites.errors) }">
+                  <ion-select-option *ngFor="let row of reservationSitesList" [value]="row.id">
+                    {{row.name}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <div *ngIf="!submitted||(form.reservationSites.touched && form.reservationSites.invalid)">
+                <small class="form-text error-message" *ngIf="form.reservationSites.errors">
+                  {{'RESERVATION_SITE_REQUIRED' | translate}}
+                </small>
+              </div>
+            </ion-col>
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="!isIndividual && showReservation">
+              <ion-item>
+                <ion-label position="stacked">{{'RESERVATION_SITE_AREAS' | translate}} <ng-container
+                    *ngIf="!isIndividual">*</ng-container></ion-label>
+                <ion-select placeholder="{{'SELECT_RESERVATION_SITE_AREAS' | translate}}"
+                  formControlName="reservationSiteAreas" 
+                  [interfaceOptions]="setLanguage==='ar' ?{cssClass: 'ar'}:''"
+                  [ngClass]="{ 'is-invalid': (!submitted && form.reservationSiteAreas.errors) || (form.reservationSiteAreas.touched && form.reservationSiteAreas.errors) }">
+                  <ion-select-option *ngFor="let row of reservationSitesAreasList" [value]="row.id">
+                    {{row.name}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <div *ngIf="!submitted||(form.reservationSiteAreas.touched && form.reservationSiteAreas.invalid)">
+                <small class="form-text error-message" *ngIf="form.reservationSiteAreas.errors">
+                  {{'RESERVATION_SITE_AREA_REQUIRED' | translate}}
+                </small>
+              </div>
+            </ion-col>
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="!isIndividual">
+              <ion-item>
+                <ion-label position="stacked">{{'RESERVED_ID_NUMBER' | translate}} <ng-container
+                    *ngIf="showMandatory">*</ng-container></ion-label>
+                <ion-input placeholder="{{'ENTER_RESERVED_ID_NUMBER' | translate}}" formControlName="reservedIdNumber"
+                  [(ngModel)]="reservedIdNumber"
+                  [ngClass]="{ 'is-invalid': (!submitted && form.reservedIdNumber.errors) || (form.reservedIdNumber.touched && form.reservedIdNumber.errors) }">
+                </ion-input>
+              </ion-item>
+              <div *ngIf="!submitted||(form.reservedIdNumber.touched && form.reservedIdNumber.invalid)">
+                <small class="form-text error-message"
+                  *ngIf="form.reservedIdNumber.errors">{{'RESERVED_ID_NUMBER_REQUIRED' |
+                  translate}}</small>
+              </div>
+            </ion-col>
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="elementVisible">
+              <ion-item>
+                <!-- (ionChange)="onInput($event)" -->
+                <ion-label position="stacked">{{'PHONE' | translate}} </ion-label>
+                <ion-input type="tel" maxlength="10" placeholder="Mobile Format-(05********)" formControlName="phone">
+                </ion-input>
+                <!-- placeholder="{{'ENTER_PHONE' | translate}}" -->
+              </ion-item>
+              <div *ngIf="!submitted||(form.phone.touched && form.phone.invalid)">
+                <small class="form-text error-message" *ngIf="form.phone.errors?.required">{{'PHONE_REQUIRED' |
+                  translate}}</small>
+
+              </div>
+              <div *ngIf="!submitted||(form.phone.touched && form.phone.invalid)">
+                <small class="form-text error-message" *ngIf="form.phone.errors?.pattern">{{'ENTER_VALID_PHONE' |
+                  translate}} </small>
+              </div>
+
+            </ion-col>
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6">
+              <ion-item>
+                <!-- (ionChange)="onInput($event)" -->
+                <ion-label position="stacked">{{'RECIPIENT_MOBILE' | translate}} <ng-container
+                    *ngIf="!isVehicle && !isCommercial">*
+                  </ng-container>
+                </ion-label>
+                <ion-input type="tel" maxlength="10" placeholder="Mobile Format-(05********)"
+                  formControlName="recipientMobile"
+                  [ngClass]="{ 'is-invalid': (!submitted && form.recipientMobile.errors) || (form.recipientMobile.touched && form.recipientMobile.errors) }">
+                </ion-input>
+                <!-- placeholder="{{'ENTER_RECIPIENT_MOBILE' | translate}}" -->
+              </ion-item>
+              <div *ngIf="!submitted||(form.recipientMobile.touched && form.recipientMobile.invalid)">
+                <small class="form-text error-message" *ngIf="form.recipientMobile.errors?.required">
+                  {{'RECIPIENT_MOBILE_REQUIRED' | translate}}</small>
+              </div>
+              <div *ngIf="!submitted||(form.recipientMobile.touched && form.recipientMobile.invalid)">
+                <small class="form-text error-message"
+                  *ngIf="form.recipientMobile.errors?.pattern">{{'ENTER_VALID_MOBILE' | translate}}</small>
+              </div>
+            </ion-col>
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="!isIndividual">
+              <ion-item>
+                <ion-label position="stacked">{{'EMAIL' | translate}}</ion-label>
+                <ion-input placeholder="{{'ENTER_EMAIL' | translate}}" formControlName="email"></ion-input>
+              </ion-item>
+              <!-- [ngClass]="{ 'is-invalid': (submitted && form.email.errors) || (form.email.touched && form.email.errors) }" -->
+              <div *ngIf="!submitted||(form.email.touched && form.email.invalid)">
+                <small class="form-text error-message" *ngIf="form.email.errors?.required">{{'EMAIL_REQUIRED' |
+                  translate}}</small>
+                <small class="form-text error-message" *ngIf="form.email.errors?.pattern">{{'ENTER_VALID_EMAIL' |
+                  translate}}</small>
+              </div>
+            </ion-col>
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="elementVisible">
+              <ion-item>
+                <ion-label position="stacked">{{'ADDRESS' | translate}}</ion-label>
+                <ion-input placeholder="{{'ENTER_ADDRESS' | translate}}" formControlName="address"></ion-input>
+              </ion-item>
+            </ion-col>
+            <!-- Start Owner details  -->
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="!isIndividual">
+              <ion-item>
+                <ion-label position="stacked">{{'OWNER_NAME' | translate}}</ion-label>
+                <ion-input placeholder="{{'ENTER_OWNER_NAME' | translate}}" formControlName="ownername">
+                </ion-input>
+              </ion-item>
+
+
+            </ion-col>
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="!isIndividual">
+              <ion-item>
+                <ion-label position="stacked">{{'OWNER_PHONE_NUMBER' | translate}} <span
+                    *ngIf="ownerPhoneRequired">*</span></ion-label>
+                <ion-input type="tel" maxlength="10" placeholder="Mobile Format-(05********)"
+                  formControlName="ownerphone"
+                  [ngClass]="{ 'is-invalid': (!submitted && form.ownerphone.errors) || (form.ownerphone.touched && form.ownerphone.errors) }">
+                </ion-input>
+                <!-- placeholder="{{'ENTER_OWNER_PHONE_NUMBER' | translate}}" -->
+              </ion-item>
+              <div *ngIf="(!submitted||(form.ownerphone.touched && form.ownerphone.invalid))">
+                <small class="form-text error-message" *ngIf="form.ownerphone.errors?.required">
+                  {{'OWNER_PHONE_REQUIRED' | translate}}</small>
+              </div>
+              <div *ngIf="!submitted||(form.ownerphone.touched && form.ownerphone.invalid)">
+                <small class="form-text error-message" *ngIf="form.ownerphone.errors?.pattern">{{'ENTER_VALID_MOBILE' |
+                  translate}}</small>
+              </div>
+            </ion-col>
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="!isIndividual">
+              <ion-item>
+                <ion-label position="stacked">{{'OWNER_ID_DESCRIPTION' | translate}}</ion-label>
+                <ion-input placeholder="{{'ENTER_OWNER_ID_DESCRIPTION' | translate}}"
+                  formControlName="ownerdescription"></ion-input>
+              </ion-item>
+            </ion-col>
+            <!-- End Owner Details Customer with no proof-->
+
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="isVehicle">
+              <ion-item>
+                <ion-label position="stacked">{{'CUSTOMER_WITH_PROOF' | translate}}</ion-label>
+                <ion-select placeholder="{{'SELECT_CUSTOMER_WITH_PROOF' | translate }}" #customerwithproof
+                  (ionChange)="selectcustomerwithproof($event)" formControlName="customerwithproof"
+                  [ngClass]="{ 'is-invalid ': (!submitted && form.customerwithproof.errors) || (form.customerwithproof.touched && form.customerwithproof.errors) } "
+                  [interfaceOptions]="setLanguage==='ar' ?{cssClass: 'ar'}:''">
+                  <ion-select-option value="Yes">Yes</ion-select-option>
+                  <ion-select-option value="No">No</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-col>
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="!isVehicle || isCustomerwithproof=='Yes'">
+              <ion-item>
+                <!-- <ion-icon lazy="true" slot="start" name="image"></ion-icon> -->
+                <ion-label position="stacked">{{'IDENTITY_DOCUMENT' | translate}} *</ion-label>
+
+
+                <div class="ionButtonCamara">
+                  <!-- <input type="file" class="fileUplodeInput" id="file-input" (change)="onFileChange($event)" accept="image/png, image/jpeg"> -->
+                  <ion-button (click)="identityDocCam()">{{'FROM_CAMERA' | translate}}</ion-button>
+                  <ion-button (click)="identityDocGallery()">{{'FROM_GALLERY' | translate}}</ion-button>
+                </div>
+
+              </ion-item>
+              <div class="iontextBottomInput">
+                <ion-text color="dark">
+                  <!-- <h6>({{'ALLOWS_JPG_MAXSIZE' | translate}}) *</h6> -->
+                </ion-text>
+                <ion-grid class="camImgDisplay">
+                  <ion-row>
+                    <ion-col size="6" sizeLg="3" sizeMd="3" sizeSm="6" *ngFor="let photos of identityDocPhotos"
+                      no-padding no-margin class="ion-align-self-start">
+                      <div class="camImgDisplayPosition">
+                        <ion-item>
+                          <ion-img-viewer title="{{'IDENTITY_DOCUMENT' | translate}}" scheme="dark"
+                            src="{{imageBase + photos}}" *ngIf="photos">
+                          </ion-img-viewer>
+
+                          <!-- <ion-img src="{{photos}}" *ngIf="photos" ></ion-img>                         -->
+                        </ion-item>
+                        <ion-buttons (click)="onDelete(photos[0],'identity')" class="camImgDeleteIcon">
+                          <!-- (click)="onVdcamImgDelete(i,'identityDoc')" -->
+                          <ion-icon name="trash"></ion-icon>
+                        </ion-buttons>
+                      </div>
+                    </ion-col>
+
+                  </ion-row>
+                </ion-grid>
+              </div>
+            </ion-col>
+
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="!isIndividual">
+              <ion-item>
+                <ion-label position="stacked">{{'DESCRIPTION' | translate}}</ion-label>
+                <ion-input placeholder="{{'ENTER_DESCRIPTION' | translate}}" formControlName="description"></ion-input>
+              </ion-item>
+            </ion-col>
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="elementVisible">
+              <ion-item>
+                <ion-label position="stacked">{{'DAILY_FINES' | translate}}</ion-label>
+                <ion-input placeholder="{{'ENTER_DAILY_FINES' | translate}}" readonly="readonly"
+                  formControlName="dailyFines">
+                </ion-input>
+              </ion-item>
+            </ion-col>
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="elementVisible">
+              <ion-item>
+                <ion-label position="stacked">{{'FINE_AMOUNT' | translate}}</ion-label>
+                <ion-input placeholder="{{'ENTER_FINE_AMOUNT' | translate}}" readonly="readonly"
+                  formControlName="fineAmount"></ion-input>
+              </ion-item>
+            </ion-col>
+
+            <ion-col size="12" sizeLg="12" sizeMd="12" sizeSm="6">
+              <ion-item>
+                <ion-label position="stacked">{{'WARNING_DOCUMENT' | translate}}<ng-container *ngIf="!isVehicle">*
+                  </ng-container>
+                </ion-label>
+
+                <div class="ionButtonCamGallery">
+                  <div class="displayInlineBlock">
+                    <ion-button (click)="getCemara()" [disabled]="photos.length==5">{{'FROM_CAMERA' | translate}}
+                    </ion-button>
+                    <ion-button (click)="getImageFromGallery()" [disabled]="photos.length==5">{{'FROM_GALLERY' |
+                      translate}}
+                    </ion-button>
+                  </div>
+
+                </div>
+
+              </ion-item>
+              <ion-text style="font-size: 12px;color: green;">
+                {{msgVideo}}
+              </ion-text>
+              <div class="iontextBottomInput">
+                <ion-text color="dark">
+                  <!-- <h6>({{'ALLOWS_JPG_MAXSIZE' | translate}}) *</h6> -->
+                </ion-text>
+
+
+                <ion-grid class="camImgDisplay">
+                  <ion-row>
+                    <ion-col size="6" sizeLg="3" sizeMd="3" sizeSm="6" *ngFor="let photo of photos" no-padding no-margin
+                      class="ion-align-self-start">
+                      <div class="camImgDisplayPosition">
+                        <ion-item>
+                          <!-- <ion-img src="{{photo}}" *ngIf="photo" ></ion-img>   -->
+                          <ion-img-viewer title="{{'VIOLATION_DOCUMENT' | translate}}" scheme="dark"
+                            src="{{imageBase+photo}}" *ngIf="photo">
+                          </ion-img-viewer>
+                        </ion-item>
+                        <ion-buttons (click)="onDelete(photo[0],'violation')" class="camImgDeleteIcon">
+                          <ion-icon name="trash"></ion-icon>
+                        </ion-buttons>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </div>
+            </ion-col>
+
+            <ion-col size="12" sizeLg="12" sizeMd="12" sizeSm="6">
+              <ion-item>
+                <ion-label position="stacked">{{'WARNING_VIDEO' | translate}}</ion-label>
+
+                <div class="ionButtonCamGallery">
+    
+                  <div class="displayInlineBlock">
+                    <ion-button (click)="videoRecord()">{{'VIDEOUPLOAD' | translate}}</ion-button>
+                  </div>
+
+                </div>
+     
+              </ion-item>
+              <!-- {{showText}} -->
+              <div *ngIf="showText === true ">
+                <!-- <h5>uplodedddd</h5> -->
+                <ion-text class="videoText">
+                  <ion-icon name="checkmark-circle-outline"></ion-icon> {{'VIDEO_UPLOADED_SUCCESSFULLY' | translate}}
+                </ion-text>
+              </div>
+
+              <div class="iontextBottomInput">
+                <ion-text color="dark">
+                  <!-- <h6>({{'ALLOWS_MP4_MAXSIZE' | translate}}) *</h6> -->
+                </ion-text>
+      
+              </div>
+            </ion-col>
+            <ion-col size="12">
+              <ion-item>
+                <ion-label position="stacked">{{'FINE_NOTES' | translate}} *</ion-label>
+                <ion-textarea rows="4" cols="20" placeholder="{{'ENTER_REPORT' | translate}}"
+                  formControlName="fineNotes"
+                  [ngClass]="{ 'is-invalid': (!submitted && form.fineNotes.errors) || (form.fineNotes.touched && form.fineNotes.errors) }">
+                </ion-textarea>
+              </ion-item>
+              <div *ngIf="!submitted||(form.fineNotes.touched && form.fineNotes.invalid)">
+                <small class="form-text error-message" *ngIf="form.fineNotes.errors"> {{'REPORT_REQUIRED' |
+                  translate}}</small>
+              </div>
+            </ion-col>
+
+          </ion-row>
+          <ion-row style="display: none;">
+            <ion-col>
+              <ion-item>
+                <ion-label position="stacked">Signature</ion-label>
+
+                <!-- Signature -->
+                <div class="signButtons">
+                  <!-- <ion-button size="small" [disabled]="isCanvasBlank()" (click)="save()"> Save</ion-button> -->
+                  <ion-button size="small" [disabled]="isCanvasBlank()" (click)="undo()"> Undo</ion-button>
+                  <ion-button size="small" [disabled]="isCanvasBlank()" (click)="clear()"> Clear</ion-button>
+                </div>
+                <div class="signature-pad">
+                  <div>
+                    <!-- <canvas class="signature-pad-canvas" #canvas width="225" height="100" style="touch-action: none;"></canvas> -->
+                    <canvas class="signature-pad-canvas" #canvas height="100" style="touch-action: none;"></canvas>
+                  </div>
+                </div>
+                <!-- Signature -->
+                <!-- <ion-button class="signatureBt" (click)="viewSignatureModal()">Create Signature</ion-button> -->
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+
+
+
+
+
+        <div class="container">
+
+
+        </div>
+
+      </ion-card-content>
+    </ion-card>
+  </form>
+  <!-- <pre>{{creatViolation.value | json}}</pre> -->
+</ion-content>
+
+<ion-footer class="ion-no-border ionFooter">
+  <ion-item lines="none">
+    <ion-button (click)="onSubmit()" expand="block" size="large" class="linearGradientGreen">
+      {{'CREATE_WARNING' | translate}} </ion-button>
+  </ion-item>
+</ion-footer>

@@ -1,0 +1,235 @@
+<ion-header>
+  <ion-toolbar class="psTitleLogoToolbar">
+
+
+    <ion-title slot="start">
+      <div class="psTitleLogo"><ion-img src="../../../../assets/images/logo-em.png"></ion-img></div>
+      <div class="ionTitleDashboard">{{'PUBLICSERVICES' | translate }}</div>
+    </ion-title>
+    <ion-buttons class="userIcon" slot="end" routerLink="/profile">
+      <ion-icon slot="icon-only" color="light" name="person-circle-outline"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ionContentFixed">
+  <div *ngIf="user_type != 29">
+  <ion-img src="../../../../assets/images/RAQIB_Logo-lg.png" class="raqebLogo" ></ion-img>
+  </div>
+  <!-- <div id="map_canvas" #map_canvas>
+    <ion-img src="../../../../assets/images/RAQIB_Logo-lg.png" class="raqebLogo" ></ion-img>
+  </div>-->
+  <ion-text class="welcomeText" *ngIf="user_type == 29">
+    <h5>{{'WELCOME' | translate }} ! </h5>
+    <h1> {{first_name | uppercase}} {{last_name | uppercase}}</h1>
+  </ion-text>
+</ion-content> 
+
+<ion-footer class="ion-no-border dashboardFooter">
+  <div>
+    <ion-grid class="violationTypeBlocks">
+      <ion-row>
+        <ng-container *ngFor="let menu of menuAccess">
+          
+          <!-- Violations -->
+          <ion-col *ngIf="menu.menu_check === 'violations' && hasAccess(menu.role_id)" size="4" sizeLg="4" sizeMd="4" sizeSm="4" class="vt-borderLeft" routerLink="/transactionslist">
+            <div class="vtBadge">
+              <ion-badge *ngIf="showInspector">{{vioCount}}</ion-badge>
+              <ion-icon name="receipt-outline"></ion-icon>
+            </div>
+            <ion-text>
+              <h4>{{'VIOLATION_LIST' | translate }}</h4>
+            </ion-text>
+          </ion-col>
+
+          <!-- Create Violation -->
+          <ion-col *ngIf="menu.menu_check === 'create_violation' && hasAccess(menu.role_id)" size="4" sizeLg="4" sizeMd="4" sizeSm="4" class="vt-borderLeft" routerLink="/createviolation">
+            <ion-icon name="add-outline"></ion-icon>
+            <ion-text>
+              <h4>{{'CREATE_VIOLATION_TITLE' | translate }}</h4>
+            </ion-text>
+          </ion-col>
+
+          <!-- Sync Masters -->
+          <ion-col *ngIf="menu.menu_check === 'sync_masters' && hasAccess(menu.role_id)" size="4" sizeLg="4" sizeMd="4" sizeSm="4" class="vt-borderLeft" (click)="syncDataMasters()">
+            <ion-icon name="list-outline"></ion-icon>
+            <ion-text>
+              <h4>{{'SYNC_LIST_MASTER' | translate }}</h4>
+            </ion-text>
+          </ion-col>
+
+          <!-- Sync Violations -->
+          <ion-col *ngIf="menu.menu_check === 'sync_violations' && hasAccess(menu.role_id)" size="4" sizeLg="4" sizeMd="4" sizeSm="4" class="vt-borderLeft" (click)="syncViolations()">
+
+            <ion-icon name="list-outline"></ion-icon>
+            <ion-text>
+              <h4>{{'SYNC_LIST_VIOLATIONS' | translate }}</h4>
+            </ion-text>
+          </ion-col>
+
+          <!-- Raise Complaints  -->
+          <ion-col *ngIf="menu.menu_check === 'create_raqib_complaint' && hasAccess(menu.role_id)" size="4" sizeLg="4" sizeMd="4" sizeSm="4" class="vt-borderLeft" routerLink="/raisecomplaint">
+            <ion-img src="assets/images/raise-complaint.svg"></ion-img>
+             <ion-text>
+               <h4>{{'RAISE_COMPLAINT' | translate }}</h4>
+             </ion-text>
+           </ion-col>
+
+          <!-- View Complaints  -->
+          <ion-col *ngIf="menu.menu_check === 'raqib_complaints' && hasAccess(menu.role_id)" size="4" sizeLg="4" sizeMd="4" sizeSm="4" class="vt-borderLeft" routerLink="/viewcomplaints">
+            <ion-img src="assets/images/view-complaints.svg"></ion-img>
+             <ion-text>
+               <h4>{{'VIEW_COMPLAINTS' | translate }}</h4>
+             </ion-text>
+          </ion-col>
+
+          <!-- Create Warning  -->
+          <ion-col *ngIf="menu.menu_check === 'create_warning' && hasAccess(menu.role_id)" size="4" sizeLg="4" sizeMd="4" sizeSm="4" class="vt-borderLeft" routerLink="/createwarning">
+            <ion-icon name="add-outline"></ion-icon>
+             <ion-text>
+               <h4>{{'CREATE_WARNING' | translate }}</h4>
+             </ion-text>
+          </ion-col>
+
+          <!-- Warning List  -->
+          <ion-col *ngIf="menu.menu_check === 'warnings' && hasAccess(menu.role_id)" size="4" sizeLg="4" sizeMd="4" sizeSm="4" class="vt-borderLeft" routerLink="/warninglist">
+            <ion-icon name="receipt-outline">ion-icon</ion-icon>
+            <ion-text>
+              <h4>{{'WARNING_LIST' | translate }}</h4>
+            </ion-text>
+          </ion-col>
+
+          <!-- Create Report  -->
+          <ion-col *ngIf ="menu.menu_check === 'create_inspector_report' && hasAccess(menu.role_id)" size="4" sizeLg="4" sizeMd="4" sizeSm="4" class="vt-borderLeft" (click)="toaddReport()">
+            <ion-icon name="add-outline">ion-icon</ion-icon>
+            <ion-text>
+              <h4>{{'CREATE_REPORT' | translate }}</h4>
+            </ion-text>
+          </ion-col> 
+
+          <!-- Report List  -->
+          <ion-col *ngIf="menu.menu_check === 'inspector_reports' && hasAccess(menu.role_id)" size="4" sizeLg="4" sizeMd="4" sizeSm="4" class="vt-borderLeft" routerLink="/report-list">
+            <ion-icon name="receipt-outline">ion-icon</ion-icon>
+            <ion-text>
+              <h4>{{'REPORT_LIST' | translate }}</h4>
+            </ion-text>
+          </ion-col>
+
+          <!-- Rejected Report List  -->
+          <ion-col *ngIf="menu.menu_check === 'reject_inspector_reports' && hasAccess(menu.role_id)" size="4" sizeLg="4" sizeMd="4" sizeSm="4" class="vt-borderLeft" routerLink="/rejected-report-list">
+            <ion-icon name="receipt-outline">ion-icon</ion-icon>
+            <ion-text>
+              <h4> {{'REJECTED_REPORT_LIST' | translate}} </h4>
+            </ion-text>
+          </ion-col>
+
+          <!-- Permits List  -->
+          <ion-col *ngIf="menu.menu_check === 'permits' && hasAccess(menu.role_id)" size="4" sizeLg="4" sizeMd="4" sizeSm="4" class="vt-borderLeft"  routerLink="/permitlist">
+            <ion-icon name="receipt-outline">ion-icon</ion-icon>
+            <ion-text>
+              <h4>{{'PERMIT_LIST' | translate }}</h4>
+            </ion-text>
+          </ion-col>
+
+          <!-- General Incident  -->
+
+          <ion-col  *ngIf="menu.menu_check === 'create_general_incident' && hasAccess(menu.role_id)" size="4" sizeLg="4" sizeMd="4" sizeSm="4" class="vt-borderLeft" routerLink="/creategeneral">
+            <div class="vtBadge">
+              <ion-icon name="add-outline">ion-icon</ion-icon>
+            </div>
+            <ion-text>
+              <h4>{{'CREATE_G_I' | translate }}</h4>
+            </ion-text>
+          </ion-col>
+
+          <ion-col *ngIf="menu.menu_check === 'general_incidents' && hasAccess(menu.role_id)" size="4" sizeLg="4" sizeMd="4" sizeSm="4" class="vt-borderLeft"  routerLink="/viewgeneral">
+            <div class="vtBadge">
+              <ion-icon name="receipt-outline">ion-icon</ion-icon>
+            </div>
+            <ion-text>
+              <h4>General Incident List</h4>
+            </ion-text>
+          </ion-col>
+
+          <!-- Create Permit  -->
+          <ion-col *ngIf="menu.menu_check === 'create_permit' && hasAccess(menu.role_id)"  size="4" sizeLg="4" sizeMd="4" sizeSm="4" class="vt-borderLeft"  routerLink="/createpermit">
+            <div class="vtBadge">
+              <ion-icon name="add-outline">ion-icon</ion-icon>
+            </div>
+            <ion-text>
+              <h4> {{'CREATE_PERMIT' | translate}} </h4>
+            </ion-text>
+          </ion-col>
+
+          <!-- warning to violation  -->
+          <ion-col *ngIf="menu.menu_check === 'warning_to_violations' && hasAccess(menu.role_id)"  size="4" sizeLg="4" sizeMd="4" sizeSm="4" class="vt-borderLeft"  routerLink="/warningtoviolations">
+            <div class="vtBadge">
+              <ion-icon name="receipt-outline">ion-icon</ion-icon>
+            </div>
+            <ion-text>
+              <h4> {{'WARNING_TO_VIOLATIONS' | translate}} </h4>
+            </ion-text>
+          </ion-col>
+
+          <ion-col *ngIf="menu.menu_check === 'assorted_report' && hasAccess(menu.role_id)"  size="4" sizeLg="4" sizeMd="4" sizeSm="4" class="vt-borderLeft" (click)="toAssortReport()">
+            <div class="vtBadge">
+              <!-- <a [href]="baseUrl + 'administrator/Dashboard/assorted_report/violations'" target="_system"> -->
+              <ion-icon name="link">ion-icon</ion-icon>
+              <!-- </a> -->
+            </div>
+            <ion-text>
+              <h4> {{'ASSERT_REPORTS' | translate}} </h4>
+            </ion-text>
+          </ion-col>
+
+          <ion-col *ngIf="menu.menu_check === 'create_toll_free_service' && hasAccess(menu.role_id)"   size="4" sizeLg="4" sizeMd="4" sizeSm="4" class="vt-borderLeft" routerLink="/followup-request"> 
+            <div class="vtBadge">
+              <ion-icon name="add-outline">ion-icon</ion-icon>
+            </div>
+            <ion-text>
+              <h4> Create Toll-Free Service</h4>
+            </ion-text>
+          </ion-col>
+
+          <ion-col *ngIf="menu.menu_check === 'toll_free_services' && hasAccess(menu.role_id)"   size="4" sizeLg="4" sizeMd="4" sizeSm="4" class="vt-borderLeft" routerLink="/followup-list"> 
+            <div class="vtBadge">
+              <ion-icon name="calendar-outline">ion-icon</ion-icon>
+            </div>
+            <ion-text>
+              <h4> Toll-Free Services </h4>
+            </ion-text>
+          </ion-col>
+
+          <ion-col *ngIf="menu.menu_check === 'legal_notices' && hasAccess(menu.role_id)"    size="4" sizeLg="4" sizeMd="4" sizeSm="4" class="" routerLink="/legalnoticelist"> 
+            <div class="vtBadge">
+              <ion-icon name="receipt-outline">ion-icon</ion-icon>
+            </div>
+            <ion-text>
+              <h4> {{'LEGAL_NOTICES' | translate}} </h4>
+            </ion-text>
+          </ion-col>
+  
+          <!-- <ion-col size="4" sizeLg="4" sizeMd="4" sizeSm="4" class="vt-borderLeft"  *ngFor="let data of complaintsMenuData" (click)="navigateToDetails(data.complaint_type_id)">
+            <div class="vtBadge">
+              <ion-icon name="receipt-outline">ion-icon</ion-icon>
+            </div>
+            <ion-text>
+              <h4>{{data.complaint_type}}</h4>
+            </ion-text>
+          </ion-col> -->
+
+        </ng-container>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+
+  <div> 
+    <ion-grid class="violationTypeBlocks">
+      <ion-row>
+
+        
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-footer>

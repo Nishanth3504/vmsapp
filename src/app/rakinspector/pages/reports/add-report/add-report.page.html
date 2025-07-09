@@ -1,0 +1,211 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    
+    <ion-title *ngIf="routerType === 'add_report'"> {{'CREATE_REPORT' | translate}} </ion-title>
+    <ion-title *ngIf="routerType === 'update_report'"> {{'UPDATE_REPORT' | translate}} </ion-title>
+    <ion-buttons class="userIcon" slot="end" routerLink="/report-list">
+      <ion-img src="assets/images/view-complaint-white.svg"></ion-img>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="createViolationWrapp formStackedStyles m-top" [fullscreen]="true" overflow-scroll="true" scroll=true
+  has-bouncing="true">
+
+
+
+  <form [formGroup]="addReport">
+    <!-- class="complaintContentcard" -->
+    <ion-card>
+      <ion-card-content class="createViolationGrid-column">
+        <ion-grid>
+
+
+          <ion-item class="no-ripple">
+            <ion-label position="stacked">{{'MAIN_AREA' | translate}}*</ion-label>
+            <ion-select placeholder="{{'SELECT' | translate}} " formControlName="reservationsite"
+              [ngClass]="{ 'is-invalid ': (!submitted && form.reservationsite.errors) || (form.reservationsite.touched && form.reservationsite.errors) } ">
+              <ion-select-option *ngFor="let row of reservationSitesList" [value]="row.id">
+                {{row.name}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <div *ngIf="!submitted||(form.reservationsite.touched && form.reservationsite.invalid)">
+            <small class="form-text error-message" *ngIf="form.reservationsite.errors"> {{'REQUIRED_FIELD' | translate}} </small>
+          </div>
+
+          <ion-item class="no-ripple">
+            <ion-label position="stacked"> {{'SECTOR' | translate }} *</ion-label>
+            <ionic-selectable #sectorComponent 
+            formControlName="sector" 
+            [items]="sectorsList" 
+            itemValueField="sector"
+            [itemTextField]="'sector'"
+            [canSearch]="true"
+            closeButtonSlot="end" 
+            placeholder=" {{'SELECT_SECTOR' | translate}} "
+            [ngClass]="{ 'is-invalid': (!submitted && form.sector.errors) || (form.sector.touched && form.sector.errors) }">
+        </ionic-selectable>
+          </ion-item>
+          <div *ngIf="!submitted||(form.sector.touched && form.sector.invalid)">
+            <small class="form-text error-message" *ngIf="form.sector.errors">  {{'SECTOR' | translate}} {{'IS_REQUIRED'|translate}}</small>
+          </div>
+
+          <ion-item class="no-ripple">
+            <ion-label position="stacked"> {{'PROGRAM_CODE' | translate}} *</ion-label>
+            <ion-select placeholder="{{'SELECT' | translate}} {{'PROGRAM_CODE' | translate}} " formControlName="programCode"
+              [ngClass]="{ 'is-invalid': (!submitted && form.programCode.errors) || (form.programCode.touched && form.programCode.errors) }">
+              <ion-select-option *ngFor="let row of programcodeList" [value]="row.id">
+                {{setLanguage==='ar' ? row.name_ar : row.name_eng}}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <div *ngIf="!submitted||(form.programCode.touched && form.programCode.invalid)">
+            <small class="form-text error-message" *ngIf="form.programCode.errors"> {{'REQUIRED_FIELD' | translate}} </small>
+          </div>
+
+          <ion-item>
+            <ion-label position="stacked"> {{'NO_OF_VIOLATIONS' | translate}} </ion-label>
+            <ion-input type="number"  formControlName="violationcount"
+              [value]="addReport.get('violationcount').value"></ion-input>
+          </ion-item>
+
+
+          <ion-item>
+            <ion-label position="stacked"> {{'NO_OF_COMPLAINTS' | translate}} </ion-label>
+            <ion-input type="number"  formControlName="complaintscount"
+              [value]="addReport.get('complaintscount').value"></ion-input>
+          </ion-item>
+
+
+          <ion-item>
+            <ion-label position="stacked"> {{'NO_OF_WARNINGS' | translate}} </ion-label>
+            <ion-input type="number"  formControlName="warningscount"
+              [value]="addReport.get('warningscount').value"></ion-input>
+          </ion-item>
+
+
+          <ion-item>
+            <ion-label position="stacked"> {{'NO_OF_REMOVE_BILLBOARDS' | translate}} </ion-label>
+            <ion-input type="number"  formControlName="billboardcounts"
+              [value]="addReport.get('billboardcounts').value" ></ion-input>
+          </ion-item>
+
+
+          <ion-item>
+            <ion-label position="stacked"> {{'NO_OF_RESERVATIONS' | translate}} </ion-label>
+            <ion-input type="number"  formControlName="reservationcount"
+              [value]="addReport.get('reservationcount').value" ></ion-input>
+          </ion-item>
+
+
+          <ion-item>
+            <ion-label position="stacked"> {{'NO_OF_CONTAINERS' | translate}} </ion-label>
+            <ion-input type="number"  formControlName="containerscount" [value]="addReport.get('containerscount').value" ></ion-input>
+          </ion-item>
+
+
+
+          <ion-item>
+            <ion-label position="stacked">{{'COMMENTS' | translate}} *</ion-label>
+            <ion-textarea placeholder=" {{'ENTER' | translate}} {{'COMMENTS' | translate}} " formControlName="report"
+              [ngClass]="{ 'is-invalid ': (!submitted && form.report.errors) || (form.report.touched && form.report.errors) } ">
+            </ion-textarea>
+          </ion-item>
+          <div *ngIf="!submitted||(form.report.touched && form.report.invalid)">
+            <small class="form-text error-message" *ngIf="form.report.errors"> {{'REQUIRED_FIELD' | translate}} </small>
+          </div>
+
+          <ion-item>
+            <ion-label position="stacked"> {{'UPLOAD_IMAGE' | translate}}</ion-label>
+            <div class="ionButtonCamGallery">
+              <div class="displayInlineBlock">
+                <ion-button (click)="complaintImageCapture()">{{'IMAGES' | translate}}</ion-button>
+              </div>
+            </div>
+          </ion-item>
+
+          <div class="iontextBottomInput">
+            <ion-grid class="camImgDisplay">
+              <ion-row>
+                <ng-container *ngIf="reportImages.length > 0">
+                  <ion-col *ngFor="let image of reportImages; let i = index" size="4" sizeLg="4" sizeMd="4"
+                    sizeSm="4" no-padding no-margin class="ion-align-self-start">
+                    <div class="camImgDisplayPosition">
+                      <ion-item lines="none">
+                        <ion-img-viewer title="Images" scheme="dark" src="{{imageBase + image}}"  *ngIf="image">
+                        </ion-img-viewer>
+                      </ion-item>
+                      <ion-buttons (click)="onDelete(image[0])" class="camImgDeleteIcon">
+                        <ion-icon name="trash"></ion-icon>
+                      </ion-buttons>
+                    </div>
+                  </ion-col>
+                </ng-container>
+              </ion-row>
+            </ion-grid>
+          </div>
+
+
+        </ion-grid>
+        <div class="container">
+
+
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="routerType === 'add_report'">
+      <ion-card-header>
+        <ion-card-title> {{'VEHICLE_DETAILS' | translate}} </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="stacked"> {{'PLATE_NO' | translate}} * </ion-label>
+          <ion-input formControlName="plateNo" placeholder="{{'ENTER_PLATENO' | translate}}"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked"> {{'PLATE_SOURCE' | translate}} * </ion-label>
+          <ion-select placeholder="{{'SELECT_PLATE_SOURCE' | translate}}"
+            (ionChange)="getSourceValue($event)" formControlName="plateSource"
+            [interfaceOptions]="setLanguage==='ar' ?{cssClass: 'ar'}:''">
+            <ion-select-option *ngFor="let row of plateSourceList" [value]="row">
+              {{setLanguage==='ar' ? row.name_ar : row.name_eng}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked"> {{'PLATE_CATEGORY' | translate}} * </ion-label>
+          <ion-select placeholder="{{'SELECT_PLATE_CATEGORY' | translate}}"
+            (ionChange)="platecategoryId($event)" formControlName="plateCategory"
+            [interfaceOptions]="setLanguage==='ar' ?{cssClass: 'ar'}:''">
+            <ion-select-option *ngFor="let row of plateCategoryData" [value]="row">
+              {{setLanguage==='ar' ? row.name_ar : row.name_eng}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked"> {{'PLATE_CODE' | translate}} * </ion-label>
+          <ion-select placeholder="{{'SELECT_PLATE_CODE' | translate}}"
+            [interfaceOptions]="setLanguage==='ar' ?{cssClass: 'ar'}:''" formControlName="plateCode">
+            <ion-select-option *ngFor="let row of plateCodeDataList" [value]="row.id">
+              {{setLanguage==='ar' ? row.raqab_desc_arb : row.raqab_desc_eng}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-card-content> 
+    </ion-card>
+  </form>
+</ion-content>
+
+<ion-footer class="ion-no-border ionFooter">
+  <ion-item lines="none">
+    <ion-button (click)="onSubmit()" expand="block" size="large" class="linearGradientGreen" *ngIf="routerType === 'add_report'"> {{'CREATE_REPORT' | translate}} </ion-button>
+    <ion-button (click)="onSubmit()" expand="block" size="large" class="linearGradientGreen" *ngIf="routerType === 'update_report'">{{'UPDATE_REPORT' | translate}}</ion-button>
+  </ion-item>
+</ion-footer>

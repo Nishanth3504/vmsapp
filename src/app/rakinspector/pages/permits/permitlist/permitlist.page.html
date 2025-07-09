@@ -1,0 +1,109 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title> {{'PERMIT_LIST' | translate}} </ion-title>
+  </ion-toolbar>
+
+  <ion-toolbar class="searchBlock permitSearchBt">
+    <ion-item lines="none">
+      <ion-searchbar [(ngModel)]="searchKeyword" showCancelButton="never" #searchbar></ion-searchbar>
+      <ion-button (click)="SearchPermits(searchbar.value)" > {{'SEARCH' | translate}} </ion-button>
+      <ion-button *ngIf="showClearButton" (click)="clearSearch()"> {{'CLEAR' | translate}} </ion-button>
+    </ion-item>
+  
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="searchWrapp m-top">
+
+    <ion-card class="tranListCard complaintsListCard" *ngFor = 'let data of permitsData'>
+      <ion-item lines="none">
+        <ion-label class="ion-text-wrap comlistLabel">
+          <div class="idComplaint fineATranListBlock">
+            <ion-row>
+              <ion-col> <ion-text>
+                  <h2> {{data.reference_number}} </h2>
+                </ion-text> </ion-col>
+              <ion-col> <ion-text>
+                  <p> {{data.created_on}} </p>
+                </ion-text></ion-col>                
+            </ion-row>
+
+            <ion-row>
+              <ion-col>
+                <ion-text>
+                  <p class="ion-text-left"> {{'PERMIT_SUBJECT' | translate}} </p>
+                  <h3 class="ion-text-left"> {{data.permit_subject}} </h3>
+                </ion-text>
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <ion-col>
+                <ion-text>
+                  <p class="ion-text-left"> {{'START_DATE_TIME' | translate}} </p>
+                  <h3 class="ion-text-left"> {{data.start_date_time | date:'dd-MM-yyyy hh:mm' }} </h3>
+                </ion-text>
+              </ion-col>
+
+              <ion-col>
+                <ion-text>
+                  <p class="ion-text-left"> {{'END_DATE_TIME' | translate}} </p>
+                  <h3 class="ion-text-left"> {{data.end_date_time | date:'dd-MM-yyyy hh:mm'}} </h3>
+                </ion-text>
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <ion-col>
+                <ion-text>
+                  <p class="ion-text-left"> {{'PERMIT_NUMBER' | translate}} </p>
+                  <h3 class="ion-text-left"> {{data.permit_number}} </h3>
+                </ion-text>
+              </ion-col>
+              <ion-col>
+                <ion-text>
+                  <p  class="ion-text-left"> {{'LICENSE_NUMBER' | translate}} </p>
+                  <h3 class="ion-text-left"> {{data.license_number}} </h3>
+                </ion-text>
+              </ion-col>
+              </ion-row>
+
+              <ion-row class="pt6">
+                <ion-col>
+                <ion-text>
+                  <p  class="ion-text-left"> {{'RECEIPT_NUMBER' | translate}} </p>
+                  <h3 class="ion-text-left"> {{data.receipt_number}} </h3>
+                </ion-text>
+              </ion-col>
+
+              <ion-col class="innerStyle">
+                <div class="ion-float-end viewEditBt btbottomPermit">
+                <ion-text class="ion-text-right" routerLink="/permitdetail/{{data.id}}" ><h5> {{'VIEW' | translate}} </h5></ion-text> 
+                </div>
+              </ion-col>
+              </ion-row>
+          </div>
+        </ion-label>
+      </ion-item>
+    </ion-card>
+
+    <div *ngIf="( permitsData && permitsData.length === 0 )|| permitsData == null">
+      <p  class="ion-text-center">No Data Found....</p>
+      <!-- <ion-img style="width: 100px; margin:auto; margin-top: 45%;" src="assets/images/search-page-icon.svg"></ion-img> -->
+    </div>
+
+
+  <div>
+
+  </div>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMorePermits($event)" [disabled]="isInfiniteScrollDisabled">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="{{ 'LOADING_MORE_PERMITS' | translate }}">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

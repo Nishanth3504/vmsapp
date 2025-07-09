@@ -1,0 +1,156 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>General Incident</ion-title>
+    <!-- <ion-buttons class="userIcon" slot="end" routerLink="/viewgeneral">
+      <ion-img src="assets/images/view-complaint-white.svg"></ion-img>
+    </ion-buttons> -->
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="createViolationWrapp formStackedStyles m-top" [fullscreen]="true" overflow-scroll="true" scroll=true
+  has-bouncing="true">
+
+
+
+  <form [formGroup]="createGeneralIncident">
+    <ion-card>
+      <ion-card-content class="createViolationGrid-column">
+        <ion-grid>
+
+
+          <ion-item class="no-ripple">
+            <ion-label position="stacked">Agency *</ion-label>
+            <ion-select placeholder="Select Agency" formControlName="agency" (ionChange)="selectcomplainttype($event)"
+              [ngClass]="{ 'is-invalid ': (!submitted && form.agency.errors) || (form.agency.touched && form.agency.errors) } ">
+              <ion-select-option [value]="row.id" *ngFor="let row of listAgencies">{{setLanguage === 'ar' ?
+                row.agency_name_ar : row.agency_name_en}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <div *ngIf="!submitted||(form.agency.touched && form.agency.invalid)">
+            <small class="form-text error-message" *ngIf="form.agency.errors">Required Agency</small>
+          </div>
+
+          <ion-item class="no-ripple">
+            <ion-label position="stacked">Area Name *</ion-label>
+            <ion-select placeholder="Select Area Name" formControlName="areaname" (ionChange)="selectArea($event)"
+              [(ngModel)]="defaultArea"
+              [ngClass]="{ 'is-invalid ': (!submitted && form.areaname.errors) || (form.areaname.touched && form.areaname.errors) } ">
+              <ion-select-option [value]="row.id" *ngFor="let row of listComplaintAreas">{{setLanguage === 'ar' ?
+              row.description_ar : row.description_en}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <div *ngIf="!submitted||(form.areaname.touched && form.areaname.invalid)">
+            <small class="form-text error-message" *ngIf="form.areaname.errors">Required Area Name</small>
+          </div>
+
+
+          <!-- <ion-item class="no-ripple" *ngIf="selectedAgency=='8'"> -->
+            <ion-label position="stacked">Sector *</ion-label>
+            <ion-input placeholder="Sector" formControlName="areasector" [value]="areaSector" [disabled]="true"></ion-input>
+          <!-- </ion-item>  -->
+
+
+          <ion-item class="no-ripple">
+            <ion-label position="stacked">Priority *</ion-label>
+            <ion-select placeholder="Select Priority" formControlName="priority"
+              [ngClass]="{ 'is-invalid ': (!submitted && form.priority.errors) || (form.priority.touched && form.priority.errors) } ">
+              <ion-select-option [value]="row.id" *ngFor="let row of listPriorities">{{setLanguage === 'ar' ?
+                row.name : row.name}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <div *ngIf="!submitted||(form.priority.touched && form.priority.invalid)">
+            <small class="form-text error-message" *ngIf="form.priority.errors">Required Priority</small>
+          </div>
+
+          <ion-item class="no-ripple">
+            <ion-label position="stacked">Complaint Type *</ion-label>
+            <ion-select placeholder="Select Complaint Type" formControlName="complainttype" 
+              [ngClass]="{ 'is-invalid ': (!submitted && form.complainttype.errors) || (form.complainttype.touched && form.complainttype.errors) } ">
+              <ion-select-option [value]="row.id" *ngFor="let row of listComplaintTypes">{{setLanguage === 'ar' ?
+                row.complaint_type_ar : row.complaint_type_en}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <div *ngIf="!submitted||(form.complainttype.touched && form.complainttype.invalid)">
+            <small class="form-text error-message" *ngIf="form.complainttype.errors">Required Complaint Type</small>
+          </div>
+
+          <ion-item>
+            <ion-label position="stacked">Description *</ion-label>
+            <ion-textarea rows="4" cols="20" placeholder="Enter Description" formControlName="description"
+              [ngClass]="{ 'is-invalid ': (!submitted && form.description.errors) || (form.description.touched && form.description.errors) } ">
+            </ion-textarea>
+          </ion-item>
+          <div *ngIf="!submitted||(form.description.touched && form.description.invalid)">
+            <small class="form-text error-message" *ngIf="form.description.errors">Required Description</small>
+          </div>
+
+
+          <ion-item>
+            <ion-label position="stacked">Upload Image</ion-label>
+            <div class="ionButtonCamGallery">
+              <div class="displayInlineBlock">
+                <ion-button (click)="complaintImageCapture()">Images</ion-button>
+              </div>
+            </div>
+          </ion-item>
+
+          <div class="iontextBottomInput">
+            <ion-text color="dark">
+            </ion-text>
+            <ion-grid class="camImgDisplay">
+              <ion-row>
+                <ng-container *ngIf="incidentImages.length>0">
+                  <ion-col size="6" sizeLg="3" sizeMd="3" sizeSm="6"
+                  *ngFor="let photos of incidentImages" no-padding no-margin
+                  class="ion-align-self-start">
+                  <div class="camImgDisplayPosition">
+                    <ion-item *ngIf="photos">
+                      <ion-img-viewer title="Incident Images" scheme="dark" src="{{imageBase + photos}}"
+                        >
+                      </ion-img-viewer>
+                    </ion-item>
+                    <ion-buttons (click)="onDelete(photos[0])"  class="camImgDeleteIcon">
+                      <ion-icon name="trash"></ion-icon>
+                    </ion-buttons>
+                  </div>
+                </ion-col>
+                </ng-container>
+               
+              </ion-row>
+            </ion-grid>
+          </div>
+
+          <ion-item>
+            <ion-label position="stacked">Upload Video</ion-label>
+            <div class="ionButtonCamGallery">
+              <div class="displayInlineBlock">
+                <ion-button (click)="videoRecord()">Videos</ion-button>
+              </div>
+            </div>
+          </ion-item>
+          <div *ngIf="showText === true ">
+            <!-- <h5>uplodedddd</h5> -->
+            <ion-text class="videoText" >
+              <ion-icon name="checkmark-circle-outline"></ion-icon> Video uploaded successfully
+            </ion-text>
+          </div>
+
+
+        </ion-grid>
+        <div class="container">
+
+
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </form>
+</ion-content>
+
+<ion-footer class="ion-no-border ionFooter">
+  <ion-item lines="none">
+    <ion-button (click)="onSubmit()" expand="block" size="large" class="linearGradientGreen">Create Incident</ion-button>
+  </ion-item>
+</ion-footer>

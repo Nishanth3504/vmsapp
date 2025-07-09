@@ -1,0 +1,382 @@
+<ion-header class="ion-no-border bgColortransparent">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      {{ (routerType=='update_followup_status' ? 'UPDATE_FOLLOWUP_STATUS' : 'VIEW_FOLLOWUP_REQUEST') | translate }}
+    </ion-title>
+  </ion-toolbar>
+  </ion-header>
+
+
+  <ion-content class="tranDetailsBlockCont m-top tranDetailsGrid-column" *ngIf="detailFollowup">
+    <ion-card>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <ion-text>
+              <h5>{{detailFollowup.reference_number ? detailFollowup.reference_number : '--'}}</h5>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+              <h5>
+                {{'NAME' | translate}}
+              </h5>
+            </ion-text>
+            <ion-text>
+              <h6>
+                {{detailFollowup.name? detailFollowup.name : '--'}}
+              </h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+              <h5>
+                {{'MOBILE_NUMBER' | translate}}
+              </h5>
+            </ion-text>
+            <ion-text>
+              <h6>
+                {{detailFollowup.mobile_no? detailFollowup.mobile_no : '--'}}
+              </h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+              <h5>
+                {{'AREA_NAME' | translate}}
+              </h5>
+            </ion-text>
+            <ion-text>
+              <h6>
+                {{setLanguage == 'ar' ? detailFollowup.areaArName : detailFollowup.areaEngName}}
+              </h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+              <h5>
+                {{'CATEGORY_TYPE' | translate}}
+              </h5>
+            </ion-text>
+            <ion-text>
+              <h6>
+                {{setLanguage == 'ar' ? detailFollowup.categoryArName : detailFollowup.categoryEngName}}
+              </h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+              <h5>
+                {{'SERVICE_TYPE' | translate}}
+              </h5>
+            </ion-text>
+            <ion-text>
+              <h6>
+                {{setLanguage == 'ar' ? detailFollowup.serviceArName : detailFollowup.serviceEngName}}
+              </h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+              <h5>
+                {{'ACTION_TYPE' | translate}}
+              </h5>
+            </ion-text>
+            <ion-text>
+              <h6>
+                {{setLanguage == 'ar' ? detailFollowup.actionArName : detailFollowup.actionEngName}}
+              </h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+              <h5>
+                {{'RESPONSIBILITY_TYPE' | translate}}
+              </h5>
+            </ion-text>
+            <ion-text>
+              <h6>
+                {{setLanguage == 'ar' ? detailFollowup.responsibilityArName : detailFollowup.responsibilityEngName}}
+              </h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+              <h5>
+                {{'RESPONSIBILITY_DEPARTMENT' | translate}}
+              </h5>
+            </ion-text>
+            <ion-text>
+              <h6>
+                {{setLanguage == 'ar' ? detailFollowup.rdArName : detailFollowup.rdEngName}}
+              </h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+              <h5>
+                {{'GEOLOCATION' | translate}}
+              </h5>
+            </ion-text>
+            <ion-text>
+              <h6>
+                {{ detailFollowup.geo_location ? detailFollowup.geo_location : '--'}}
+              </h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+              <h5>
+                {{'ARRIVAL_TIME' | translate}}
+              </h5>
+            </ion-text>
+            <ion-text>
+              <h6>
+                {{ detailFollowup.arrival_time ? detailFollowup.arrival_time : '--'}}
+              </h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+              <h5>
+                {{'COMMENTS' | translate}}
+              </h5>
+            </ion-text>
+            <ion-text>
+              <h6>
+                {{ detailFollowup.comments ? detailFollowup.comments : '--'}}
+              </h6>
+            </ion-text>
+          </ion-col>
+
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+              <h5>
+                {{'STATUS' | translate}}
+              </h5>
+            </ion-text>
+            <ion-text>
+              <h6>
+                {{ detailFollowup.status ? detailFollowup.status : '--'}}
+              </h6>
+            </ion-text>
+          </ion-col>
+
+          
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+              <h5>
+                {{'RECIPIENT_NAME'| translate}} 
+              </h5>
+            </ion-text>
+            <ion-text>
+              <h6>
+                {{detailFollowup.inspectorFirstName}} {{detailFollowup.inspectorLastName}}
+              </h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+              <h5>
+                {{'CREATED_BY' | translate}}
+              </h5>
+            </ion-text>
+            <ion-text>
+              <h6>
+                {{detailFollowup.createByFirstName}} {{detailFollowup.createByLastName}}
+              </h6>
+            </ion-text>
+          </ion-col>
+        
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+
+
+    <ion-card>
+      <ion-text> {{'STATUS_DETAILS' | translate}} </ion-text>
+      <ion-card *ngFor="let data of statusDetails" >
+        <ion-grid>
+       <ion-row>
+        <ion-col >
+          <ion-text>
+            <h6>
+              {{data.first_name}} {{data.last_name}} / {{data.employee_id}}  ({{data.role_name}})
+            </h6>
+          </ion-text>
+        </ion-col>
+    
+            <ion-col >
+              <ion-text>
+                <h6>
+                  {{data.created_on|date:'dd-MM-yyyy hh:mm'}}
+                </h6>
+              </ion-text>
+            </ion-col>
+            </ion-row>
+            <ion-row>
+    
+                <ion-col *ngIf="data.arrival_time" >
+              <ion-text>
+                <h5>
+                  {{'ARRIVAL_TIME' | translate}}
+                </h5>
+              </ion-text>
+              <ion-text>
+                <h6>
+                  {{data.arrival_time}}
+                </h6>
+              </ion-text>
+            </ion-col>
+            <ion-col >
+              <ion-text>
+                <h5>
+                  {{'COMMENTS' | translate}}
+                </h5>
+              </ion-text>
+              <ion-text>
+                <h6>
+                  {{data.comments}}
+                </h6>
+              </ion-text>
+            </ion-col>
+    
+            <ion-col >
+              <ion-text>
+                <h5>
+                  {{'STATUS' | translate}}
+                </h5>
+              </ion-text>
+              <ion-text>
+                <h6>
+                  {{data.status}}
+                </h6>
+              </ion-text>
+            </ion-col>
+
+            <ion-col size="12" *ngIf="data.attachment">
+              <ion-text>
+                <h5>{{ 'ATTACHMENT' | translate }}</h5>
+              </ion-text>
+              <ion-text>
+                <ion-grid>
+                  <ion-row class="violationDocumentRow">
+                    <ion-col size="4">
+                      <ion-img-viewer title="Violation Document" scheme="dark" src="{{imageBase}}{{filePath }}{{data.attachment}}" *ngIf="data.attachment"
+                        alt="Document Not Uploaded">
+                      </ion-img-viewer>
+                      
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-text>
+
+            </ion-col>
+          </ion-row>
+
+          
+        </ion-grid>
+      </ion-card>
+      <!-- <ion-button class="btn" expand="block" color="danger" (click)="torejectReport(detailReports[0].id)" *ngIf="detailReports[0].status === 'Accepted' && ((user_type).includes('8') || (user_type).includes('15'))"> {{'REJECT' | translate}} </ion-button> -->
+    
+    </ion-card>
+
+    <div #formSection *ngIf="routerType === 'view_followup' && detailFollowup.status !== 'Closed' " id="formSectionDiv">
+      <form [formGroup]="updateStatusForm" id="updateForm" 
+      *ngIf="routerType === 'view_followup' && ((userType == 12 && detailFollowup.status === 'In-progress') || (userType != 12 && detailFollowup.status === 'Completed'))" (ngSubmit)="submit()">
+        <ion-card>
+          <ion-text> {{'UPDATE_FOLLOWUP_STATUS' | translate}} </ion-text>
+          <ion-card-content class="createViolationGrid-column">
+            <ion-grid>
+
+              <ion-item class="no-ripple" *ngIf=" userType== 12 && (detailFollowup.arrival_time == null || detailFollowup.arrival_time == '') ">
+                    <ion-label position="stacked">{{'ARRIVAL_TIME' | translate}} </ion-label>
+                    <ion-input type="time" placeholder=" {{'ENTER' | translate}} {{'ARRIVAL_TIME' | translate}} "
+                      formControlName="arrival_time"
+                      [ngClass]="{ 'is-invalid ': (!submitted && form.arrival_time.errors) || (form.arrival_time.touched && form.arrival_time.errors) } ">
+                  </ion-input>
+                </ion-item>
+                <div *ngIf="!submitted||(form.arrival_time.touched && form.arrival_time.invalid)">
+                  <small class="form-text error-message" *ngIf="form.arrival_time.errors">{{'ARRIVAL_TIME' | translate}} {{'IS_REQUIRED'
+                  | translate}}</small>
+                </div>
+
+              <ion-item class="no-ripple">
+                <ion-label position="stacked">
+                  {{'COMMENTS' | translate}}*
+                </ion-label>
+                <ion-textarea rows="4" cols="20" placeholder=" {{'ENTER' | translate}} {{'COMMENTS' | translate}}" formControlName="comments"
+                [ngClass]="{ 'is-invalid ': (!submitted && form.comments.errors) || (form.comments.touched && form.comments.errors) }"></ion-textarea>
+              </ion-item>
+              <div *ngIf="!submitted||(form.comments.touched && form.comments.invalid)">
+                <small class="form-text error-message" *ngIf="form.comments.errors"> {{'COMMENTS' | translate}} {{'IS_REQUIRED' | translate}}</small>
+              </div>
+    
+              <ion-item>
+                <ion-label position="stacked"> {{'UPLOAD_IMAGE' | translate}}</ion-label>
+                <div class="ionButtonCamGallery">
+                  <div class="displayInlineBlock">
+                    <ion-button (click)="folloeupImageCapture()">{{'IMAGES' | translate}}</ion-button>
+                  </div>
+                </div>
+              </ion-item>
+    
+              <div class="iontextBottomInput">
+                <ion-grid class="camImgDisplay">
+                  <ion-row>
+                    <ng-container *ngIf="followupImage">
+                      <ion-col  size="4" sizeLg="4" sizeMd="4"
+                        sizeSm="4" no-padding no-margin class="ion-align-self-start">
+                        <div class="camImgDisplayPosition">
+                          <ion-item lines="none">
+                            <ion-img-viewer title="Images" scheme="dark" src="{{imageBase+filePath+followupImage}}"  *ngIf="followupImage">
+                            </ion-img-viewer>
+                          </ion-item>
+                          <ion-buttons (click)="onDelete()" class="camImgDeleteIcon">
+                            <ion-icon name="trash"></ion-icon>
+                          </ion-buttons>
+                        </div>
+                      </ion-col>
+                    </ng-container>
+                  </ion-row>
+                </ion-grid>
+              </div>
+    
+              <ion-item class="no-ripple">
+                <ion-label position="stacked">{{'SELECT' | translate}} {{'STATUS' | translate}} *</ion-label>
+                <ion-select placeholder=" {{'SELECT' | translate}} {{'STATUS' | translate}} " formControlName="status"
+                  [ngClass]="{ 'is-invalid ': (!submitted && form.status.errors) || (form.status.touched && form.status.errors) } ">
+                  <ion-select-option *ngFor="let data of statusData" [value]="data">{{data}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <div *ngIf="!submitted||(form.status.touched && form.status.invalid)">
+                <small class="form-text error-message" *ngIf="form.status.errors">select an option</small>
+              </div>
+    
+            </ion-grid>
+          </ion-card-content>
+          <ion-button   expand="block" size="large" class="linearGradientGreen" type="submit"> {{'UPDATE' | translate}} </ion-button>
+        </ion-card>
+        
+      </form> 
+      
+    </div>
+
+
+  </ion-content> 

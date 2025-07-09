@@ -1,0 +1,22 @@
+ion-img-viewer {
+    margin-top: 4px;
+    margin-top: 4px;
+    overflow:
+        hidden;
+    height: 109px;
+    display: flex;
+    width: 100%;
+}
+
+.signButtons ion-button {
+    margin-bottom: 16px;
+    margin-top: 16px;
+}
+
+canvas {
+    border: 3px dashed gray;
+   /* height: 100px !important;
+    width: 255px !important;*/
+    
+    width: 100%;
+}

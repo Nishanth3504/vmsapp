@@ -1,0 +1,51 @@
+// // .modal-wrapper .ion-overlay-wrapper .sc-ion-modal-md{
+// // width: 100% !important;
+// // height: 100% !important;
+// // }
+//         #map_canvas {
+//          height: 100% !important;
+//          width: 100% !important;
+//          top: 0;
+//          left: 0;
+//          position: absolute;
+//         }
+
+//         // .modal-wrapper {
+//         //     position: relative;
+//         //     height: calc(100vh - 4em - 64px);
+//         //   }
+          
+//         //   .angular-google-map-container {
+//         //     position: absolute;
+//         //     top: 0;
+//         //     bottom: 0;
+//         //     right: 0;
+//         //     left: 0;
+//         //   }
+// ion-model{
+//     --height:100%
+// }
+
+ion-img-viewer {
+    margin-top: 4px;
+    margin-top: 4px;
+    overflow:
+        hidden;
+    height: 109px;
+    display: flex;
+    width: 100%;
+}
+
+.signButtons ion-button {
+    margin-bottom: 16px;
+    margin-top: 16px;
+}
+
+canvas {
+    border: 3px dashed gray;
+   /* height: 100px !important;
+    width: 255px !important;*/
+    
+    width: 100%;
+}
+ 

@@ -1,0 +1,291 @@
+<ion-header class="ion-no-border bgColortransparent">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title> {{'REPORT_TEXT' | translate}} </ion-title>
+  </ion-toolbar>
+  </ion-header>
+
+
+  <ion-content class="tranDetailsBlockCont m-top tranDetailsGrid-column" *ngIf="detailReports">
+    <ion-card>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <ion-text>
+              <h5>{{detailReports[0].reference_number}}</h5>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+            <h5> {{'MAIN_AREA' | translate}} </h5>
+            </ion-text>
+            <ion-text>
+              <h6>{{ setLanguage === 'ar'? detailReports[0].reservationSiteAr :detailReports[0].reservationSite}}</h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+              <h5>
+                {{'SECTOR' | translate }}
+              </h5>
+            </ion-text>
+            <ion-text>
+              <h6>
+                {{detailReports[0].reservation_sector}}
+              </h6>
+            </ion-text>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+
+    <ion-card>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+              <h5>
+                {{'PROGRAM_CODE' | translate}}
+              </h5>
+            </ion-text>
+            <ion-text>
+              <h6>
+                {{detailReports[0].program_code}}
+              </h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+              <h5>
+                {{'NO_OF_VIOLATIONS' | translate}}
+              </h5>
+            </ion-text>
+            <ion-text>
+              <h6>
+                {{detailReports[0].no_of_violations}}
+              </h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+              <h5>
+                {{'NO_OF_COMPLAINTS' | translate}}
+              </h5>
+            </ion-text>
+            <ion-text>
+              <h6>
+                {{detailReports[0].no_of_complaints}}
+              </h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+              <h5>
+                {{'NO_OF_WARNINGS'|translate}}
+              </h5>
+            </ion-text>
+            <ion-text>
+              <h6>
+                {{detailReports[0].no_of_warnings}}
+              </h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+              <h5>
+                {{'NO_OF_REMOVE_BILLBOARDS' | translate}}
+              </h5>
+            </ion-text>
+            <ion-text>
+              <h6>
+                {{detailReports[0].no_of_removal_billbords}}
+              </h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+              <h5>
+                {{'NO_OF_RESERVATIONS' | translate}}
+              </h5>
+            </ion-text>
+            <ion-text>
+              <h6>
+                {{detailReports[0].no_of_reservations}}
+              </h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+              <h5>
+                 {{'NO_OF_CONTAINERS' | translate}}
+              </h5>
+            </ion-text>
+            <ion-text>
+              <h6>
+                {{detailReports[0].no_of_containers}}
+              </h6>
+            </ion-text>
+          </ion-col>
+        </ion-row>
+        <ion-col>
+          <ion-text>
+            <h5>
+              {{'COMMENTS' | translate}}
+            </h5>
+          </ion-text>
+          <ion-text>
+            <h6>
+              {{detailReports[0].comment ? detailReports[0].comment : '--' }}
+            </h6>
+          </ion-text>
+        </ion-col>
+      </ion-grid>
+    </ion-card>
+
+    <ion-card>
+      <ion-text> {{'ATTACHMENTS' | translate}} </ion-text>
+      <ion-text>
+        <ion-grid>
+          <ion-row class="violationDocumentRow" *ngIf="docsImages.length > 0">
+            <ion-col size="4" *ngFor="let row of docsImages[0]">
+              <ion-img-viewer title="Report Document" scheme="dark" src="{{imagePath}}{{row}}"
+                *ngIf="row" alt="Document Not Uploaded">
+              </ion-img-viewer>
+            </ion-col>
+          </ion-row>
+          <ion-row class="violationDocumentRow" *ngIf="docsImages.length == 0">
+              <ion-text class="noFound">No Attachments Found</ion-text>
+          </ion-row>
+        </ion-grid>
+      </ion-text>
+    </ion-card>
+
+      <ion-card>
+      <ion-text> {{'VEHICLE_DETAILS' | translate}} </ion-text>
+        <ion-grid>
+            <ion-row>
+
+              <ion-col >
+                <ion-text>
+                  <h5>
+                    {{'PLATE_NO' | translate}}
+                  </h5>
+                </ion-text>
+                <ion-text>
+                  <h6>
+                    {{detailReports[0].inspector_plate_no}}
+                  </h6>
+                </ion-text>
+              </ion-col>
+
+            <ion-col >
+              <ion-text>
+                <h5>
+                  {{'PLATE_SOURCE' | translate}}
+                </h5>
+              </ion-text>
+              <ion-text>
+                
+                <h6>
+                  {{ detailReports[0].plateSourceData?.[0]?.name_eng ? (setLanguage === 'ar' ? detailReports[0].plateSourceData[0].name_ar : detailReports[0].plateSourceData[0].name_eng) : 'N/A' }}
+                </h6>
+              </ion-text>
+            </ion-col>
+    
+
+          </ion-row>
+          <ion-row>
+            <ion-col >
+              <ion-text>
+                <h5>
+                  {{'PLATE_CATEGORY' | translate}}
+                </h5>
+              </ion-text>
+              <ion-text>
+                <h6>
+                  {{ detailReports[0].plateCatgoryData?.[0]?.name_eng ? (setLanguage === 'ar' ? detailReports[0].plateCatgoryData[0].name_ar : detailReports[0].plateCatgoryData[0].name_eng) : 'N/A' }}
+                </h6>
+              </ion-text>
+            </ion-col>
+    
+            <ion-col >
+              <ion-text>
+                <h5>
+                  {{'PLATE_CODE' | translate}}
+                </h5>
+              </ion-text>
+              <ion-text>
+                <h6>
+                  {{ detailReports[0].plateCodeData?.[0]?.raqab_desc_eng ? (setLanguage === 'ar' ? detailReports[0].plateCodeData[0].raqab_desc_arb : detailReports[0].plateCodeData[0].raqab_desc_eng) : 'N/A' }}
+                </h6>
+              </ion-text>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+    </ion-card>
+
+<ion-card>
+  <ion-text>Status Details</ion-text>
+  <ion-card *ngFor="let data of statusDetails" >
+    <ion-grid>
+   <ion-row>
+    <ion-col >
+      <ion-text>
+        <h6>
+          {{data.first_name}} {{data.last_name}} / {{data.employee_id}}  ({{data.role_name}})
+        </h6>
+      </ion-text>
+    </ion-col>
+
+        <ion-col >
+          <ion-text>
+            <h6>
+              {{data.created_on|date:'dd-MM-yyyy hh:mm'}}
+            </h6>
+          </ion-text>
+        </ion-col>
+        </ion-row>
+        <ion-row>
+
+        <ion-col >
+          <ion-text>
+            <h5>
+              {{'COMMENTS' | translate}}
+            </h5>
+          </ion-text>
+          <ion-text>
+            <h6>
+              {{data.comment}}
+            </h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col >
+          <ion-text>
+            <h5>
+              {{'STATUS' | translate}}
+            </h5>
+          </ion-text>
+          <ion-text>
+            <h6>
+              {{data.status}}
+            </h6>
+          </ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+  <ion-button class="btn" expand="block" color="danger" (click)="torejectReport(detailReports[0].id)" *ngIf="detailReports[0].status === 'Accepted' && ((user_type).includes('8') || (user_type).includes('15'))"> {{'REJECT' | translate}} </ion-button>
+</ion-card>
+
+  </ion-content> 

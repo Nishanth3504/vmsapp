@@ -1,0 +1,92 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title> {{'REPORT_LIST' | translate}} </ion-title>
+  </ion-toolbar>
+
+  <ion-toolbar class="searchBlock">
+    <ion-searchbar showCancelButton="never" (ionInput)="SearchReports($event)"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="searchWrapp m-top">
+
+    <ion-card class="complaintsListCard" *ngFor="let row of filteredReports">
+      <ion-item lines="none">
+        <ion-label class="ion-text-wrap comlistLabel">
+          <div class="idComplaint">
+            <ion-row>
+              <ion-col> <ion-text>
+                  <h2>{{row.reference_number}}</h2>
+                </ion-text> </ion-col>
+              <ion-col> <ion-text>
+                  <p>{{row.created_on|date:'dd-MM-yyyy hh:mm'}}</p>
+                </ion-text></ion-col>                
+            </ion-row>
+
+            <ion-row>
+              <ion-col>
+                <ion-text>
+                  <p  class="ion-text-left">
+                    Sector - {{row.reservation_sector}}
+                  </p>
+                </ion-text>
+                <ion-text>
+                  <p  class="ion-text-left">{{setLanguage === 'ar' ? row.reservationSiteAr :row.reservationSite}}</p>
+                </ion-text>
+                <ion-text>
+                  <p class="ion-text-left">
+                    Created by : {{row.first_name}} {{row.last_name}} / {{row.employee_id}}
+                  </p>
+                </ion-text>
+                <ion-text>
+                  <p  class="ion-text-left">
+                    <ion-icon name="ellipse" [ngStyle]="{'color': getStatusColor(row.status)}"></ion-icon>
+                    <span [ngStyle]="{'color': getStatusColor(row.status)}">{{row.status == 'Accepted'?  'Approved' : row.status}}</span>
+                  </p>
+                </ion-text>
+              </ion-col>
+              
+              
+             
+              <ion-col class="innerStyle">
+                <div class="ion-float-end viewEditBt">
+                <ion-text class="ion-text-right" routerLink="/view-report/{{row.id}}">View </ion-text> 
+                <ion-text class="ion-text-right"   (click)="toeditReport(row.id)" *ngIf="row.status === 'Rejected' && (user_type).includes('12')" > <span>|</span> Edit</ion-text>
+                <ion-text class="ion-text-right"   (click)="torejectReport(row.id)" *ngIf="row.status === 'Accepted' && ((user_type).includes('8') || (user_type).includes('15'))" > <span>|</span> Reject</ion-text>
+              </div>
+              </ion-col>
+            </ion-row>
+          </div>
+        </ion-label>
+      </ion-item>
+    </ion-card>
+
+    <div *ngIf="filteredReports.length === 0">
+      <p class="ion-text-center">No reports found.</p>
+    </div>
+
+
+  <div>
+
+  </div>
+
+  <!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="fabIonStyles">
+    <ion-fab-button (click)="toaddReport()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab> -->
+
+
+
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMoreReports($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more warnings...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

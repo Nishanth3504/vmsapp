@@ -1,0 +1,590 @@
+<ion-header class="ion-no-border bgColortransparent">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{'VIOLATION_DETAILS' | translate }}</ion-title>
+  </ion-toolbar>
+
+  <ion-toolbar class="toolbar-tranDetailsBlock">
+    <ion-card class="tranListCard">
+      <ion-item lines="none" *ngIf="violationData">
+        <ion-avatar slot="start">
+          <div class="iAvatarLetter" *ngIf="violationData.ViolatiionList.side_type === '1'">IV</div>
+          <div class="iAvatarLetter" *ngIf="violationData.ViolatiionList.side_type === '2'">CV</div>
+          <div class="iAvatarLetter" *ngIf="violationData.ViolatiionList.side_type === '3'">VV</div>
+          <div class="iAvatarLetter" *ngIf="violationData.ViolatiionList.side_type === '4'">VV</div>
+        </ion-avatar>
+        <ion-label class="ion-text-wrap" *ngIf="violationData">
+          <ion-text>
+            <h2>{{setLanguage==='ar' ? violationData.tbl_side_types_list.name_ar :
+              violationData.tbl_side_types_list.name_eng}}</h2>
+          </ion-text>
+        </ion-label>
+      </ion-item>
+    </ion-card>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content class="tranDetailsBlockCont m-top tranDetailsGrid-column" *ngIf="violationData">
+
+  <ion-card>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12">
+          <ion-text>
+            <h5>{{'VIOLATION_TITLE' | translate }}</h5>
+          </ion-text>
+          <ion-text *ngIf="isOnline === true">
+            <h6>{{violationData.violation_title_idlist?(setLanguage==='ar' ?
+              violationData.violation_title_idlist.violation_ar_title :
+              violationData.violation_title_idlist.violation_eng_title):'--'}}
+            </h6>
+          </ion-text>
+          <ion-text *ngIf="isOnline === false">
+            <h6>--</h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4"
+          *ngIf="violationData.is_show_vehicle_sidecode_description">
+          <ion-text>
+            <h5>
+              {{(violationData.ViolatiionList.side_type==1?'INDIVIDUAL_SIDE_CODE':violationData.ViolatiionList.side_type==2?'COMMERCIAL_SIDE_CODE':violationData.ViolatiionList.side_type==3?'VEHICLE_SIDE_CODE':'SIDE_CODE'
+              )| translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{setLanguage==='ar' ? violationData.tbl_side_codesList.description :
+              violationData.tbl_side_codesList.description_eng}}</h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4" *ngIf="violationData.ViolatiionList.side_type === '2'">
+          <ion-text>
+            <h5>{{'LICENSE_NO' | translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{violationData.ViolatiionList.license_no}}</h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4"
+          *ngIf="violationData.ViolatiionList.side_type === '3' || violationData.ViolatiionList.side_type === '4' ">
+          <ion-text>
+            <h5>{{'PLATE_NO' | translate}}</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{violationData.ViolatiionList.license_plate_no}}</h6>
+          </ion-text>
+        </ion-col>
+
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4"
+          *ngIf="violationData.ViolatiionList.side_type === '3' || violationData.ViolatiionList.side_type === '4'">
+          <ion-text>
+            <h5>{{'PLATE_SOURCE' | translate}}</h5>
+          </ion-text>
+          <ion-text *ngIf="isOnline === true">
+            <h6>{{setLanguage==='ar' ? violationData.platesource[0].platesource_ar :
+              violationData.platesource[0].platesource_eng}} <span
+                *ngIf="violationData.platesource[0].platesource_id === '0' "> :
+                {{violationData.ViolatiionList.other_plate_source}}</span></h6>
+          </ion-text>
+          <ion-text *ngIf="isOnline === false">
+            <h6>{{violationData.ViolatiionList.plate_source }} <span
+                *ngIf="violationData.ViolatiionList.plate_source === ' ' || violationData.ViolatiionList.plate_source === 'null' ">
+                : {{violationData.ViolatiionList.other_plate_source}}</span></h6>
+          </ion-text>
+        </ion-col>
+
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4"
+          *ngIf="(violationData.ViolatiionList.side_type === '3' || violationData.ViolatiionList.side_type === '4') && violationData.ViolatiionList.plate_source != '0' ">
+          <ion-text>
+            <h5>{{'PLATE_CATEGORY' | translate}}</h5>
+          </ion-text>
+          <ion-text *ngIf="isOnline === true">
+            <h6
+              *ngIf="violationData.ViolatiionList.plate_category!=' ' && violationData.ViolatiionList.plate_category!=null && violationData.platesource[0].platesource_id !== '0'">
+              {{setLanguage==='ar' ? violationData.platecategory[0].platecategory_ar :
+              violationData.platecategory[0].platecategory_eng}}</h6>
+          </ion-text>
+          <ion-text *ngIf="isOnline === false">
+            <h6
+              *ngIf="violationData.ViolatiionList.plate_category!=' ' && violationData.ViolatiionList.plate_category!=null">
+              {{violationData.ViolatiionList.plate_category}}
+            </h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4"
+          *ngIf="(violationData.ViolatiionList.side_type === '3' || violationData.ViolatiionList.side_type === '4') && violationData.ViolatiionList.plate_source != '0'">
+          <ion-text>
+            <h5>{{'PLATE_CODE' | translate}}</h5>
+          </ion-text>
+          <ion-text *ngIf="isOnline === true">
+            <h6
+              *ngIf="violationData.ViolatiionList.plate_code!=' ' && violationData.platesource[0].platesource_id !== '0'">
+              {{ setLanguage==='ar' ? violationData.platecodes[0].platecode_ar :
+              violationData.platecodes[0].platecode_eng }}
+            </h6>
+          </ion-text>
+          <ion-text *ngIf="isOnline === false">
+            <h6 *ngIf="violationData.ViolatiionList.plate_code!=' '">
+              {{violationData.ViolatiionList.plate_code}}
+            </h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4"
+        *ngIf="(violationData.ViolatiionList.side_type === '3' || violationData.ViolatiionList.side_type === '4') && violationData.ViolatiionList.vehicle_class_type != 0">
+        <!-- *ngIf="(violationData.ViolatiionList.side_type === '3' || violationData.ViolatiionList.side_type === '4') && violationData.ViolatiionList.vehicle_class_type != null && violationData.ViolatiionList.vehicle_class_type !== 0"> -->
+        <ion-text>
+          <h5>{{'VEHICLE_CLASS' | translate}}</h5>
+        </ion-text>
+        <ion-text *ngIf="isOnline === true">
+          <h6
+            *ngIf="violationData.ViolatiionList.vehicle_class_type!= 0">
+            {{setLanguage === 'ar' ? violationData.vehicleClassTypes.name_ar : violationData.vehicleClassTypes.name_eng }}
+          </h6>
+        </ion-text>
+      </ion-col>
+
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4" *ngIf="violationData.ViolatiionList.side_type == '1'">
+          <ion-text>
+            <h5>{{'DOCUMENT_TYPE' | translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{setLanguage==='ar' ? violationData.tbl_document_type_list.name_arb :
+              violationData.tbl_document_type_list.name_eng}}</h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4" *ngIf="violationData.ViolatiionList.side_type === '1'">
+          <ion-text>
+            <h5>{{'DOCUMENT_NO' | translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{violationData.ViolatiionList.document_no}}</h6>
+          </ion-text>
+        </ion-col>
+
+        <!-- <ion-col size="12"
+          *ngIf="violationData.ViolatiionList.side_type !== '3' && violationData.is_show_vehicle_sidecode_description">
+          <ion-text>
+            <h5>
+              {{(violationData.ViolatiionList.side_type==1?'INDIVIDUAL_SIDE_CODE_DESCRIPTION':violationData.ViolatiionList.side_type==2?'COMMERCIAL_SIDE_CODE_DESCRIPTION':violationData.ViolatiionList.side_type==3?'VEHICLE_SIDE_CODE_DESCRIPTION':violationData.ViolatiionList.side_type==4?'VEHICLE_SIDE_CODE_DESCRIPTION':'SIDE_CODE_DESCRIPTION'
+              )| translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{violationData.ViolatiionList.description_side_code}}</h6>
+          </ion-text>
+        </ion-col> -->
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+
+
+  <ion-card>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" sizeLg="3" sizeMd="4" sizeSm="4">
+          <ion-text>
+            <h5>{{'VIOLATION_CATEGORY' | translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{setLanguage==='ar' ? violationData.tbl_fine_categories_list.description :
+              violationData.tbl_fine_categories_list[0].description_eng}}</h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="12" sizeLg="9" sizeMd="8" sizeSm="8">
+          <ion-text>
+            <h5>{{'FINE_CODE' | translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{setLanguage==='ar' ? violationData.tbl_fine_categories_code_list.description :
+              violationData.tbl_fine_categories_code_list.description_eng}}</h6>
+          </ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+  <ion-card>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" sizeLg="3" sizeMd="4" *ngIf="violationData.ViolatiionList.fine_place!=''">
+          <ion-text>
+            <h5>{{'FINE_PLACE' | translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{violationData.ViolatiionList.fine_place=='undefined' ||
+              violationData.ViolatiionList.fine_place=='null'?'--':violationData.ViolatiionList.fine_place}}</h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+          <ion-text>
+            <h5>{{'AREA' | translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{setLanguage==='ar' ? violationData.ViolatiionList.area_arb :
+              violationData.ViolatiionList.area}}</h6>
+          </ion-text>
+        </ion-col>
+
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+          <ion-text>
+            <h5>{{'REPORT' | translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{violationData.ViolatiionList.notes}}</h6>
+          </ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+  <ion-card>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6">
+          <ion-text>
+            <h5>{{'FINE_NO' | translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{violationData.ViolatiionList.fine_no}}</h6>
+          </ion-text>
+        </ion-col>
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+          <ion-text>
+            <h5>{{'MANUAL_REF_NO' | translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{violationData.ViolatiionList.reference_number}}</h6>
+          </ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+  <ion-card *ngIf="violationData.ViolatiionList.side_type !== '1' && violationData.ViolatiionList.reservation_site !== null ">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6" *ngIf="violationData.ViolatiionList.reservation_site !== null || violationData.ViolatiionList.reservation_site !== ''">
+          <ion-text>
+            <h5>{{'RESERVATION_SITES' | translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{violationData.ViolatiionList.reservation_site}}</h6>
+          </ion-text>
+        </ion-col>
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4" *ngIf="violationData.ViolatiionList.reservation_site_area !== null || violationData.ViolatiionList.reservation_site_area !== ''" >
+          <ion-text>
+            <h5>{{'RESERVATION_SITE_AREAS' | translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{violationData.ViolatiionList.reservation_site_area}}</h6>
+          </ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+
+  <ion-card>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+          <ion-text>
+            <h5>{{'RECIPIENT_PERSON ' | translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{violationData.ViolatiionList.recipient_person}}</h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+          <ion-text>
+            <h5>{{'RECIPIENT_MOBILE' | translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{violationData.ViolatiionList.recipient_mobile}}</h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+          <ion-text>
+            <h5>{{'EMAIL' | translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{violationData.ViolatiionList.email}}</h6>
+          </ion-text>
+        </ion-col>
+
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4" *ngIf="violationData.ViolatiionList.side_type !== '1'">
+          <ion-text>
+            <h5>{{'RESERVED_CODE' | translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{setLanguage==='ar' ?violationData.ViolatiionList.r_name_arb:violationData.ViolatiionList.r_name_eng}}
+            </h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4" *ngIf="violationData.ViolatiionList.side_type !== '1'">
+          <ion-text>
+            <h5>{{'RESERVED_ID_NUMBER' | translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{violationData.ViolatiionList.reserved_number}}</h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4" *ngIf="violationData.ViolatiionList.side_type !== '1'">
+          <ion-text>
+            <h5>{{'OWNER_NAME' | translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{violationData.ViolatiionList.owner_name}}</h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4" *ngIf="violationData.ViolatiionList.side_type !== '1'">
+          <ion-text>
+            <h5>{{'OWNER_PHONE_NUMBER' | translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{violationData.ViolatiionList.owner_number}}</h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4" *ngIf="violationData.ViolatiionList.side_type !== '1'">
+          <ion-text>
+            <h5>{{'OWNER_ID_DESCRIPTION' | translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{violationData.ViolatiionList.owner_identity_description}}</h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+          <ion-text>
+            <h5>{{'BUILDING_NUMBER' | translate}}</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{violationData.ViolatiionList.building_number ? violationData.ViolatiionList.building_number : '--' }}</h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+          <ion-text>
+            <h5>{{'STREET_NAME' | translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{violationData.ViolatiionList.street_name ? violationData.ViolatiionList.street_name : '--' }}</h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="12" sizeLg="3" sizeMd="4" sizeSm="4" no-margin no-padding>
+          <ion-text>
+            <h5>{{'IDENTITY_DOCUMENT_VIEW' | translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <ion-grid>
+              <ion-row class="violationDocumentRow" *ngIf="isOnline === true">
+                <ion-col size="4" *ngFor="let row of identityDocs[0]">
+                  <ion-img-viewer title="Violation Document" scheme="dark" src="{{ViolationDocumentsPath}}{{row}}"
+                    *ngIf="row" alt="Document Not Uploaded">
+                  </ion-img-viewer>
+                </ion-col>
+              </ion-row>
+
+              <ion-row class="violationDocumentRow" *ngIf="isOnline === false">
+                <ion-col size="4">
+                  <ion-img-viewer title="Violation Document" scheme="dark" [src]="violationData.ViolatiionList.docpath"
+                    alt="Document Not Uploaded">
+                  </ion-img-viewer>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+
+  <ion-card *ngIf="fineamountvisible">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4" *ngIf="fineamountvisible">
+          <ion-text>
+            <h5>{{'FINE_AMOUNT' | translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <h6> AED {{violationData.ViolatiionList.fine_amount | number : '1.0-0'}}</h6>
+          </ion-text>
+        </ion-col>
+
+
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+  <ion-card>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" sizeLg="3" sizeMd="4" sizeSm="4">
+          <ion-text>
+            <h5>{{'DESCRIPTION' | translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{violationData.ViolatiionList.description}}</h6>
+          </ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+  <ion-card>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" sizeLg="12" sizeMd="12" sizeSm="12">
+          <ion-text>
+            <h5>{{'VIOLATION_DOCUMENT_VIEW' | translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <ion-grid>
+              <ion-row class="violationDocumentRow">
+                <ion-col size="4" *ngFor="let row of docsImages[0]">
+                  <ion-img-viewer title="Violation Document" scheme="dark" src="{{ViolationDocumentsPath}}{{row}}"
+                    *ngIf="row" alt="Document Not Uploaded">
+                  </ion-img-viewer>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+          <ion-text>
+            <h5>{{'VIOLATION_STATUS' | translate }}</h5>
+          </ion-text>
+          <ion-text>
+
+            <!-- <h6>{{'VIOLATION_STATUS_DRAFT' | translate}}</h6> -->
+             <h6>{{violationData.ViolatiionList.status}}</h6>
+          </ion-text>
+        </ion-col>
+
+
+
+        <ion-col size="12" sizeLg="12" sizeMd="12" sizeSm="12"
+          *ngIf="violationData.ViolatiionList.violation_video != 'null' && violationData.ViolatiionList.violation_video != '--' && violationData.ViolatiionList.violation_video !=null && violationData.ViolatiionList.violation_video !=''">
+          <ion-text>
+            <h5>{{'VIOLATION_VIDEO_VIEW' | translate }} </h5>
+          </ion-text>
+          <ion-text>
+            <ion-button (click)="download()">{{isOnline?'DOWNLOAD':'PLAY' | translate }}</ion-button>
+
+          </ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+  <ion-card *ngIf="violationData.ViolatiionList.warning_number != null">
+    <ion-text> {{'WARNING_TO_VIOLATIONS' | translate}} {{'STATUS_DETAILS' | translate}}</ion-text>
+    <ion-card *ngFor="let data of statusDetails">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-text>
+              <h5>{{ 'CREATED_BY' | translate }}</h5>
+            </ion-text>
+            <ion-text>
+              <h6>{{ data.createdUser }}</h6>
+            </ion-text>
+          </ion-col>
+          <ion-col>
+            <ion-text>
+              <h6>{{ data.created_on | date: 'dd-MM-yyyy hh:mm' }}</h6>
+            </ion-text>
+          </ion-col>
+        </ion-row>
+        
+        <ion-row>
+          <ion-col>
+            <ion-text>
+              <h5>{{ 'COMMENTS' | translate }}</h5>
+            </ion-text>
+            <ion-text>
+              <h6>{{ data.note || 'No comment available' }}</h6>
+            </ion-text>
+          </ion-col>
+  
+          <ion-col size="12">
+            <ion-text>
+              <h5>{{ 'ATTACHMENTS' | translate }}</h5>
+            </ion-text>
+            <ion-text>
+              <ion-grid>
+                <ion-row class="violationDocumentRow">
+                  <ion-col size="4" *ngFor="let row of warningImages[0]">
+                    <ion-img-viewer title="Violation Document" scheme="dark" src="{{warningProofUrl}}{{row}}"
+                      *ngIf="row" alt="Document Not Uploaded">
+                    </ion-img-viewer>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-text>
+            <ng-template #noAttachment>
+              <h6>No attachments available</h6>
+            </ng-template>
+          </ion-col>
+  
+          <ion-col>
+            <ion-text>
+              <h5>{{ 'STATUS' | translate }}</h5>
+            </ion-text>
+            <ion-text>
+              <h6>{{ data.status }}</h6>
+            </ion-text>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+  </ion-card>
+
+  <ion-card *ngIf="amendData">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" sizeLg="12" sizeMd="12" sizeSm="12">
+          <ion-text>
+            <h5>{{'AMEND_VIOLATION_REASON' | translate }}</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{amendData.amend_message}}</h6>
+          </ion-text>
+          <ion-img-viewer title="{{'VIOLATION_DOCUMENT' | translate}}" scheme="dark"
+            *ngIf="amendData.images && amendData.images!==''" src="{{amendPath}}{{amendData.images}}">
+          </ion-img-viewer>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+  <div class="PublishBt"
+    *ngIf="violationData.ViolatiionList.amend_request_raised != 'Pending' && violationData.ViolatiionList.is_delete_approved_status != 'Sent For Delete Approval By INSPECTOR' && user_type == 12">
+    <ion-button (click)="publishViolation()" expand="block" size="large" class="linearGradientGreen"
+      [disabled]="publishdisabled">{{'PUBLISH' |translate }}
+    </ion-button>
+  </div>
+
+
+</ion-content>

@@ -1,0 +1,78 @@
+<!-- <ion-header>
+  <ion-toolbar> <ion-title>login</ion-title> </ion-toolbar>
+</ion-header> -->
+
+<ion-content class="loginWrapp">
+  <!-- <div class="loginTopImg"></div> -->
+  <div class="loginMiddle">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          <h1>Login</h1>
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <form [formGroup]="loginForm">
+          <ion-item>
+            <ion-label position="stacked">Username</ion-label>
+            <ion-input placeholder="Enter Username" formControlName="userName"
+              [ngClass]="{ 'is-invalid': (submitted && form.userName.errors) || (form.userName.touched && form.userName.errors) }">
+            </ion-input>
+          </ion-item>
+          <div *ngIf="submitted||(form.userName.touched && form.userName.invalid)">
+            <small class="form-text error-message" *ngIf="form.userName.errors"> Username is required</small>
+          </div>
+
+          <ion-item>
+            <ion-label position="stacked">Password</ion-label>
+            <ion-button class="showOrHidePassword" (click)="showOrHidePassword()">
+              <ion-icon  *ngIf="isClicked===true" name="eye-off-outline"></ion-icon>
+              <ion-icon *ngIf="isClicked===false"  name="eye-outline"></ion-icon>
+            </ion-button>
+            <ion-input [type]="initailType" placeholder="Enter Password" formControlName="password"
+              [ngClass]="{ 'is-invalid': (submitted && form.password.errors) || (form.password.touched && form.password.errors) }">
+            </ion-input>
+          </ion-item>
+          <div *ngIf="submitted||(form.password.touched && form.password.invalid)">
+            <small class="form-text error-message" *ngIf="form.password.errors"> Password is required</small>
+          </div>
+          <!-- <ion-text class="dark" routerLink="/forgotpassword">Forgot Password?</ion-text> -->
+          <ion-item class="captchaBlock" *ngIf="this.isOnline==='true'">
+            <ion-input placeholder="Enter captcha" formControlName="captcha"
+            [ngClass]="{ 'is-invalid': (submitted && form.captcha.errors) || (form.captcha.touched && form.captcha.errors) }"></ion-input>             
+            
+            <ion-button class="loginCptBtn reload" (click)="createCaptcha()" fill="clear">&#x21bb;</ion-button>
+          </ion-item>
+          <div #dataContainer id="dataContainer"></div>
+          <div *ngIf="submitted||(form.captcha.touched && form.captcha.invalid)">
+            <small class="form-text error-message" *ngIf="form.captcha.errors">Captcha is
+              required</small>
+          </div>
+          <div  *ngIf="form.captcha.touched && loginForm.hasError('mismatchedcaptcha') && form.captcha.valid">
+            <small class="form-text error-message">Invalid Captcha.</small>
+          </div>
+
+          <ion-item lines="none" class="checkboxLabel">           
+            <ion-checkbox slot="start" (ionChange)="rememberme($event)" formControlName="frmremember" [(ngModel)]="rememberMe"></ion-checkbox>
+            <ion-label>Remember Me</ion-label>
+          </ion-item>
+
+
+          <ion-button class="linearGradientGreen" (click)="login()">Login</ion-button>
+
+          <ion-text class="appVersion">v29.05.25</ion-text>
+
+
+   
+
+          <!-- routerLink="/dashboard" -->
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+</ion-content>
+
+<!-- Default Spinner -->
+<!-- <ion-spinner></ion-spinner> -->

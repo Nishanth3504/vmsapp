@@ -1,0 +1,233 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title> {{'CREATE_PERMIT' | translate }} </ion-title>
+    <ion-buttons class="userIcon" slot="end" routerLink="/permitlist">
+      <ion-img src="assets/images/view-complaint-white.svg"></ion-img>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="createPermitWrapp formStackedStyles m-top" [fullscreen]="true" overflow-scroll="true" scroll="true"
+  has-bouncing="true">
+  <form [formGroup]="createpermit" (ngSubmit)="onSubmit()">
+    <ion-card>
+      <ion-card-content class="createPermitGrid-column">
+        <ion-grid>
+          <!-- Permit Number -->
+          <ion-item class="no-ripple">
+            <ion-label position="stacked"> {{'PERMIT_NUMBER' | translate}} *</ion-label>
+            <ion-input formControlName="permit_number" placeholder=" {{'ENTER_PERMIT_NUMBER' | translate}} "></ion-input>
+          </ion-item>
+          <div
+            *ngIf="createpermit.get('permit_number').invalid && (createpermit.get('permit_number').touched || createpermit.get('permit_number').dirty)">
+            <small class="form-text error-message" *ngIf="createpermit.get('permit_number').hasError('required')"> {{'PERMIT_NUMBER' | translate}} {{'IS_REQUIRED' | translate}}</small>
+          </div>
+
+          <!-- Permit Date -->
+          <ion-item class="no-ripple">
+            <ion-label position="stacked"> {{'PERMIT_DATE' | translate}} *</ion-label>
+            <ion-datetime formControlName="permit_date" displayFormat="MM/DD/YYYY"></ion-datetime>
+          </ion-item>
+          <div
+            *ngIf="createpermit.get('permit_date').invalid && (createpermit.get('permit_date').touched || createpermit.get('permit_date').dirty)">
+            <small class="form-text error-message" *ngIf="createpermit.get('permit_date').hasError('required')"> {{'PERMIT_DATE' | translate}} {{'IS_REQUIRED' | translate}}</small>
+          </div>
+
+          <!-- License Number -->
+          <ion-item class="no-ripple">
+            <ion-label position="stacked"> {{'LICENSE_NUMBER' | translate}} *</ion-label>
+            <ion-input formControlName="license_number" placeholder=" {{'ENTER_LICENSE_NO' | translate}}"></ion-input>
+          </ion-item>
+          <div
+            *ngIf="createpermit.get('license_number').invalid && (createpermit.get('license_number').touched || createpermit.get('license_number').dirty)">
+            <small class="form-text error-message"
+              *ngIf="createpermit.get('license_number').hasError('required')"> {{'LICENSE_NUMBER' | translate}} {{'IS_REQUIRED' | translate}} </small>
+          </div>
+
+          <!-- Receipt Number -->
+          <ion-item class="no-ripple">
+            <ion-label position="stacked"> {{'RECEIPT_NUMBER' | translate}} *</ion-label>
+            <ion-input formControlName="receipt_number" placeholder=" {{'ENTER' | translate}} {{'RECEIPT_NUMBER' | translate}}"></ion-input>
+          </ion-item>
+          <div
+            *ngIf="createpermit.get('receipt_number').invalid && (createpermit.get('receipt_number').touched || createpermit.get('receipt_number').dirty)">
+            <small class="form-text error-message"
+              *ngIf="createpermit.get('receipt_number').hasError('required')"> {{'RECEIPT_NUMBER' | translate}} {{'IS_REQUIRED' | translate}} </small>
+          </div>
+
+          <!-- Start DateTime -->
+          <ion-item class="no-ripple">
+            <ion-label position="stacked"> {{'START_DATE_TIME' | translate}} *</ion-label>
+            <ion-datetime formControlName="start_date_time" displayFormat="MM/DD/YYYY HH:mm"></ion-datetime>
+          </ion-item>
+          <div
+            *ngIf="createpermit.get('start_date_time').invalid && (createpermit.get('start_date_time').touched || createpermit.get('start_date_time').dirty)">
+            <small class="form-text error-message" *ngIf="createpermit.get('start_date_time').hasError('required')"> {{'START_DATE_TIME' | translate}} {{'IS_REQUIRED' | translate}} </small>
+          </div>
+
+          <!-- End DateTime -->
+          <ion-item class="no-ripple">
+            <ion-label position="stacked"> {{'END_DATE_TIME' | translate}} *</ion-label>
+            <ion-datetime formControlName="end_date_time" [min]="createpermit.get('start_date_time').value"
+              displayFormat="MM/DD/YYYY HH:mm"></ion-datetime>
+          </ion-item>
+          <div
+            *ngIf="createpermit.get('end_date_time').invalid && (createpermit.get('end_date_time').touched || createpermit.get('end_date_time').dirty)">
+            <small class="form-text error-message" *ngIf="createpermit.get('end_date_time').hasError('required')"> {{'END_DATE_TIME' | translate}} {{'IS_REQUIRED' | translate}} </small>
+          </div>
+
+          <!-- Email -->
+          <ion-item class="no-ripple">
+            <ion-label position="stacked">{{'EMAIL' | translate}}</ion-label>
+            <ion-input formControlName="email" type="email" placeholder=" {{'ENTER_EMAIL' | translate}} "></ion-input>
+          </ion-item>
+          <div
+            *ngIf="createpermit.get('email').invalid && (createpermit.get('email').touched || createpermit.get('email').dirty)">
+            <small class="form-text error-message" *ngIf="createpermit.get('email').hasError('email')"> {{'ENTER_VALID_EMAIL' | translate}} </small>
+          </div>
+
+          <!-- Mobile Number -->
+          <ion-item class="no-ripple">
+            <ion-label position="stacked"> {{'MOBILE_NUMBER' | translate}} </ion-label>
+            <ion-input formControlName="mobile_number" type="tel" maxlength="10"
+              placeholder=" {{'ENTER_PHONE' | translate}} "></ion-input>
+          </ion-item>
+          <div
+            *ngIf="createpermit.get('mobile_number').invalid && (createpermit.get('mobile_number').touched || createpermit.get('mobile_number').dirty)">
+            <small class="form-text error-message" *ngIf="createpermit.get('mobile_number').hasError('pattern')"> {{'ENTER_VALID_MOBILE' | translate}} </small>
+          </div>
+
+          <!-- Permit Subject -->
+          <ion-item class="no-ripple">
+            <ion-label position="stacked"> {{'PERMIT_SUBJECT' | translate}} </ion-label>
+            <ion-input formControlName="permit_subject" placeholder="{{'ENTER_PERMIT_SUBJECT' | translate}}"></ion-input>
+          </ion-item>
+
+          <!-- Comments -->
+          <ion-item class="no-ripple">
+            <ion-label position="stacked"> {{'COMMENTS' | translate}} </ion-label>
+            <ion-textarea formControlName="comments" rows="3" placeholder=" {{'ENTER' | translate}} {{'COMMENTS' | translate}}"></ion-textarea>
+          </ion-item>
+
+          <!-- Attachments -->
+          <ion-item class="no-ripple">
+            <ion-label position="stacked"> {{'ATTACHMENTS' | translate}}  *</ion-label>
+            <div class="ionButtonCamara">
+              <ion-button (click)="permitCam()">{{'FROM_CAMERA' | translate}}</ion-button>
+            </div>
+          </ion-item>
+          <div class="iontextBottomInput">
+            <ion-grid class="camImgDisplay">
+              <ion-row>
+                <ion-col size="6" sizeLg="3" sizeMd="3" sizeSm="6" *ngFor="let photos of permitImages; let i = index"
+                  no-padding no-margin class="ion-align-self-start">
+                  <div class="camImgDisplayPosition">
+                    <ion-item>
+                      <ion-img-viewer title="Document" scheme="dark" src="{{imageBase +photos}}" *ngIf="photos">
+                      </ion-img-viewer>
+                    </ion-item>
+                    <ion-buttons (click)="onDelete(photos[0])" class="camImgDeleteIcon">
+                      <ion-icon name="trash"></ion-icon>
+                    </ion-buttons>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Equipment Details -->
+    <ion-card class="equipmentDetailsCard">
+      <ion-card-header>
+        <ion-card-title> {{'EQUIPMENT_DETAILS' | translate}} </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div formArrayName="equipmentDetails">
+          <div *ngFor="let equipment of equipmentDetails.controls; let i = index" [formGroupName]="i">
+            <ion-card>
+              <ion-card-content>
+                <ion-item>
+                  <ion-label position="stacked"> {{'EQUIPMENT_TYPE' | translate}} </ion-label>
+                  <ion-select placeholder=" {{'SELECT' | translate}} {{'EQUIPMENT_TYPE' | translate}} " formControlName="equipmentType"
+                    [interfaceOptions]="setLanguage==='ar' ?{cssClass: 'ar'}:''">
+                    <ion-select-option *ngFor="let row of equipmentList" [value]="row.id">
+                      {{setLanguage==='ar' ? row.name_ar : row.name_eng}}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+    
+                <ion-item>
+                  <ion-label position="stacked"> {{'PLATE_NO' | translate}} </ion-label>
+                  <ion-input formControlName="plateNo" placeholder="{{'ENTER_PLATENO' | translate}}"></ion-input>
+                </ion-item>
+    
+                <ion-item>
+                  <ion-label position="stacked"> {{'PLATE_SOURCE' | translate}} </ion-label>
+                  <ion-select placeholder="{{'SELECT_PLATE_SOURCE' | translate}}"
+                    (ionChange)="getSourceValue($event)" formControlName="plateSource"
+                    [interfaceOptions]="setLanguage==='ar' ?{cssClass: 'ar'}:''">
+                    <ion-select-option *ngFor="let row of plateSourceList" [value]="row">
+                      {{setLanguage==='ar' ? row.name_ar : row.name_eng}}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+    
+                <ion-item>
+                  <ion-label position="stacked"> {{'PLATE_CATEGORY' | translate}} </ion-label>
+                  <ion-select placeholder="{{'SELECT_PLATE_CATEGORY' | translate}}"
+                    (ionChange)="platecategoryId($event)" formControlName="plateCategory"
+                    [interfaceOptions]="setLanguage==='ar' ?{cssClass: 'ar'}:''">
+                    <ion-select-option *ngFor="let row of plateCategoryData" [value]="row">
+                      {{setLanguage==='ar' ? row.name_ar : row.name_eng}}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+    
+                <ion-item>
+                  <ion-label position="stacked"> {{'PLATE_CODE' | translate}} </ion-label>
+                  <ion-select placeholder="{{'SELECT_PLATE_CODE' | translate}}"
+                    [interfaceOptions]="setLanguage==='ar' ?{cssClass: 'ar'}:''" formControlName="plateCode">
+                    <ion-select-option *ngFor="let row of plateCodeDataList" [value]="row.id">
+                      {{setLanguage==='ar' ? row.raqab_desc_arb : row.raqab_desc_eng}}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+    
+                <div class="add-remove-buttons">
+                  <ion-button (click)="removeEquipment(i)" color="danger" fill="clear">
+                    <ion-icon name="trash" slot="icon-only"></ion-icon>
+                  </ion-button>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </div>
+          <div class="add-remove-buttons">
+            <ion-button (click)="addEquipment()" color="primary" fill="clear">
+              <ion-icon name="add" slot="icon-only"></ion-icon> {{'ADD_EQUIPMENT' | translate}}
+            </ion-button>
+          </div>
+          <div *ngIf="equipmentDetails.invalid && equipmentDetails.touched">
+            <small class="form-text error-message" *ngIf="equipmentDetails.hasError('emptyArray')">At least one equipment must be added</small>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+    
+    
+    
+    
+    
+    
+  </form>
+</ion-content>
+
+<ion-footer class="ion-no-border ionFooter">
+  <ion-item lines="none">
+    <ion-button (click)="onSubmit()" expand="block" size="large" class="linearGradientGreen"> {{'CREATE_PERMIT' | translate}} </ion-button>
+  </ion-item>
+</ion-footer>

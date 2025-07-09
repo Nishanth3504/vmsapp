@@ -1,0 +1,76 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{'PROFILE' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="porfileWrapp m-top">
+  <div class="porfileUserblock">
+    <div class="porfilePosition">
+      <ion-icon class="personIcon" name="person-outline"></ion-icon>
+      <ion-button class="editBt"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">
+          <g transform="translate(-235 -138)">
+            <circle cx="14" cy="14" r="14" transform="translate(235 138)" fill="#d4e0f1" />
+            <g transform="translate(230.525 129.122)">
+              <g transform="translate(13.486 16.375)">
+                <path
+                  d="M14.045,29.38a.361.361,0,0,0,.148-.019l3.876-1.131a1.154,1.154,0,0,0,.556-.334l7.084-7.084a2.6,2.6,0,0,0-3.672-3.672l-7.066,7.084a1.539,1.539,0,0,0-.334.556l-1.131,3.876a.573.573,0,0,0,.148.556A.566.566,0,0,0,14.045,29.38ZM21.63,19.143l2.1,2.1-5.508,5.508-2.1-2.1Zm2.263-1.651a1.569,1.569,0,0,1,1.057.427,1.523,1.523,0,0,1,0,2.114l-.427.408-2.1-2.1.408-.408A1.475,1.475,0,0,1,23.893,17.492Zm-8.345,8.141L17.216,27.3l-2.355.686Z"
+                  transform="translate(-13.486 -16.375)" fill="#31385b" />
+              </g>
+            </g>
+          </g>
+        </svg></ion-button>
+    </div>
+  </div>
+
+  <ion-card class="porfileCard">
+    <div class="porfileCardSapce">
+      <ion-grid class="porHeading">
+        <ion-row>
+          <ion-col class="ion-no-margin ion-no-padding">
+            <h1>{{fullname | uppercase}}</h1>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col class="ion-no-margin ion-no-padding">
+            <h6>{{'INSPECTOR' | translate }}</h6>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-button class="changepasswordBt" routerLink="/changepassword">{{'CHANGE_PASSWORD' | translate }}</ion-button>
+
+      <div class="changeLanguageRadio">
+            <h4>{{'CHANGE_LANGUAGE' | translate }}</h4>    
+        <ion-radio-group [value]="selectedLang">             
+           <div class="selectedLangRadio">
+              <ion-item lines="none" class="no-ripple">
+                <ion-label>{{'ENGLISH' | translate }}</ion-label>
+                <ion-radio value="en" (click)="onSelectLanguage('en')"></ion-radio>
+              </ion-item>
+         </div>
+
+         <div class="selectedLangRadio"> 
+              <ion-item lines="none" class="no-ripple">
+                <ion-label>{{'ARABIC' | translate }}</ion-label>
+                <ion-radio value="ar" (click)="onSelectLanguage('ar')"></ion-radio>
+              </ion-item>
+           </div>
+        </ion-radio-group>
+    </div>
+    </div>
+
+
+    <div class="logoutBlock" (click)="logout()">
+      <div class="logoutcont">
+        <ion-icon name="log-out-outline"> </ion-icon>
+        <h5>{{'LOGOUT' | translate }}</h5>
+      </div>
+    </div>
+  </ion-card>
+
+</ion-content>

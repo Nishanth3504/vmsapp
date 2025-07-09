@@ -1,0 +1,140 @@
+<ion-header class="ion-no-border bgColortransparent">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Incident Details</ion-title>
+  </ion-toolbar>
+<!-- 
+  <ion-toolbar class="toolbar-tranDetailsBlock">
+    <ion-card class="tranListCard">
+      <ion-title>Incident Details</ion-title>
+    </ion-card>
+  </ion-toolbar> -->
+</ion-header>
+
+
+<ion-content class="tranDetailsBlockCont m-top tranDetailsGrid-column" *ngIf="detailData">
+  <ion-card>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12">
+          <ion-text>
+            <h5>Reference Number</h5>
+          </ion-text>
+          <ion-text>
+            <h6> {{detailData.reference_number}} </h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4" >
+          <ion-text>
+            <h5>Complaint Type</h5>
+          </ion-text>
+          <ion-text>
+              <h6> {{detailData.complaint_type_en}} </h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4" >
+          <ion-text>
+            <h5>Agency Name</h5>
+          </ion-text>
+          <ion-text>
+            <h6> {{detailData.agency_name_en}} </h6>
+          </ion-text>
+
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4" >
+          <ion-text>
+            <h5>Area Name</h5>
+          </ion-text>
+          <ion-text>
+            <h6> {{detailData.area_name}} </h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+          <ion-text>
+            <h5>Priority</h5>
+          </ion-text>
+          <ion-text>
+            <h6> {{detailData.priority}} </h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+          <ion-text>
+            <h5>Status</h5>
+          </ion-text>
+          <ion-text>
+            <h6> {{detailData.status}} </h6>
+          </ion-text>
+        </ion-col>
+
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+  <ion-card *ngIf="docsImages.length > 0" >
+    <ion-grid>
+      <ion-row>
+        <ion-col  size="12" sizeLg="12" sizeMd="12" sizeSm="12">
+          <ion-text>
+            <h5>Images</h5>
+          </ion-text>
+          <ion-text>
+            <ion-grid>
+              <ion-row class="violationDocumentRow">
+                <ion-col size="4" *ngFor="let row of docsImages">
+                  <ion-img-viewer title="Attachements" scheme="dark" src="{{imageBase}}{{row}}" *ngIf="row"
+                    alt="Document Not Uploaded">
+                  </ion-img-viewer>
+                  <!-- <ion-img src="{{ViolatinDoc}}{{row}}" style="width:100px;height: 100px;"></ion-img> -->
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+  <ion-card>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" sizeLg="12" sizeMd="12" sizeSm="12"
+        *ngIf="detailData.video_name != 'null' && detailData.video_name != '--' && detailData.video_name !=null && detailData.video_name !=''">
+        <ion-text>
+          <h5>Incident Video</h5>
+        </ion-text>
+        <ion-text>
+          <ion-button (click)="download()">Download</ion-button>
+        </ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+
+
+
+  <ion-card>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" sizeLg="3" sizeMd="4" sizeSm="4">
+          <ion-text>
+            <h5>DESCRIPTION</h5>
+          </ion-text>
+          <ion-text>
+            <h6>{{detailData.description}}</h6>
+          </ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+
+</ion-content>
+

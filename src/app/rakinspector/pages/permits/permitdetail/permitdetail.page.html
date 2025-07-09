@@ -1,0 +1,189 @@
+<ion-header class="ion-no-border bgColortransparent">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Permit</ion-title>
+  </ion-toolbar>
+  </ion-header>
+
+
+  <ion-content class="tranDetailsBlockCont m-top tranDetailsGrid-column" *ngIf="permitData">
+    <ion-card>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <ion-text>
+              <h5>{{permitData[0].reference_number}}</h5>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+            <h5> {{'PERMIT_NUMBER' | translate}} </h5>
+            </ion-text>
+            <ion-text>
+              <h6>{{permitData[0].permit_number}}</h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+            <h5> {{'LICENSE_NUMBER' | translate}} </h5>
+            </ion-text>
+            <ion-text>
+              <h6>{{permitData[0].license_number}}</h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+            <h5> {{'RECEIPT_NUMBER' | translate}} </h5>
+            </ion-text>
+            <ion-text>
+              <h6>{{permitData[0].receipt_number}}</h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+            <h5> {{'PERMIT_DATE' | translate}} </h5>
+            </ion-text>
+            <ion-text>
+              <h6>{{permitData[0].permit_date}}</h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+            <h5> {{'START_DATE_TIME' | translate}} </h5>
+            </ion-text>
+            <ion-text>
+              <h6>{{permitData[0].start_date_time}}</h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+            <h5> {{'END_DATE_TIME' | translate}} </h5>
+            </ion-text>
+            <ion-text>
+              <h6>{{permitData[0].end_date_time}}</h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+            <h5> {{'EMAIL' | translate}} </h5>
+            </ion-text>
+            <ion-text>
+              <h6>{{permitData[0].email}}</h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+            <h5> {{'MOBILE_NUMBER' | translate}} </h5>
+            </ion-text>
+            <ion-text>
+              <h6>{{permitData[0].mobile_number}}</h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+            <h5> {{'PERMIT_SUBJECT' | translate}} </h5>
+            </ion-text>
+            <ion-text>
+              <h6>{{permitData[0].permit_subject}}</h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+            <ion-text>
+            <h5> {{'COMMENTS' | translate}} </h5>
+            </ion-text>
+            <ion-text>
+              <h6>{{permitData[0].comments}}</h6>
+            </ion-text>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+
+    <ion-card>
+      <ion-text> {{'ATTACHMENTS' | translate}} </ion-text>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12" sizeLg="12" sizeMd="12" sizeSm="12">
+            <ion-text>
+              <ion-grid>
+                <ion-row class="violationDocumentRow">
+                  <ion-col size="4" *ngFor="let attachment of permitAttachments">
+                    <ion-img-viewer 
+                      title="Violation Document" 
+                      scheme="dark" 
+                      [src]="imageBase + attachment.attachment"
+                      *ngIf="attachment?.attachment" 
+                      alt="Document Not Uploaded">
+                    </ion-img-viewer>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-text>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+
+    <ion-card>
+      <ion-text> {{'EQUIPMENT_DETAILS' | translate}} </ion-text>
+      <ion-card *ngFor="let data of permitEquipmentDetail">
+        <ion-grid>
+          <ion-row>
+            <ion-col size="12">
+              <ion-text>
+                <h5>{{data.equipmentName}}</h5>
+              </ion-text>
+            </ion-col>
+
+            <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+              <ion-text>
+              <h5> {{'PLATE_NO' | translate}} </h5>
+              </ion-text>
+              <ion-text>
+                <h6>{{data.plate_number}}</h6>
+              </ion-text>
+            </ion-col>
+
+            <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+              <ion-text>
+              <h5> {{'PLATE_SOURCE' | translate }} </h5>
+              </ion-text>
+              <ion-text>
+                <h6>{{data.plateSourceName}}</h6>
+              </ion-text>
+            </ion-col>
+
+            <!-- <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+              <ion-text>
+              <h5> {{'PLATE_CATEGORY' | translate}} </h5>
+              </ion-text>
+              <ion-text>
+                <h6>{{data.plateCategoryName}}</h6>
+              </ion-text>
+            </ion-col> -->
+
+            <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+              <ion-text>
+              <h5> {{'PLATE_CODE' | translate}} </h5>
+              </ion-text>
+              <ion-text>
+                <h6>{{data.plateCodeName}}</h6>
+              </ion-text>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card>
+    </ion-card>
+  </ion-content> 
