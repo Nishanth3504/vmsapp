@@ -156,7 +156,8 @@ const routes: Routes = [
   {
     path: 'view-followup',
     loadChildren: () => import('./rakinspector/pages/followuo_requests/view-followup/view-followup.module').then( m => m.ViewFollowupPageModule)
-  },  {
+  },
+  {
     path: 'legalnoticelist',
     loadChildren: () => import('./rakinspector/pages/legalnotices/legalnoticelist/legalnoticelist.module').then( m => m.LegalnoticelistPageModule)
   },
@@ -164,6 +165,10 @@ const routes: Routes = [
     path: 'noticedetail',
     loadChildren: () => import('./rakinspector/pages/legalnotices/noticedetail/noticedetail.module').then( m => m.NoticedetailPageModule)
   },
+  {
+    path:'uaepassverification',
+    loadChildren: () => import('./onboarding/pages/uaepassverification/uaepassverification.module').then(m => m.UaepassverificationPageModule)
+  }
 
 
 

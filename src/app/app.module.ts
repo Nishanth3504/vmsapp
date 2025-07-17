@@ -42,6 +42,7 @@ import { HTTP } from '@ionic-native/http/ngx';
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { VideoEditor } from '@ionic-native/video-editor/ngx';
 import { ViewmapmodalPage } from './rakinspector/pages/modalpopup/viewmapmodal/viewmapmodal.page';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, '../assets/i18n/', '.json');
 }
@@ -82,7 +83,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     StreamingMedia,
     HTTP,
     Globalization,
-
+    InAppBrowser
 
   ],
   bootstrap: [AppComponent],

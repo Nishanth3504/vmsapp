@@ -76,7 +76,8 @@
 
           <ion-item class="no-ripple">
             <ion-label position="stacked">{{'CATEGORY_TYPE' | translate}} *</ion-label>
-            <ion-select placeholder=" {{'SELECT' | translate}} {{'CATEGORY_TYPE' | translate}} " formControlName="category_type"
+            <ion-select [value]="selectedCategoryVal?.id" placeholder=" {{'SELECT' | translate}} {{'CATEGORY_TYPE' | translate}} " formControlName="category_type"
+             (ionChange)="handleCategory($event)"
               [ngClass]="{ 'is-invalid ': (!submitted && form.category_type.errors) || (form.category_type.touched && form.category_type.errors) } ">
               <ion-select-option [value]="row.id" *ngFor="let row of FollowupCategoryData"> {{setLanguage === 'ar' ? row.name_ar : row.name_eng}} </ion-select-option>
             </ion-select>
@@ -96,8 +97,8 @@
             <small class="form-text error-message" *ngIf="form.service_type.errors">{{'SERVICE_TYPE' | translate}} {{'IS_REQUIRED' | translate}}</small>
           </div>
 
-          <ion-item class="no-ripple">
-            <ion-label position="stacked">{{'RECIPIENT_NAME' | translate}} </ion-label>
+          <ion-item class="no-ripple" *ngIf="statusFlowFlag">
+            <ion-label position="stacked">{{'RECIPIENT_NAME' | translate}}* </ion-label>
             <ion-select placeholder=" {{'SELECT' | translate}} {{'RECIPIENT_PERSON ' | translate}} " formControlName="recipient_name"
               [ngClass]="{ 'is-invalid ': (!submitted && form.recipient_name.errors) || (form.recipient_name.touched && form.recipient_name.errors) } ">
               <ion-select-option [value]="row.user_id" *ngFor="let row of InspectorlistData"> {{row.first_name}} {{row.last_name}} </ion-select-option>

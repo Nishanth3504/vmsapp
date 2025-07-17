@@ -13,6 +13,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular-devkit/architect": "^0.1200.5",
     "@angular/common": "~12.1.1",
     "@angular/core": "~12.1.1",
     "@angular/forms": "~12.1.1",
@@ -21,10 +22,12 @@
     "@angular/platform-browser-dynamic": "~12.1.1",
     "@angular/router": "~12.1.1",
     "@awesome-cordova-plugins/android-permissions": "^6.15.0",
+    "@awesome-cordova-plugins/app-availability": "^8.0.2",
     "@awesome-cordova-plugins/core": "^5.39.0",
     "@awesome-cordova-plugins/video-player": "^5.39.0",
     "@capacitor/core": "3.2.3",
     "@ionic-native/android-permissions": "^5.36.0",
+    "@ionic-native/app-availability": "^5.36.0",
     "@ionic-native/background-upload": "^5.36.0",
     "@ionic-native/camera": "^5.36.0",
     "@ionic-native/core": "^5.36.0",
@@ -51,12 +54,16 @@
     "@ng-idle/keepalive": "^11.0.3",
     "@ngx-translate/core": "^13.0.0",
     "@ngx-translate/http-loader": "^6.0.0",
+    "@types/cordova": "^11.0.3",
     "@types/moment-timezone": "^0.5.30",
     "cordova-android": "^9.1.0",
     "cordova-browser": "6.0.0",
+    "cordova-plugin-appavailability": "^0.4.2",
+    "cordova-plugin-customurlscheme": "^5.0.2",
     "cordova-plugin-inappbrowser": "^6.0.0",
     "cordova-plugin-x-toast": "^2.7.2",
     "cordova-sqlite-storage-dependencies": "^4.1.0",
+    "cordova-universal-links-plugin": "^1.2.1",
     "crypto-js": "^4.1.1",
     "ffmpeg": "^0.0.4",
     "ionic-selectable": "^4.9.0",
@@ -161,16 +168,18 @@
       "cordova-plugin-request-location-accuracy": {
         "PLAY_SERVICES_LOCATION_VERSION": "16.+"
       },
-      "cordova-plugin-advanced-http": {
-        "ANDROIDBLACKLISTSECURESOCKETPROTOCOLS": "SSLv3,TLSv1"
-      },
+      "cordova-plugin-advanced-http": {},
       "cordova-plugin-iroot": {},
       "cordova-plugin-video-editor": {},
       "cordova-plugin-file-opener2": {
         "ANDROID_SUPPORT_V4_VERSION": "27.+"
       },
       "cordova-plugin-inappbrowser": {},
-      "cordova-plugin-android-permissions": {}
+      "cordova-plugin-android-permissions": {},
+      "cordova-plugin-appavailability": {},
+      "cordova-plugin-customurlscheme": {
+        "URL_SCHEME": "vms"
+      }
     },
     "platforms": [
       "android",

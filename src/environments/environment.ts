@@ -220,6 +220,23 @@
   sms_api_msgtype:"2",
   sms_api_dlr:"1",
   authorizationURL:"rpwebapps.us:8087",
+    schema: 'vms',
+  uaePass: {
+    packageId : 'ae.uaepass.mainapp.stg',
+    schema : 'uaepassstg',
+    username:'rakpsdvms_mobile_stage',
+    password:'QwsUELa3VnwoNlw1',
+    authUrl: 'https://stg-id.uaepass.ae/idshub/authorize',
+    mobileacrValues: 'urn:digitalid:authentication:flow:mobileondevice',
+    webacrValues:'urn:safelayer:tws:policies:authentication:level:low',
+    clientId: 'rakpsdvms_mobile_stage',
+    redirectUri: 'vms://uaepassverification',
+    responseType: 'code',
+    scope: 'urn:uae:digitalid:profile:general',
+    state : 'ShNP22hyl1jUU2RGjTRkpg==',
+    userInfo: 'https://stg-id.uaepass.ae/idshub/userinfo',
+    tokenUrl: 'https://stg-id.uaepass.ae/idshub/token',
+  },
   /* Below is the Ded Code*/
   
   //vmsDedApiUrl :"https://rakdedlicdstg.ega.lan/QSInternalTest/",

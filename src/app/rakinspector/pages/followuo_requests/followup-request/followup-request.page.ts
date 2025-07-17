@@ -36,6 +36,8 @@ export class FollowupRequestPage implements OnInit {
   populateData: any;
   isEditMode: boolean = false;
   statusData: any;
+  statusFlowFlag: boolean = false;
+  selectedCategoryVal : any
 
   constructor(
     public routerServices: Router,
@@ -73,7 +75,8 @@ export class FollowupRequestPage implements OnInit {
       comments: [''],
       created_by: [localStorage.getItem('user_id')],
       tfs_id: [''],
-      status: ['']
+      status: [''],
+      statusFlowFlag:['']
     });
   }
 
@@ -186,6 +189,26 @@ this.geolocation.getCurrentPosition(options).then((position) => {
       }
     });
   }
+
+  handleCategory(event: any){
+  const selectedId = event.detail.value;
+  const selectedCategory = this.FollowupCategoryData.find(item => item.id === selectedId);
+
+  if (!selectedCategory) return;
+
+  this.followupform.controls['category_type'].setValue(selectedCategory.id);
+  this.followupform.controls['statusFlowFlag'].setValue(selectedCategory.tfs_status_flow);
+
+  if (selectedCategory.tfs_status_flow === "1") {
+    this.statusFlowFlag = true;
+    this.followupform.controls['recipient_name'].setValidators([Validators.required]);
+  } else {
+    this.followupform.controls['recipient_name'].setValue('');
+    this.statusFlowFlag = false;
+    this.followupform.controls['recipient_name'].clearValidators();
+  }
+  this.followupform.controls['recipient_name'].updateValueAndValidity();
+}
 
   getFollowUpServiceTypes(){
     this.mService.getFollowUpServiceTypes().subscribe((response: any) => {

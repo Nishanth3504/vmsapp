@@ -131,6 +131,15 @@ export class RaisecomplaintPage implements OnInit {
       return;
     }
 
+    if(this.complaintImages.length == 0) {
+        this.toastService.showError(
+          this.setLanguage == "ar" ? "المستندات المطلوبة" : "Documents are Required", 
+          this.setLanguage == "ar" ? "تنبيه " : "Alert"
+        );
+        this.submitted = false;
+        return;
+    }
+
 
  
     let options = {

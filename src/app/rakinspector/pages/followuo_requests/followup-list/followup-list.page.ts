@@ -24,6 +24,10 @@ export class FollowupListPage implements OnInit {
   SearchReportsTimeout: any;
   filteredFollowuoList: any=[];
   search_keyword:any;
+  private isReturningFromView = false;
+  showFilterOptions: boolean;
+  FilterData: string[] = [];
+  selectedFilter: string = '';
 
 
 
@@ -42,7 +46,7 @@ export class FollowupListPage implements OnInit {
   }
 
 
-  ionViewDidEnter(){
+  ionViewWillEnter(){
         this.user_type = localStorage.getItem('user_type');
     this.setLanguage = window.localStorage.getItem('language');
     this.translateService.use(this.setLanguage);
@@ -51,14 +55,18 @@ export class FollowupListPage implements OnInit {
     if (menuAccessStored) {
       this.menuAccess = JSON.parse(menuAccessStored);
     }
+    this.isReturningFromView = true;
+    setTimeout(() => {
+      this.isReturningFromView = false;
+    }, 1000);
     this.pageLength = 0;
     this.followupListData = [];
     this.isInfiniteScrollDisabled = false;
-    this.followupLists('');
+    this.followupLists('','',null);
     this.filteredFollowuoList =[];
   }
 
-  followupLists(searchText : any,event?: any){
+  followupLists(searchText : any,filter: any,event?: any){
     if (this.isSearching && event) {
       event.target.complete();
       return;
@@ -68,7 +76,8 @@ export class FollowupListPage implements OnInit {
     let payload = {
       reference_number:searchText,
       user_id:localStorage.getItem('user_id'),
-      pageLength: this.pageLength
+      pageLength: this.pageLength,
+      status:filter
     }
     this.mService.followUpRequestList(payload).pipe(finalize(()=>{
       this.loaderService.loadingDismiss();
@@ -82,6 +91,7 @@ export class FollowupListPage implements OnInit {
         }
         this.filteredFollowuoList = [...this.followupListData]
         this.isInfiniteScrollDisabled = resp.data.length === 0;
+         this.FilterData = ['All', ...resp.statusData];
 
       }
       else{
@@ -96,9 +106,6 @@ export class FollowupListPage implements OnInit {
       if (event) {
         event.target.complete();
       }
-       else {
-        this.loaderService.loadingDismiss();
-      }
       this.isSearching = false;
 
     },
@@ -106,8 +113,6 @@ export class FollowupListPage implements OnInit {
       console.log('error', error);
       if (event) {
         event.target.complete();
-      }else {
-        this.loaderService.loadingDismiss();
       }
       this.isSearching = false;
       this.toastService.showError('Error fetching in the followup list', 'Error');
@@ -139,14 +144,16 @@ export class FollowupListPage implements OnInit {
     this.routerServices.navigate(['/followup-request'], navigationExtras);
   };
 
-  loadMoreComplaints(event: any) {
-    if (!this.isInfiniteScrollDisabled && !this.isSearching) {
-      this.pageLength++;  
-      this.followupLists(this.search_keyword,event);  
-    } else {
-      event.target.complete();
-    }
+loadMoreComplaints(event: any) {
+  if (this.isReturningFromView || this.isInfiniteScrollDisabled || this.isSearching) {
+    event.target.complete();
+    return;
   }
+
+  this.pageLength++;
+
+  this.followupLists(this.search_keyword || '', this.selectedFilter || '', event);
+}
 
   toupdateFollowup(id: any){
     let navigationExtras: NavigationExtras = {
@@ -189,8 +196,29 @@ export class FollowupListPage implements OnInit {
       this.filteredFollowuoList = [];
       this.isInfiniteScrollDisabled = false;
       this.search_keyword = searchTerm;
-      this.followupLists(searchTerm);
+       this.followupLists(searchTerm, this.selectedFilter || '', null);
+
     }, 3000);
   }
+
+  toggleFilterOptions() {
+    this.showFilterOptions = !this.showFilterOptions;
+  }
+
+onFilterSelect(filter: string) {
+  this.selectedFilter = filter === 'All' ? '' : filter;
+  this.showFilterOptions = false;
+  this.pageLength = 0;
+  this.followupListData = [];
+  this.isInfiniteScrollDisabled = false;
+
+  this.followupLists(this.search_keyword || '', this.selectedFilter, null);
+}
+
+
+
+  ngOnDestroy() {
+  clearTimeout(this.SearchReportsTimeout);
+}
 
 }

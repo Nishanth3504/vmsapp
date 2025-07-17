@@ -39,6 +39,23 @@ export const environment = {
     sms_api_msgtype:"2",
     sms_api_dlr:"1",
     authorizationURL:"raqib.rak.ae",
+         schema: 'nocinspector',
+  uaePass: {
+    packageId : 'ae.uaepass.mainapp',
+    schema : 'uaepass',
+    username:'rak_nocinspector_mob_prod',
+    password:'P2FMBFMjhgBlGvdL',
+    authUrl: 'https://id.uaepass.ae/idshub/authorize',
+    mobileacrValues: 'urn:digitalid:authentication:flow:mobileondevice',
+    webacrValues:'urn:safelayer:tws:policies:authentication:level:low',
+    clientId: 'rak_nocinspector_mob_prod',
+    redirectUri: 'nocinspector://uaepassverification',
+    responseType: 'code',
+    scope: 'urn:uae:digitalid:profile:general',
+    state : 'ShNP22hyl1jUU2RGjTRkpg==',
+    userInfo: 'https://id.uaepass.ae/idshub/userinfo',
+    tokenUrl: 'https://id.uaepass.ae/idshub/token',
+  },
     /* Below is the Ded Code*/
      
     //vmsDedApiUrl :"https://rakdedlicdstg.ega.lan/QSInternalTest/",

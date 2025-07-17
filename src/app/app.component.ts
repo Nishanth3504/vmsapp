@@ -19,7 +19,9 @@ import { AuthenticationService } from './shared/services/authentication.service'
 import { Keepalive } from '@ng-idle/keepalive';
 import { AutoLogoutService } from './shared/services/auto-logout.service';
 import { HTTP } from '@ionic-native/http/ngx';
+import { UaepassService } from './shared/services/uaepass.service';
 ///declare var IRoot: any;
+declare var handleOpenURL: (url: string) => void;
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -36,7 +38,7 @@ export class AppComponent {
     private androidPermissions: AndroidPermissions,
     private locationAccuracy: LocationAccuracy, private platform: Platform, private auth: AuthenticationService,
     private route: ActivatedRoute, private router: Router, private cref: ChangeDetectorRef, private idle: Idle, private keepalive: Keepalive, private autoService: AutoLogoutService
-    ,private http: HTTP
+    ,private http: HTTP,private uaePassService: UaepassService
     ) {
        this.initializeApp();
     // platform.ready().then(() => {
@@ -108,7 +110,6 @@ export class AppComponent {
       this.cref.detectChanges();
       this.initTimer();
       this.reset();
-
     });
     
     this.network.onDisconnect().subscribe(() => {
@@ -165,7 +166,7 @@ export class AppComponent {
           this.locationAccPermission();
         }
       },
-      error => {
+      (error) => {
       }
     );
   }
@@ -179,7 +180,7 @@ export class AppComponent {
             () => {
               this.enableGPS();
             },
-            error => {
+            (error) => {
             }
           );
       }
@@ -191,7 +192,7 @@ export class AppComponent {
       () => {
         localStorage.setItem("locationserviceenabled", "true")
       },
-      error => localStorage.setItem("locationserviceenabled", "false")
+      (error) => localStorage.setItem("locationserviceenabled", "false")
     );
   }
 
@@ -236,7 +237,7 @@ export class AppComponent {
 
 
     this.idle.onIdleStart.subscribe(() => {
-      this.idleState = 'You\'ve gone idle!'
+      this.idleState = "You've gone idle!"
       console.log('State - ' + this.idleState);
     });
     this.idle.onTimeoutWarning.subscribe((countdown) => {
@@ -303,7 +304,7 @@ export class AppComponent {
         {
           localStorage.clear();
         }
-        this.connectivity.appIsOnline$.subscribe(async online => {
+        this.connectivity.appIsOnline$.subscribe(async (online) => {
 
           console.log(online)
 
@@ -320,24 +321,49 @@ export class AppComponent {
     //this.logout();
   }
 
-  initializeApp() {
-    this.platform.ready().then(() => {
-      this.platform.ready() 
+ initializeApp() {
+  this.platform.ready().then(() => {
+    this.http.setServerTrustMode('nocheck')
       .then(() => {
-          
-          
-        this.http.setServerTrustMode("nocheck") //<=== Add this function 
-          .then(() => {
-              console.log("Congratulaions, you have set up SSL Pinning.")
-          })
-          .catch(() => {
-              console.error("Opss, SSL pinning failed.")
-          });
-      
-          
-          
+        console.log('SSL Pinning setup successful.');
       })
+      .catch(() => {
+        console.error('SSL Pinning setup failed.');
+      });
+     
+   (window as any).handleOpenURL = (url: string) => {
+      console.log('App opened via URL:', url);
+      
+     if (url.includes('resume_authentication')) {
+          const startIndex = url.indexOf('url=');
+          const returnUrl = decodeURIComponent(url.substring(startIndex + 4));  // +4 for "url="
+ 
+          if (returnUrl) {
+            const decodedURL = decodeURIComponent(returnUrl);
+            console.log('Decoded success URL:', decodedURL); // Full URL like https://stg-ids...
+ 
+            // Now extract `status` from this decoded URL
+            const innerParsedUrl = new URL(decodedURL);
+            const status = innerParsedUrl.searchParams.get('status');
+ 
+            console.log('Status:', status); // should be "success" or "failure"
+            if (status === 'success') {
+              this.uaePassService.verifyAppAuthentication(returnUrl);
+            } else {
+              this.toastService.showError('Authentication Failed', "");
+            }
+            // Proceed with your logic (optional)
+ 
+          }
+        }
 
-    });
-  }
+
+    };
+
+    // Check for pending launch URL (in case app was already running)
+    if ((window as any).handleOpenURL_launchUrl) {
+      (window as any).handleOpenURL((window as any).handleOpenURL_launchUrl);
+    }
+  });
+}
 }

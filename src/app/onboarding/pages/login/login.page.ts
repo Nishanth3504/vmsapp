@@ -19,6 +19,10 @@ import { Subject } from 'rxjs';
 import { HTTP } from '@ionic-native/http/ngx';
 import {EncrDecrServiceService} from '../../../shared/services/encr-decr-service.service';
 import { AuthenticationService } from 'src/app/shared/services/authentication.service';
+import { AppAvailability } from '@ionic-native/app-availability/ngx'
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { UaepassService } from 'src/app/shared/services/uaepass.service';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -42,6 +46,7 @@ export class LoginPage implements OnInit {
   isClicked:boolean=true;
   initailType="password";
   userTypeWithMobileAccess: any =[];
+  uaepassbuttonenable: boolean = false;
   
   constructor(
     private fb: FormBuilder,
@@ -49,20 +54,17 @@ export class LoginPage implements OnInit {
     public routerServices: Router,
     private loaderService: LoaderService,
     private moduleService: ModuleService,
-    // public toastController: ToastController,
     public toastService: ToastService,
     private dbservice: DbService, private connectivity: ConnectivityService,
     private network: Network, private cref: ChangeDetectorRef,private httpobj: HTTP,
     private EncrDecr: EncrDecrServiceService,
-    private route:ActivatedRoute,private auth: AuthenticationService
+    private route:ActivatedRoute,private auth: AuthenticationService,
+    private appAvailability : AppAvailability,
+    private inAppBrowser: InAppBrowser,
+    private uaePassService:UaepassService,
   ) {
     
     route.params.subscribe(val => {
-      // setTimeout(async () => {
-      //   await this.createCaptcha()
-      //   this.refresh.next()
-      //   this.cref.detectChanges();
-      // }, 80);
       if (localStorage.getItem('remcredentials')) {
 
         let userCredentials = JSON.parse(localStorage.getItem('remcredentials'))
@@ -100,38 +102,21 @@ export class LoginPage implements OnInit {
     })
   }
 
-  ngOnInit() {
-    //this.generateCaptch();
-    // this.connectivity.appIsOnline$.subscribe(async online => {
-    //   if (online) {        
-    //     this.isOnline = "true";
-    //     setTimeout(() => {
-    //       this.createCaptcha()
-    //       this.refresh.next()
-    //     }, 80);       
-    //   }
-    //   else
-    //   {
-    //     this.isOnline = "false";
-    //   }
-    // })
-    
-  }
+ngOnInit() {   
+  console.log("ngOnInit called");
+  this.uaePassSettings();
+}
+
   ngAfterViewInit(): void {
-    //this.login();
     this.connectivity.appIsOnline$.subscribe(async online => {
       if (online) {
         this.isOnline = "true";
-        // setTimeout(async () => {
-        //   await this.createCaptcha()
-        //   this.refresh.next()
-        //   this.cref.detectChanges();
-        // }, 80);
       }
       else {
         this.isOnline = "false";
       }
     })
+    this.generateCaptch();
   }
 
   ionViewDidEnter() {
@@ -650,6 +635,117 @@ export class LoginPage implements OnInit {
       this.initailType="password"
     }
   }
+
+   checkApp(){
+    const packageId = environment.uaePass.packageId;
+    console.log(packageId,'djsnjdn');
+    this.appAvailability.check(packageId)
+    .then(() => {
+      console.log('UAE PASS is installed');
+      this.openUAEPassApp();
+    })
+    .catch((error) => {
+      this.navigatetoUae();
+      // Handle the error appropriately
+    });
+  };
+
+openUAEPassApp() {
+  const state = encodeURIComponent(environment.uaePass.state);
+  const uaePassConfig = environment.uaePass;
+
+  // Construct the UAE Pass authentication URL
+  const loginUrl = `${uaePassConfig.authUrl}?acr_values=${encodeURIComponent(uaePassConfig.mobileacrValues)}&client_id=${uaePassConfig.clientId}&redirect_uri=${encodeURIComponent(uaePassConfig.redirectUri)}&response_type=${uaePassConfig.responseType}&scope=${encodeURIComponent(uaePassConfig.scope)}&state=${state}`;
+
+  console.log('UAE Pass Auth URL:', loginUrl);
+
+  // Open in InAppBrowser with proper options
+  this.loaderService.loadingPresentcm('Launching UAE Pass...');
+  const browser = this.inAppBrowser.create(loginUrl, '_blank', {
+    location: 'no',
+    hidden: 'no',
+    clearcache: 'yes',
+    clearsessioncache: 'yes',
+    toolbar: 'no',
+  });
+
+  // Handle navigation events
+  browser.on('loadstart').subscribe(async (event) => {
+    this.loaderService.loadingDismiss();
+    if (!event.url) return;
+    let url = event.url;
+    console.log('Navigation URL:', event.url);
+    const cleaned = url.replace(/^http:\/\/uaepass:\/\//,'');
+    // Handle UAE Pass callback URLs
+    if (url.startsWith('http://uaepass://')) {
+      try {
+        console.log('uaepassstg URL detected', url)
+        // Normalize the URL (remove protocol inconsistencies)
+        const normalizedUrl = new URL(url.replace('http://uaepass://', 'https://uaepassstg/'));
+        
+        const successURL = normalizedUrl.searchParams.get('successurl');
+        const failureURL = normalizedUrl.searchParams.get('failureurl');
+        console.log('successurl', successURL);
+        console.log('failureurl', failureURL);
+        const pathOnly = cleaned.split('?')[0];
+        if (successURL && failureURL) {
+          console.log('Processing UAE Pass response...');
+          // Prepare the deep link URLs for your app
+          const appScheme = environment.schema;
+          const encodedSuccess = encodeURIComponent(`${appScheme}://resume_authentication?url=${successURL}`);
+          const encodedFailure = encodeURIComponent(`${appScheme}://resume_authentication?url=${failureURL}`);
+          
+          const rewrittenUrl = `${environment.uaePass.schema}://${pathOnly}?successurl=${encodedSuccess}&failureurl=${encodedFailure}`;
+
+          console.log('Rewritten URL:', rewrittenUrl);
+          browser.close();
+          // Open the system browser to trigger the app deep link
+          this.inAppBrowser.create(rewrittenUrl, '_system');
+        }
+      } catch (error) {
+        console.error('Error processing UAE Pass response:', error);
+        browser.close();
+        this.toastService.showError('Authentication processing failed', '');
+      }
+    }
+  });
+
+  // Handle browser exit
+  browser.on('exit').subscribe(() => {
+    console.log('UAE Pass browser closed');
+  });
+}
+  navigatetoUae() {
+    //const dynamicUrl = `${environment.UAEPassBaseUrl}?${environment.params.toString()}`;
+    const state = encodeURIComponent(environment.uaePass.state); // Replace or generate dynamically
+    const uaePassConfig = environment.uaePass;
+ 
+    const dynamicUrl = `${uaePassConfig.authUrl}?acr_values=${encodeURIComponent(uaePassConfig.webacrValues)}&client_id=${uaePassConfig.clientId}&redirect_uri=${encodeURIComponent(uaePassConfig.redirectUri)}&response_type=${uaePassConfig.responseType}&scope=${encodeURIComponent(uaePassConfig.scope)}&state=${state}`
+    this.uaePassService.verifyAppAuthentication(dynamicUrl);
+  }
+
+uaePassSettings() {
+  const btoaValue = btoa('uaeSettings');
+  let payload = {
+    uaeCheck: btoaValue
+  };
+  console.log("Calling UAE Pass settings API...");
+
+  this.moduleService.getUaeSettings(payload).subscribe(
+    (res: any) => {
+      console.log(res, "uae check");
+      if (res.statusCode == 200) {
+        if (res.data.buttonCheck == "Yes") {
+          this.uaepassbuttonenable = true;
+        }
+      }
+    },
+    (error) => {
+      console.error("Error in UAE Pass settings:", error);
+    }
+  );
+}
+
 
 
 }

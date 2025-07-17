@@ -229,7 +229,7 @@ async folloeupImageCapture() {
       .subscribe({
         next: (resp: any) => {
           if (resp.statusCode === 200) {
-            this.toastService.showSuccess(this.setLanguage == 'ar' ? 'تم تحديث الحالة بنجاح': 'Status Updated Successfully!"', 'Success');
+            this.toastService.showSuccess(this.setLanguage == 'ar' ? 'تم تحديث الحالة بنجاح': 'Status Updated Successfully!', 'Success');
             this.router.navigate(['/dashboard']);
           } else {
             this.toastService.showError('Failed to update status', 'Error');

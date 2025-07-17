@@ -3751,6 +3751,33 @@ export class ModuleService {
     });
   };
 
+  getUaeSettings(body: any): Observable<any> {
+    return Observable.create((Observer) => {
+      this.httpobj.setHeader(environment.authorizationURL, "Authorization", localStorage.getItem('hashToken'));
+      let nativeHttpCall = this.httpobj.post(environment.vmsApiUrl + 'getUAESetting', body, {});
+      from(nativeHttpCall).subscribe(
+        (res: any) => {
+          if (res.status == 401) {
+            this.logout();
+          }
+          console.log(res,'hfejfjknfjknfkhdjkfjkdherfdguhgtrkfdhguthrsughu')
+          let response = res.data.data
+            ? JSON.parse(res.data.data)
+            : JSON.parse(res.data);
+          Observer.next(response);
+          Observer.complete();
+        },
+        (err) => {
+          if (err.status === 401) {
+            this.logout();
+          }
+          Observer.error(err);
+          Observer.complete();
+        }
+      );
+    });
+  };
+
 
 
 

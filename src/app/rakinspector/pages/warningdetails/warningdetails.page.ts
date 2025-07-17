@@ -69,6 +69,9 @@ export class WarningdetailsPage implements OnInit {
   warningImages: any[] = [];
   warningProofUrl: string;
   defaultwarningHours: any='';
+  isReject: boolean = false;
+  warningRejectedReasonData: any;
+  reason_id : any;
   constructor(
     private activatedRouterServices: ActivatedRoute,
     private moduleService: ModuleService,
@@ -698,11 +701,56 @@ export class WarningdetailsPage implements OnInit {
     })
   }
 
-  async confirmViolation(data: string) {
-    console.log(data,"data");
+  async getWarningReasons (){
+    let payload = {
+      reason_by:'Rejected'
+    }
+    this.moduleService.getWarningReasons(payload).subscribe((resp : any)=>{
+      if(resp.statusCode == 200){
+        this.warningRejectedReasonData = resp.data;
+      }
+    })
+  }
+
+    async updateReasonVal(event: any){
+    console.log(event);
+    this.reason_id = event.detail.value;
+     const alert = await this.alertController.create({
+      header: this.setLanguage === 'ar' ? 'رفض التنبيه' : 'Reject Warning',
+      message: this.setLanguage === 'ar' 
+        ? 'هل أنت متأكد أنك تريد الرفض؟' 
+        : 'Are you sure you want to reject?',
+      buttons: [
+        {
+          text: this.setLanguage === 'ar' ? 'إلغاء' : 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary'
+        },
+        {
+          text: this.setLanguage === 'ar' ? 'تأكيد' : 'Confirm',
+          handler: () => {
+            this.processViolation('Reject');
+          }
+        }
+      ]
+    });
+    await alert.present();
+
+  }
+
+ async confirmViolation(data: string) {
+  console.log(data, "data");
+
+  if (data === 'Reject') {
+    this.getWarningReasons();
+    this.isReject = true;
+  } else {
+    // Default confirmation for other actions
     const alert = await this.alertController.create({
-      header: this.setLanguage === 'ar' ? 'Convert Warning to Violation' : 'تحويل التنبيه لمخالفة',
-      message: `Are you sure ?`,
+      header: this.setLanguage === 'ar' ? 'تحويل التنبيه لمخالفة' : 'Convert Warning to Violation',
+      message: this.setLanguage === 'ar'
+        ? 'هل أنت متأكد؟'
+        : 'Are you sure?',
       buttons: [
         {
           text: this.setLanguage === 'ar' ? 'إلغاء' : 'Cancel',
@@ -717,16 +765,20 @@ export class WarningdetailsPage implements OnInit {
         }
       ]
     });
-
     await alert.present();
   }
+}
 
   private processViolation(data: string) {
     console.log("data", data);
+    if(data == 'Reject' && this.reason_id == ''){
+      this.toastService.showError('Please select the reason for rejection.','');
+    }
     let payload = {
       "warning_id": this.violationId,
       "status": data,
-      "created_by": this.userId
+      "created_by": this.userId,
+      "reason_id": this.reason_id
     };
     this.moduleService.convertwarningtoviolation(payload).subscribe(
       (resp: any) => {

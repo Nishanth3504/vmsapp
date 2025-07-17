@@ -50,7 +50,33 @@ export class LoginService {
         }
       );
     });
-  }
+  };
+
+    validateUaeUser(body: any): Observable<any> {
+    return Observable.create((Observer) => {
+      this.httpobj.setHeader('*', String("Content-Type"), String("application/json"));
+      this.httpobj.setHeader('*', String("Accept"), String("application/json"));
+      this.httpobj.setDataSerializer("json");
+      let nativeHttpCall = this.httpobj.post(environment.authenticationApiUrl + 'loginValidationUAE', body, {});
+      from(nativeHttpCall).subscribe(
+        (res: any) => {
+          console.log("res",res);
+          let response = res.data.data
+            ? JSON.parse(res.data.data)
+            : JSON.parse(res.data);
+          Observer.next(response);
+          Observer.complete();
+        },
+        (err) => {
+          if (err.status === 401) {
+            this.toastService.showError('Invalid Credentials or Not Authorized !', 'Alert');
+          }
+          Observer.error(err);
+          Observer.complete();
+        }
+      );
+    });
+  };
 
   ChangePassword(body: any): Observable<any> {
     // const userid: any = data.userid;

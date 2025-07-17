@@ -722,7 +722,16 @@
     </div>
   </ng-container>
 
-  <ng-container></ng-container>
+  <ng-container>
+      <ion-card *ngIf="isReject">
+      <ion-item class="no-ripple createViolationGrid-column">
+        <ion-label position="stacked">Select the Reason *</ion-label>
+        <ion-select (ionChange)="updateReasonVal($event)" >
+          <ion-select-option [value]="data.id" *ngFor="let data of warningRejectedReasonData">{{setLanguage == 'ar' ? data.name_ar : data.name_eng}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-card>
+  </ng-container>
 
   <ion-footer class="ion-no-border ionFooter" *ngIf="violationData.warning_to_violation == 'Warning To Violation'">
     <ion-item class="none">

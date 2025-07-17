@@ -61,7 +61,13 @@
 
           <ion-button class="linearGradientGreen" (click)="login()">Login</ion-button>
 
-          <ion-text class="appVersion">v29.05.25</ion-text>
+          <ion-button class="uaepassBt" shape="round" size="large" expand="block" style="margin-top: 10px;"  (click)="checkApp()" *ngIf="uaepassbuttonenable">
+          <ion-img src="../../../assets/images/login-uaspass-icon.svg"></ion-img>
+          Login with UAE PASS
+          <!-- {{ 'login_with_uaepass' | translate }} -->
+          </ion-button>
+
+          <ion-text class="appVersion">v16.07.25</ion-text>
 
 
    

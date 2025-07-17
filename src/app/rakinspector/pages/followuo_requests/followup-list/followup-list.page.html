@@ -6,8 +6,18 @@
     <ion-title>{{ 'FOLLOW_UP_REQUESTS' | translate }}</ion-title>
   </ion-toolbar>
 
-  <ion-toolbar class="searchBlock">
+  <ion-toolbar class="searchBlock permitSearchBt">
+    <ion-item>
     <ion-searchbar showCancelButton="never" (ionInput)="SearchFollowups($event)"></ion-searchbar>
+    <ion-button   (click)="toggleFilterOptions()" color="#f0f5fd"><ion-icon style="color: #31385B" name="filter-outline"></ion-icon></ion-button>
+    
+  </ion-item>
+   <ion-list *ngIf="showFilterOptions" class="filter-dropdown" >
+    <ion-item *ngFor="let data of FilterData" button (click)="onFilterSelect(data)">
+      <ion-label>{{ data === 'All' ? 'Clear Filter' : data }}</ion-label>
+    <ion-icon *ngIf="selectedFilter === data || (data === 'All' && !selectedFilter)" name="checkmark" slot="end"></ion-icon>
+    </ion-item>
+  </ion-list>
   </ion-toolbar>
 </ion-header>
 

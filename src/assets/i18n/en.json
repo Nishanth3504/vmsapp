@@ -295,5 +295,6 @@
     "STREET_NAME":"Street Name",
     "TIME": "Time",
     "DATE": "Date",
-    "RECIPIENT_NAME": "Recipient Name"
+    "RECIPIENT_NAME": "Recipient Name",
+    "TOLL_FREE_SERVICE":"Toll-Free Service"
 }
