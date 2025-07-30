@@ -1,0 +1,403 @@
+<ion-header class="ion-no-border bgColortransparent">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      {{ (routerType=='update_noticedetail' ? 'Update Legal Notice Invoice' : 'View Legal Notice Invoice') | translate }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content class="tranDetailsBlockCont m-top tranDetailsGrid-column" *ngIf="detailNotice">
+ 
+  <ion-card>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12">
+          <ion-text>
+            <h5>{{detailNotice.reference_number ? detailNotice.reference_number : '--'}}</h5>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+          <ion-text>
+            <h5>
+              {{'Memo ref no' | translate}}
+            </h5>
+          </ion-text>
+          <ion-text>
+            <h6>
+              {{ detailNotice.memo_ref_no}}
+            </h6>
+          </ion-text>
+        </ion-col>
+
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+          <ion-text>
+            <h5>
+              {{'LICENSE_NO' | translate}}
+            </h5>
+          </ion-text>
+          <ion-text>
+            <h6>
+              {{ detailNotice.license_no ? detailNotice.license_no : '--'  }}
+            </h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+          <ion-text>
+            <h5>
+              {{'COMMERCIAL_SIDE_CODE_DESCRIPTION' | translate}}
+            </h5>
+          </ion-text>
+          <ion-text>
+            <h6>
+              {{ detailNotice.sideCodeName ? detailNotice.sideCodeName : '--'  }}
+            </h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+          <ion-text>
+            <h5>
+              {{'Email' | translate}}
+            </h5>
+          </ion-text>
+          <ion-text>
+            <h6>
+              {{ detailNotice.Email}}
+            </h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4" >
+          <ion-text>
+            <h5>
+              {{'Owner Name ' | translate}}
+            </h5>
+          </ion-text>
+          <ion-text>
+            <h6>
+              {{ detailNotice.owner_name ?   detailNotice.owner_name : '--'}}
+            </h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4" >
+          <ion-text>
+            <h5>
+              {{'Case Filed' | translate}}
+            </h5>
+          </ion-text>
+          <ion-text>
+            <h6>
+              {{  detailNotice.case_filed ?   detailNotice.case_filed : '--' }}
+            </h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+          <ion-text>
+            <h5>
+              {{'Case Filed Date' | translate}}
+            </h5>
+          </ion-text>
+          <ion-text>
+            <h6>
+              {{ detailNotice.case_filing_date ?   detailNotice.case_filing_date : '--'  }}
+            </h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4" >
+          <ion-text>
+            <h5>
+              {{'Owner Mobile Number' | translate}}
+            </h5>
+          </ion-text>
+          <ion-text>
+            <h6>
+              {{ detailNotice.owner_mobile_number ?   detailNotice.owner_mobile_number : '--' }}
+            </h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+          <ion-text>
+            <h5>
+              {{'STATUS' | translate}}
+            </h5>
+          </ion-text>
+          <ion-text>
+            <h6>
+              {{ detailNotice.status ? detailNotice.status : '--'}}
+            </h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+          <ion-text>
+            <h5>
+              {{'CREATED_BY' | translate}}
+            </h5>
+          </ion-text>
+          <ion-text>
+            <h6>
+              {{ detailNotice.first_name ? detailNotice.first_name : '--'}}
+            </h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+          <ion-text>
+            <h5>
+              {{'CREATED_ON' | translate}}
+            </h5>
+          </ion-text>
+          <ion-text>
+            <h6>
+              {{ detailNotice.created_on ? detailNotice.created_on : '--'}}
+            </h6>
+          </ion-text>
+        </ion-col>
+
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+
+  <ion-card>
+    <ion-text> {{'STATUS_DETAILS' | translate}} </ion-text>
+    <ion-card *ngFor="let data of statusDetails">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-text>
+              <h6>
+                {{data.first_name}} {{data.last_name}} / {{data.employee_id}} ({{data.role_name}})
+              </h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col>
+            <ion-text>
+              <h6>
+                {{data.created_on|date:'dd-MM-yyyy hh:mm'}}
+              </h6>
+            </ion-text>
+          </ion-col>
+        </ion-row>
+        <ion-row style="padding-bottom: 10px;">
+
+          <ion-col size="6">
+            <ion-text>
+              <h5>
+                {{'COMMENTS' | translate}}
+              </h5>
+            </ion-text>
+            <ion-text>
+              <h6>
+                {{data.comments ? data.comments : '--'}}
+              </h6>
+            </ion-text>
+          </ion-col>
+
+
+
+          <ion-col size="6">
+            <ion-text>
+              <h5>
+                {{'STATUS' | translate}}
+              </h5>
+            </ion-text>
+            <ion-text>
+              <h6>
+                {{data.status}}
+              </h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="6" *ngIf="data.mobile_no">
+            <ion-text>
+              <h5>
+                {{'MOBILE_NO' | translate}}
+              </h5>
+            </ion-text>
+            <ion-text>
+              <h6>
+                {{data.mobile_no}}
+              </h6>
+            </ion-text>
+          </ion-col>
+
+          <ion-col size="12" *ngIf="data.attachment">
+            <ion-text>
+              <h5>{{ 'ATTACHMENTS' | translate }}</h5>
+            </ion-text>
+            <ion-text>
+              <ion-grid>
+                <ion-row class="violationDocumentRow">
+                  <ion-col size="4">
+                    <ion-img-viewer title="Violation Document" scheme="dark"
+                      src="{{imageBase}}{{filePath }}{{data.attachment}}" *ngIf="data.attachment"
+                      alt="Document Not Uploaded">
+                    </ion-img-viewer>
+
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-text>
+          </ion-col>
+        </ion-row>
+
+        <ion-button class="iconBt" (click)="viewMapModal(data.geo_location)" *ngIf="data.geo_location">
+          <ion-icon name="globe-outline"></ion-icon>
+        </ion-button>
+      </ion-grid>
+    </ion-card>
+    <!-- <ion-button class="btn" expand="block" color="danger" (click)="torejectReport(detailReports[0].id)" *ngIf="detailReports[0].status === 'Accepted' && ((user_type).includes('8') || (user_type).includes('15'))"> {{'REJECT' | translate}} </ion-button> -->
+
+  </ion-card>
+
+    <ion-card>
+    <ion-text> {{'Agency Details' | translate}} </ion-text>
+    <ion-card>
+      <ion-grid>
+        <ion-grid>
+          <ion-row *ngFor="let data of agencyDetails">
+            <ion-col size="6">
+              <h6>
+                {{ setLanguage == 'ar' ? data.agency_name_ar : data.agency_name_en}}
+              </h6>
+            </ion-col>
+            <ion-col size="6">
+              <h6>{{data.amount}}</h6>
+            </ion-col>
+          </ion-row>
+          <hr>
+        </ion-grid>
+      </ion-grid>
+      <ion-row>
+        <ion-col size="6">
+          <h6>
+            Total Ammount
+          </h6>
+        </ion-col>
+        <ion-col size="6">
+          <h6> {{detailNotice.total_amount}} </h6>
+        </ion-col>
+        <ion-col size="6">
+          <h6>
+            Collected Ammount
+          </h6>
+        </ion-col>
+        <ion-col size="6">
+          <h6>{{detailNotice.collected_amount}}</h6>
+        </ion-col>
+        <ion-col size="6">
+          <h6>
+            Balance Ammount
+          </h6>
+        </ion-col>
+        <ion-col size="6">
+          <h6>{{detailNotice.balance_amount}}</h6>
+        </ion-col>
+      </ion-row>
+      <ion-row style="padding-bottom: 10px;">
+      </ion-row>
+    </ion-card>
+    <!-- <ion-button class="btn" expand="block" color="danger" (click)="torejectReport(detailReports[0].id)" *ngIf="detailReports[0].status === 'Accepted' && ((user_type).includes('8') || (user_type).includes('15'))"> {{'REJECT' | translate}} </ion-button> -->
+
+  </ion-card>
+
+  <div #formSection *ngIf="routerType === 'update_noticedetail'" id="formSectionDiv">
+    <form [formGroup]="updateStatusForm" id="updateForm" *ngIf="routerType === 'update_noticedetail'"
+      (ngSubmit)="submit()">
+      <ion-card>
+        <ion-text> {{'UPDATE' | translate}} {{'STATUS' | translate}} </ion-text>
+        <ion-card-content class="createViolationGrid-column">
+          <ion-grid>
+            <ion-item class="no-ripple">
+              <ion-label position="stacked">
+                {{'COMMENTS' | translate}}
+              </ion-label>
+              <ion-textarea rows="4" cols="20" placeholder=" {{'ENTER' | translate}} {{'COMMENTS' | translate}}"
+                formControlName="comments"
+                [ngClass]="{ 'is-invalid ': (!submitted && form.comments.errors) || (form.comments.touched && form.comments.errors) }"></ion-textarea>
+            </ion-item>
+            <div *ngIf="!submitted||(form.comments.touched && form.comments.invalid)">
+              <small class="form-text error-message" *ngIf="form.comments.errors"> {{'COMMENTS' | translate}}
+                {{'IS_REQUIRED' | translate}} </small>
+            </div>
+
+            <ion-item class="no-ripple">
+              <ion-label position="stacked">
+                {{'MOBILE_NO' | translate}}
+              </ion-label>
+              <ion-input type="tel" maxlength="10" placeholder=" {{'ENTER' | translate}} {{'MOBILE_NO' | translate}}"
+                formControlName="mobile_no"
+                [ngClass]="{ 'is-invalid ': (!submitted && form.mobile_no.errors) || (form.mobile_no.touched && form.mobile_no.errors) }"></ion-input>
+            </ion-item>
+            <!-- <div *ngIf="!submitted||(form.mobile_no.touched && form.mobile_no.invalid)">
+                <small class="form-text error-message" *ngIf="form.mobile_no.errors">{{'MOBILE_NO' | translate}} {{'IS_REQUIRED' | translate}} </small>
+              </div> -->
+
+            <ion-item>
+              <ion-label position="stacked"> {{'UPLOAD_IMAGE' | translate}} *</ion-label>
+              <div class="ionButtonCamGallery">
+                <div class="displayInlineBlock">
+                  <ion-button (click)="folloeupImageCapture()">{{'IMAGES' | translate}}</ion-button>
+                </div>
+              </div>
+            </ion-item>
+
+            <div class="iontextBottomInput">
+              <ion-grid class="camImgDisplay">
+                <ion-row>
+                  <ng-container *ngIf="NoticeImage">
+                    <ion-col size="4" sizeLg="4" sizeMd="4" sizeSm="4" no-padding no-margin  *ngFor="let photos of NoticeImage; let i = index" 
+                      class="ion-align-self-start">
+                      <div class="camImgDisplayPosition">
+                        <ion-item lines="none">
+                          <ion-img-viewer title="Images" scheme="dark" src="{{imageBase+filePath+photos}}"
+                            *ngIf="NoticeImage">
+                          </ion-img-viewer>
+                        </ion-item>
+                        <ion-buttons (click)="onDelete(i)" class="camImgDeleteIcon">
+                          <ion-icon name="trash"></ion-icon>
+                        </ion-buttons>
+                      </div>
+                    </ion-col>
+                  </ng-container>
+                </ion-row>
+              </ion-grid>
+            </div>
+
+            <ion-item class="no-ripple">
+              <ion-label position="stacked">{{'COMPLETE_STATUS' | translate}}*</ion-label>
+              <ion-select placeholder=" {{'SELECT' | translate}} " formControlName="status"
+                [ngClass]="{ 'is-invalid ': (!submitted && form.status.errors) || (form.status.touched && form.status.errors) } ">
+                <ion-select-option [value]="row.id" *ngFor="let row of statusesData"> {{setLanguage == 'ar' ? row.name_ar : row.name_eng }} </ion-select-option>
+              </ion-select>
+            </ion-item>
+            <div *ngIf="!submitted||(form.status.touched && form.status.invalid)">
+              <small class="form-text error-message" *ngIf="form.status.errors"> {{'SELECT_AN_OPTION' | translate}}
+              </small>
+            </div>
+
+          </ion-grid>
+        </ion-card-content>
+        <ion-button expand="block" size="large" class="linearGradientGreen" type="submit"> {{'UPDATE' | translate}}
+        </ion-button>
+      </ion-card>
+
+    </form>
+
+  </div>
+
+
+</ion-content>

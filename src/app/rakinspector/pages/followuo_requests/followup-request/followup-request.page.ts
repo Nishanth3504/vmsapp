@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, NgZone, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
@@ -12,6 +12,24 @@ import { ModuleService } from 'src/app/shared/services/module.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { IonicSelectableComponent } from 'ionic-selectable';
+
+export function geoLocationValidator(control: AbstractControl): ValidationErrors | null {
+  const value = control.value;
+  if (!value) return null;
+
+  const regex = /^(-?\d{1,2}(?:\.\d+)?),\s*(-?\d{1,3}(?:\.\d+)?)$/;
+  const match = regex.exec(value);
+
+  if (!match) return { invalidCoordinates: true };
+
+  const lat = parseFloat(match[1]);
+  const lng = parseFloat(match[2]);
+
+  const isValidLat = lat >= -90 && lat <= 90;
+  const isValidLng = lng >= -180 && lng <= 180;
+
+  return isValidLat && isValidLng ? null : { invalidCoordinates: true };
+}
 
 @Component({
   selector: 'app-followup-request',
@@ -63,12 +81,12 @@ export class FollowupRequestPage implements OnInit {
       name: ['', [Validators.required]],
       mobile_no: ['', [Validators.required]],
       area: ['', [Validators.required]],
-      geo_location: [''],
+      geo_location: ['',[geoLocationValidator]],
       category_type: ['', [Validators.required]],
       service_type: ['', [Validators.required]],
       recipient_name: [''],
-      request_date: [''],
-      request_time: [''],
+      request_date: ['', [Validators.required]],
+      request_time: ['', [Validators.required]],
       responsibility_type: ['', [Validators.required]],
       responsible_department: ['', [Validators.required]],
       action_type: ['', [Validators.required]],
@@ -117,19 +135,24 @@ export class FollowupRequestPage implements OnInit {
       enableHighAccuracy: true,
       maximumAge: 3600
     };
-this.geolocation.getCurrentPosition(options).then((position) => {
-  const coords = position.coords.latitude + ',' + position.coords.longitude;
-  this.followupform.controls['geo_location'].setValue(coords);
+    if (this.isEditMode) {
+      this.updateFollowupRequest();
+    } else {
+      this.createFollowupRequest();
+    }
+              // this.geolocation.getCurrentPosition(options).then((position) => {
+              //   const coords = position.coords.latitude + ',' + position.coords.longitude;
+              //   this.followupform.controls['geo_location'].setValue(coords);
 
-  if (this.isEditMode) {
-    this.updateFollowupRequest();
-  } else {
-    this.createFollowupRequest();
-  }
-}).catch((err) => {
-  this.loaderService.loadingDismiss();
-  this.toastService.showError('Failed to get location. Please try again.', 'Error');
-});
+              //   if (this.isEditMode) {
+              //     this.updateFollowupRequest();
+              //   } else {
+              //     this.createFollowupRequest();
+              //   }
+              // }).catch((err) => {
+              //   this.loaderService.loadingDismiss();
+              //   this.toastService.showError('Failed to get location. Please try again.', 'Error');
+              // });
   }
 
   createFollowupRequest() {

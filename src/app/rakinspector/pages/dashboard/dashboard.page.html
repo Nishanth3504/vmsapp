@@ -208,6 +208,16 @@
               <h4> {{'LEGAL_NOTICES' | translate}} </h4>
             </ion-text>
           </ion-col>
+
+          <!-- legal notice invoice -->
+          <ion-col *ngIf="menu.menu_check === 'legal_notice_invoices' && hasAccess(menu.role_id)"    size="4" sizeLg="4" sizeMd="4" sizeSm="4" class="" routerLink="/legal-notice-invoice-list"> 
+            <div class="vtBadge">
+              <ion-icon name="receipt-outline">ion-icon</ion-icon>
+            </div>
+            <ion-text>
+              <h4> Legal Notice Invoice </h4>
+            </ion-text>
+          </ion-col>
   
           <!-- <ion-col size="4" sizeLg="4" sizeMd="4" sizeSm="4" class="vt-borderLeft"  *ngFor="let data of complaintsMenuData" (click)="navigateToDetails(data.complaint_type_id)">
             <div class="vtBadge">

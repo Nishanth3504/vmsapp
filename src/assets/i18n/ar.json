@@ -278,6 +278,7 @@
     "TIME":"وقت",
     "DATE": "تاريخ",
     "RECIPIENT_NAME": "اسم المستلم",
-    "TOLL_FREE_SERVICE":"الاسم"
+    "TOLL_FREE_SERVICE":"الاسم",
+    "IS_INVALID":"غير صالح"
 
 }

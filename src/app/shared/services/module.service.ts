@@ -3638,6 +3638,35 @@ export class ModuleService {
     })
   };
 
+  getLegalNoticeInvoicesList(body): Observable<any> {
+    return Observable.create((Observer) => {
+      this.httpobj.setHeader('*', String("Content-Type"), String("application/json"));
+      this.httpobj.setHeader('*', String("Accept"), String("application/json"));
+      this.httpobj.setDataSerializer("json");
+      this.httpobj.setHeader(environment.authorizationURL, "Authorization", localStorage.getItem('hashToken'));
+      let nativeHttpCall = this.httpobj.post(environment.violationApiUrl + 'getLegalNoticeInvoicesList', body, {});
+      from(nativeHttpCall).subscribe(
+        (res: any) => {
+          if (res.status == 401) {
+            this.logout();
+          }
+          let response = res.data.data
+            ? JSON.parse(res.data.data)
+            : JSON.parse(res.data);
+        Observer.next(response);
+          Observer.complete();
+        },
+        (err) => {
+          if (err.status === 401) {
+            this.logout();
+          }
+          Observer.error(err);
+          Observer.complete();
+        }
+      );
+    })
+  };
+
   viewLegalNotice(body): Observable<any> {
     return Observable.create((Observer) => {
       this.httpobj.setHeader('*', String("Content-Type"), String("application/json"));
@@ -3666,6 +3695,36 @@ export class ModuleService {
       );
     })
   };
+
+  viewLegalNoticeInvoice(body): Observable<any> {
+    return Observable.create((Observer) => {
+      this.httpobj.setHeader('*', String("Content-Type"), String("application/json"));
+      this.httpobj.setHeader('*', String("Accept"), String("application/json"));
+      this.httpobj.setDataSerializer("json");
+      this.httpobj.setHeader(environment.authorizationURL, "Authorization", localStorage.getItem('hashToken'));
+      let nativeHttpCall = this.httpobj.post(environment.violationApiUrl + 'viewLegalNoticeInvoice', body, {});
+      from(nativeHttpCall).subscribe(
+        (res: any) => {
+          if (res.status == 401) {
+            this.logout();
+          }
+          let response = res.data.data
+            ? JSON.parse(res.data.data)
+            : JSON.parse(res.data);
+        Observer.next(response);
+          Observer.complete();
+        },
+        (err) => {
+          if (err.status === 401) {
+            this.logout();
+          }
+          Observer.error(err);
+          Observer.complete();
+        }
+      );
+    })
+  };
+  
 
 
   updateLegalNoticeStatus(body): Observable<any> {
@@ -3696,6 +3755,36 @@ export class ModuleService {
       );
     })
   };
+
+  updateLegalNoticeInvoiceStatus(body): Observable<any> {
+    return Observable.create((Observer) => {
+      this.httpobj.setHeader('*', String("Content-Type"), String("application/json"));
+      this.httpobj.setHeader('*', String("Accept"), String("application/json"));
+      this.httpobj.setDataSerializer("json");
+      this.httpobj.setHeader(environment.authorizationURL, "Authorization", localStorage.getItem('hashToken'));
+      let nativeHttpCall = this.httpobj.post(environment.violationApiUrl + 'updateLegalNoticeInvoiceStatus', body, {});
+      from(nativeHttpCall).subscribe(
+        (res: any) => {
+          if (res.status == 401) {
+            this.logout();
+          }
+          let response = res.data.data
+            ? JSON.parse(res.data.data)
+            : JSON.parse(res.data);
+        Observer.next(response);
+          Observer.complete();
+        },
+        (err) => {
+          if (err.status === 401) {
+            this.logout();
+          }
+          Observer.error(err);
+          Observer.complete();
+        }
+      );
+    })
+  };
+  
 
   checkWarningexistinviolation(body: any): Observable<any> {
     return Observable.create((Observer) => {

@@ -110,9 +110,9 @@ export class DashboardPage implements OnInit, OnDestroy {
     const order = [
       'violations', 'create_violation', 'sync_masters', 'sync_violations',
       'create_raqib_complaint', 'raqib_complaints', 'create_warning', 'warnings',
-      'create_inspector_report', 'inspector_reports', 'reject_inspector_reports', 'permits',
+      'create_inspector_report', 'inspector_reports', 'reject_inspector_reports','permits','toll_free_services',
       'create_general_incident', 'general_incidents', 'create_permit', 'warning_to_violations',
-      'assorted_report','create_follow_up_request','follow_up_requests','legal_notices'
+      'assorted_report','create_follow_up_request','follow_up_requests','legal_notices',"legal_notice_invoices"
     ];
 
     this.menuAccess.sort((a, b) => {

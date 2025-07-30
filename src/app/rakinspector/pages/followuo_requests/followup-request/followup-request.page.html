@@ -64,7 +64,7 @@
             <small class="form-text error-message" *ngIf="form.area.errors"> {{'AREA_NAME' | translate}} {{'IS_REQUIRED' | translate}} </small>
           </div>
 
-          <ion-item class="no-ripple" *ngIf="isEditMode"  >
+          <!-- <ion-item class="no-ripple" *ngIf="isEditMode"  >
             <ion-label position="stacked">{{'GEOLOCATION' | translate}}</ion-label>
             <ion-input readonly="true" placeholder=" {{'ENTER' | translate}} {{'GEOLOCATION' | translate}} " formControlName="geo_location"
               [ngClass]="{ 'is-invalid ': (!submitted && form.geo_location.errors) || (form.geo_location.touched && form.geo_location.errors) } ">
@@ -72,7 +72,24 @@
           </ion-item>
           <div *ngIf="!submitted||(form.geo_location.touched && form.geo_location.invalid)">
             <small class="form-text error-message" *ngIf="form.geo_location.errors"> {{'GEOLOCATION' | translate}} {{'IS_REQUIRED' | translate}}</small>
-          </div>
+          </div> -->
+<ion-item class="no-ripple">
+  <ion-label position="stacked">{{ 'GEOLOCATION' | translate }}</ion-label>
+  <ion-input
+    placeholder="{{ 'ENTER' | translate }} {{ 'GEOLOCATION' | translate }}"
+    formControlName="geo_location"
+    [ngClass]="{
+      'is-invalid': (!submitted && form.geo_location.errors) || (form.geo_location.touched && form.geo_location.errors)
+    }">
+  </ion-input>
+</ion-item>
+
+<div *ngIf="(form.geo_location.touched || submitted) && form.geo_location.errors">
+  <small class="form-text error-message" *ngIf="form.geo_location.errors['invalidCoordinates']">
+    {{ 'GEOLOCATION' | translate }} {{ 'IS_INVALID' | translate }}
+  </small>
+</div>
+
 
           <ion-item class="no-ripple">
             <ion-label position="stacked">{{'CATEGORY_TYPE' | translate}} *</ion-label>
@@ -119,16 +136,20 @@
           </div> -->
 
           <ion-item class="no-ripple">
-            <ion-label position="stacked">{{'DATE' | translate}}</ion-label>
+            <ion-label position="stacked">{{'DATE' | translate}} *</ion-label>
             <ion-input type="date" placeholder="{{'ENTER' | translate}} {{'DATE' | translate}}" formControlName="request_date" ></ion-input>
           </ion-item>
+          <div *ngIf="!submitted||(form.request_date.touched && form.request_date.invalid)">
+            <small class="form-text error-message" *ngIf="form.request_date.errors"> {{'DATE' | translate }} {{ 'IS_REQUIRED' | translate }}</small>
+          </div>
 
-
-            <ion-item class="no-ripple">
-              <ion-label position="stacked">{{'TIME' | translate}} </ion-label>
-              <ion-input type="time" placeholder=" {{'ENTER' | translate}} {{'TIME' | translate}} " formControlName="request_time">
-              </ion-input>
-            </ion-item>
+          <ion-item class="no-ripple">
+            <ion-label position="stacked">{{'TIME' | translate}} *</ion-label>
+            <ion-input type="time" placeholder=" {{'ENTER' | translate}} {{'TIME' | translate}} " formControlName="request_time"></ion-input>
+          </ion-item>
+          <div *ngIf="!submitted||(form.request_time.touched && form.request_time.invalid)">
+            <small class="form-text error-message" *ngIf="form.request_time.errors"> {{'TIME' | translate }} {{ 'IS_REQUIRED' | translate }}</small>
+          </div>
             <!-- <div *ngIf="!submitted||(form.arrival_time.touched && form.arrival_time.invalid)">
               <small class="form-text error-message" *ngIf="form.arrival_time.errors">{{'ARRIVAL_TIME' | translate}} {{'IS_REQUIRED'
                 | translate}}</small>

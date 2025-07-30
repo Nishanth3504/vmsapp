@@ -168,7 +168,16 @@ const routes: Routes = [
   {
     path:'uaepassverification',
     loadChildren: () => import('./onboarding/pages/uaepassverification/uaepassverification.module').then(m => m.UaepassverificationPageModule)
+  },
+  {
+    path: 'legal-notice-invoice-list',
+    loadChildren: () => import('./rakinspector/pages/legalnoticeinvoices/legal-notice-invoice-list/legal-notice-invoice-list.module').then( m => m.LegalNoticeInvoiceListPageModule)
+  },  {
+    path: 'legal-notice-invoice-details',
+    loadChildren: () => import('./rakinspector/pages/legalnoticeinvoices/legal-notice-invoice-details/legal-notice-invoice-details.module').then( m => m.LegalNoticeInvoiceDetailsPageModule)
   }
+
+
 
 
 

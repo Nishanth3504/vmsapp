@@ -1,0 +1,114 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title> Legal Invoice List </ion-title>
+  </ion-toolbar>
+
+  <ion-toolbar class="searchBlock">
+    <ion-searchbar showCancelButton="never" (ionInput)="SearchNotices($event)"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card class="complaintsListCard" *ngFor="let row of filteredNoticeList">
+    <ion-item lines="none">
+      <ion-label class="ion-text-wrap comlistLabel">
+        <div class="idComplaint">
+          <ion-row>
+            <ion-col> <ion-text>
+                <h2> {{row.reference_number}} </h2>
+              </ion-text> </ion-col>
+            <ion-col> <ion-text>
+                <p>{{row.created_on|date:'dd-MM-yyyy hh:mm'}}</p>
+              </ion-text></ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-grid class="custom-grid">
+              <ion-row>
+                <ion-col size="6" sizeLg="4" sizeMd="6" sizeSm="6">
+                  <ion-text>
+                    <h4>Memo.ref.no</h4>
+                  </ion-text>
+                  <ion-text>
+                    <p class="ion-text-left">{{ row.memo_ref_no }}</p>
+                  </ion-text>
+                </ion-col>
+            
+                <ion-col size="6" sizeLg="4" sizeMd="6" sizeSm="6">
+                  <ion-text>
+                    <h4>Licence no</h4>
+                  </ion-text>
+                  <ion-text>
+                    <p class="ion-text-left">{{ row.license_no }}</p>
+                  </ion-text>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+
+
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6">
+              <ion-text>
+                <h4>Side Code</h4>
+              </ion-text>
+              <ion-text>
+
+                <p class="ion-text-left">
+                  {{row.sideCodeName}}
+                </p>
+              </ion-text>
+            </ion-col>
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6">
+              <ion-text>
+                <p class="ion-text-left">
+                  <ion-icon name="ellipse" [ngStyle]="{'color': getStatusColor(row.status)}"></ion-icon>
+                  <span [ngStyle]="{'color': getStatusColor(row.status)}">{{row.status == 'Accepted'? 'Approved' :
+                    row.status}}</span>
+                </p>
+              </ion-text>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col class="innerStyle">
+              <div class="viewEditBt">
+                <!-- <ion-button class="iconBt" routerLink="/violationdetails/{{row.violationId}}" >
+                <ion-icon name="eye-outline">ion-icon</ion-icon>
+              </ion-button> -->
+                <!-- <ion-button class="iconBt" (click)="toView(row.id)">
+                <ion-icon name="alert-circle-outline"></ion-icon>
+              </ion-button> -->
+                <ion-button class="iconBt updateIcon" (click)="toUpdate(row.id)">
+                  <ion-icon name="eye-outline">ion-icon</ion-icon>
+                  <!-- <img src="../../../../../assets/images/update-icon.svg" /> -->
+                </ion-button>
+
+                <!-- <ion-button class="iconBt" (click)="viewMapModal(row.license_location)" *ngIf="row.license_location">
+                <ion-icon name="globe-outline"></ion-icon>
+              </ion-button> -->
+              </div>
+            </ion-col>
+          </ion-row>
+        </div>
+      </ion-label>
+    </ion-item>
+  </ion-card>
+
+  <div *ngIf="filteredNoticeList.length === 0">
+    <p class="ion-text-center"> {{'NO_RECORDS_FOUND' | translate}} </p>
+  </div>
+
+
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMoreNotices($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more warnings...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
