@@ -28,10 +28,10 @@ export class ViewFollowupPage implements OnInit, AfterViewInit {
   updateStatusForm: FormGroup;
   submitted: boolean = true;
   followupblobImage: any=[];
-  followupImage: string  ='';
+  followupImages: string[] = [];
   imageName: any='';
   filePath: any;
-  imageBase : any ='https://rpwebapps.us/clients/vms-live/';
+  imageBase : any = environment.webUrl;
   userType: any;
   statusData: any;
 
@@ -80,13 +80,24 @@ export class ViewFollowupPage implements OnInit, AfterViewInit {
       next: (res: any) => {
         if (res.statusCode === 200) {
           this.detailFollowup = res.viewDetails;
-          this.statusDetails = res.statusDetails;
+          this.statusDetails  = Array.isArray(res.statusDetails) ? res.statusDetails : [];
           this.filePath = res.fileUploadPath;
           this.statusData = res.statusData;
-          if(this.detailFollowup.arrival_time == null ){
-            this.updateStatusForm.controls['arrival_time'].setValidators([Validators.required]);
-            this.updateStatusForm.controls['arrival_time'].updateValueAndValidity();
-          }
+                this.statusDetails = this.statusDetails.map((d: any) => ({
+        ...d,
+        attachmentList: (d?.attachment ?? '')
+          .split(',')
+          .map((s: string) => s.trim())
+          .filter(Boolean)
+      }));
+               const needsArrival = this.detailFollowup?.arrival_time == null;
+      const ctrl = this.updateStatusForm.controls['arrival_time'];
+      if (needsArrival) {
+        ctrl.setValidators([Validators.required]);
+      } else {
+        ctrl.clearValidators();
+      }
+      ctrl.updateValueAndValidity({ emitEvent: false });
           
 
           // Additional scroll trigger
@@ -117,7 +128,7 @@ async folloeupImageCapture() {
     this.loaderService.loadingPresent();
     
     // Add maximum image upload limit
-    if (this.followupImage.length >= 5) {
+    if (this.followupImages.length >= 5) {
       this.toastService.showError('Maximum 5 images allowed', 'Upload Limit');
       this.loaderService.loadingDismiss();
       return;
@@ -137,8 +148,13 @@ async folloeupImageCapture() {
       next: (resp: any) => {
         if (resp.statusCode === 200) {
           this.imageName = resp.data[0];
-          this.followupImage=this.imageName;
-          this.toastService.showSuccess('Image uploaded successfully', 'Success');
+          const uploadedName = resp.data?.[0];
+            if (uploadedName) {
+              this.followupImages.push(uploadedName); // ✅ accumulate
+              this.toastService.showSuccess('Image uploaded successfully', 'Success');
+            } else {
+              this.toastService.showError('Unexpected upload response', 'Error');
+            }
         } else {
           this.toastService.showError("Image upload failed", "Error");
         }
@@ -195,27 +211,19 @@ async folloeupImageCapture() {
     //   this.toastService.showError('Please upload at least one image', 'Error');
     //   return;
     // }
-    let payload: any;
-    if(this.userType == 12){
-         payload = {
+    const basePayload: any = {
       comments: this.updateStatusForm.value['comments'],
-      status:this.updateStatusForm.value['status'],
-      arrival_time: this.updateStatusForm.value['arrival_time'],
+      status: this.updateStatusForm.value['status'],
       created_by: this.userId,
       tfs_id: this.routerData,
-      attachment: this.followupImage // Ensure comma-separated string
+      attachment: this.followupImages.join(',')
     };
-    }
-    else{
-         payload = {
-      comments: this.updateStatusForm.value['comments'],
-      status:this.updateStatusForm.value['status'],
-      created_by: this.userId,
-      tfs_id: this.routerData,
-      attachment: this.followupImage // Ensure comma-separated string
-    };
-    }
+    const payload =
+      this.userType == 12
+        ? { ...basePayload, arrival_time: this.updateStatusForm.value['arrival_time'] }
+        : basePayload;
   
+  console.log(payload,"payload");
   
     this.loaderService.loadingPresent();
     this.moduleService.updateFollowupStatus(payload)
@@ -223,7 +231,7 @@ async folloeupImageCapture() {
         finalize(() => {
           this.loaderService.loadingDismiss();
           this.updateStatusForm.reset();
-          this.followupImage =''; // Reset images
+          this.followupImages  =[]; // Reset images
         })
       )
       .subscribe({
@@ -269,30 +277,37 @@ async folloeupImageCapture() {
     });
   }
 
-  onDelete(){
-    if(this.followupImage){
-      let payload = {
-        "imagename":this.followupImage,
-        "filePath":this.filePath
-      }
+ onDelete(imageName?: string) {
+    const target = imageName ?? this.followupImages[this.followupImages.length - 1];
+
+    if (target) {
+      const payload = {
+        imagename: target,
+        filePath: this.filePath
+      };
       this.moduleService.vdeleteImage(payload).subscribe({
-        next: (resp: any)=>{
-          this.followupImage = '';
-          console.log('Image deleted');
-          this.toastService.showSuccess('Image Deleted Successfully!','');
+        next: (resp: any) => {
+          // Remove from local list
+          this.followupImages = this.followupImages.filter((n) => n !== target);
+          this.toastService.showSuccess('Image Deleted Successfully!', '');
         },
         error: (err) => {
-          console.error("Error deleting image", err);
-          // Optionally show a toast or message to the user
-          this.toastService.showError("Error deleting the image. Please try again.",'');
-        },
+          console.error('Error deleting image', err);
+          this.toastService.showError('Error deleting the image. Please try again.', '');
+        }
       });
     } else {
-      console.log("No image to delete.");
-      this.toastService.showWarning("No image to delete.",'');
+      this.toastService.showWarning('No image to delete.', '');
     }
- 
   }
-  
+
+  // In your component class
+toAttachmentList(csv?: string): string[] {
+  return (csv || '')
+    .split(',')
+    .map(s => s.trim())
+    .filter(Boolean);
+}
 
 }
+  

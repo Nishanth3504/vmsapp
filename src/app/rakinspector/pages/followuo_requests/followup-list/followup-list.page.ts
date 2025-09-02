@@ -215,6 +215,12 @@ onFilterSelect(filter: string) {
   this.followupLists(this.search_keyword || '', this.selectedFilter, null);
 }
 
+  async viewMapModal(latlong:any) {
+
+    let destination =  latlong.split(',')[0] + ',' +  latlong.split(',')[1];
+    window.open('geo:0,0?q=' + destination + '', '_system');
+   }
+
 
 
   ngOnDestroy() {

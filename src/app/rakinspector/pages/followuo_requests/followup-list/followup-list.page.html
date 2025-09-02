@@ -75,6 +75,10 @@
                 <div class="ion-float-end viewEditBt">
                 <ion-text class="ion-text-right" (click)="toviewFollowup(row.id)"> {{'VIEW' | translate}} </ion-text> 
                 <ion-text *ngIf="row.status !== 'Closed' && user_type !== '12'" class="ion-text-right"  (click)="toeditFollowup(row.id)" > <span>|</span> {{'EDIT' | translate}} </ion-text>
+                <ion-text *ngIf="row.geo_location" class="ion-text-right"  (click)="viewMapModal(row.geo_location)" > <span>|</span> {{'MAP' | translate}} </ion-text>
+                <!-- <ion-button class="iconBt" (click)="viewMapModal(row.fine_place)" *ngIf="row.geo_location">
+                  <ion-icon name="globe-outline"></ion-icon>
+                </ion-button> -->
                 <!-- <ion-text class="ion-text-right" *ngIf="row.status !=='Completed' && user_type == '12'" (click)="toupdateFollowup(row.id)" > <span>|</span>  {{'UPDATE' | translate}} </ion-text> -->
               </div>
               </ion-col>

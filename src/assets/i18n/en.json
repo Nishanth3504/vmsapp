@@ -297,5 +297,14 @@
     "DATE": "Date",
     "RECIPIENT_NAME": "Recipient Name",
     "TOLL_FREE_SERVICE":"Toll-Free Service",
-    "IS_INVALID": "is invalid"
+    "IS_INVALID": "is invalid",
+    "MEMO_DATE":"Memo Date",
+    "LEGAL_EMAIL_DATE":"Legal Email Date",
+    "LEGAL_PAYMENT_UPDATED_DATE":"Legal Payment Updated Date",
+    "MAP":"Map",
+    "LEGAL_NOTICE_INVOICE":"Legal Notice Invoice",
+    "TOLL_FREE_SERVICES":"",
+    "CREATE_TOLL_FREE_SERVICE":"جديد"
+
+
 }

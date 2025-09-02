@@ -429,6 +429,7 @@ export class WarningdetailsPage implements OnInit {
       console.log("data", data);
 
       this.moduleService.updateWarningStatus(data).subscribe((resp: any) => {
+        debugger
         if (resp.statusCode === 200 || resp.status === 200) {
           if (violationData == 'Closed') {
             this.toastService.showSuccess(this.setLanguage == 'ar' ? 'تم تحديث الحالة بنجاح': 'Status Updated Successfully!', 'Thank You');
@@ -440,11 +441,23 @@ export class WarningdetailsPage implements OnInit {
         }
       },
         (error: any) => {
-          if (error.statusCode == 400 && error.data && error.data.msg) {
-            this.toastService.showError(error.data.msg, 'Alert');
-          } else if (error.status === 401) {
+
+          let parsedError: any;
+          try {
+              // If the error is a string, parse it
+            parsedError = typeof error.error === 'string' ? JSON.parse(error.error) : error.error;
+          } catch (e) {
+            parsedError = error;
+          }
+
+          console.log(parsedError.statusCode,"error");
+          
+          if (parsedError.statusCode == 400 && parsedError.data && parsedError.data.msg) {
+            this.toastService.showError(parsedError.data.msg, 'Alert');
+          } else if (parsedError.status === 401) {
             this.toastService.showError('Unauthorized. Please log in again.', 'Alert');
-          } else {
+          }
+           else {
             this.toastService.showError('An error occurred. Please try again.', 'Alert');
           }
           console.error("Error creating violation:", error);

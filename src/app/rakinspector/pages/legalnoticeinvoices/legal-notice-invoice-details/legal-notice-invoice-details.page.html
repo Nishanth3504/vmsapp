@@ -34,6 +34,18 @@
           </ion-text>
         </ion-col>
 
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+          <ion-text>
+            <h5>
+              {{'MEMO_DATE' | translate}}
+            </h5>
+          </ion-text>
+          <ion-text>
+            <h6>
+              {{ detailNotice.memo_date ? detailNotice.memo_date : '--'  }}
+            </h6>
+          </ion-text>
+        </ion-col>
 
         <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
           <ion-text>
@@ -69,7 +81,33 @@
           </ion-text>
           <ion-text>
             <h6>
-              {{ detailNotice.Email}}
+              {{ detailNotice.email}}
+            </h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+          <ion-text>
+            <h5>
+              {{'LEGAL_EMAIL_DATE' | translate}}
+            </h5>
+          </ion-text>
+          <ion-text>
+            <h6>
+              {{ detailNotice.legal_email_date}}
+            </h6>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="6" sizeLg="3" sizeMd="4" sizeSm="4">
+          <ion-text>
+            <h5>
+              {{'LEGAL_PAYMENT_UPDATED_DATE' | translate}}
+            </h5>
+          </ion-text>
+          <ion-text>
+            <h6>
+              {{ detailNotice.legal_payment_updated_date}}
             </h6>
           </ion-text>
         </ion-col>

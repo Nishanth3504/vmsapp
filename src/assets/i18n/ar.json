@@ -266,7 +266,7 @@
     "UPDATE_LEGAL_NOTICE":"تحديث الإشعار القانوني",
     "REFERENCE_NUMBER":"رقم المرجع",
     "COMMERCIAL_NUMEBR":"رقم الرخصة",
-    "SELECT_AN_OPTION": "اختيار",
+    "SELECT_AN_OPTION": "اختر من القائمة",
     "ERROR_FETCHING_FOLLOWUP":"خطأ في استرجاع البيانات من قائمة المتابعة",
     "REQUEST_SUBMIT_SUCCESS":"تم تقديم الطلب بنجاح!",
     "COMPLETE_STATUS": "حالة الاشعار",
@@ -279,6 +279,12 @@
     "DATE": "تاريخ",
     "RECIPIENT_NAME": "اسم المستلم",
     "TOLL_FREE_SERVICE":"الاسم",
-    "IS_INVALID":"غير صالح"
-
+    "IS_INVALID":"غير صالح",
+    "MEMO_DATE":"تاريخ المذكرة",
+    "LEGAL_EMAIL_DATE":"تاريخ الارسال للمكتب القانوني",
+    "LEGAL_PAYMENT_UPDATED_DATE":"تاريخ تحديث الدفع / المكتب",
+    "MAP":"الخريطة",
+    "LEGAL_NOTICE_INVOICE":"اشعارات قانونية - الفواتير",
+    "TOLL_FREE_SERVICES":"الخدمات المجانية",
+    "CREATE_TOLL_FREE_SERVICE":"جديد"
 }
