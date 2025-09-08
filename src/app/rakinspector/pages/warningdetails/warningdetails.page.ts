@@ -429,7 +429,6 @@ export class WarningdetailsPage implements OnInit {
       console.log("data", data);
 
       this.moduleService.updateWarningStatus(data).subscribe((resp: any) => {
-        debugger
         if (resp.statusCode === 200 || resp.status === 200) {
           if (violationData == 'Closed') {
             this.toastService.showSuccess(this.setLanguage == 'ar' ? 'تم تحديث الحالة بنجاح': 'Status Updated Successfully!', 'Thank You');

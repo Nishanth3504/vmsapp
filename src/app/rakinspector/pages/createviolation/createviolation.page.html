@@ -302,13 +302,7 @@
             <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="isCommercial">
               <ion-item>
                 <ion-label position="stacked">{{'LICENSE_NO' | translate }} *</ion-label>
-                <!-- <ion-input placeholder="{{'ENTER_LICENSE_NO' | translate }}" formControlName="licenseNo"
-                  [ngClass]="{ 'is-invalid': (!submitted && form.licenseNo.errors) || (form.licenseNo.touched && form.licenseNo.errors) }">
-                </ion-input> -->
-                <!-- <ng-container> -->
-                <!-- (onSearchFail)="onLicenseSearchFail($event)" 
-                  (onChange)="licenseNumberChange($event)"
-                  (onSearchSuccess)="onLicenseSearchSuccess($event)"  -->
+              
                 <ionic-selectable #licenseNumberComponent formControlName="licenseNo" [(ngModel)]="license"
                   [modalCssClass]="setLanguage==='ar' ? 'ar' : ''" [items]="licenseNumberList"
                   (onChange)="licenseNumberChange($event)" itemValueField="license_no" itemTextField="license_no"
@@ -376,12 +370,27 @@
                 </ionic-selectable>
                 <!-- </ng-container> -->
               </ion-item>
-              <!-- <div *ngIf="!submitted||(form.licenseNo.touched && form.licenseNo.invalid)">
-                <small class="form-text error-message" *ngIf="form.licenseNo.errors">{{'LICENSE_NO_REQUIRED' | translate
-                  }}</small>
-              </div> -->
               <!-- Commercial License End -->
             </ion-col>
+
+            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6">
+              <ion-item>
+                <ion-label position="stacked">{{'Emirate Name' | translate}} *</ion-label>
+                <ion-select #source [value]="selectedSourceVal" placeholder="{{'Select Emirate Name' | translate}}"
+                  (ionChange)="getSourceValue($event)" formControlName="plateSource"
+                  [interfaceOptions]="setLanguage==='ar' ?{cssClass: 'ar'}:''"
+                  [ngClass]="{ 'is-invalid': (!submitted && form.plateSource.errors) || (form.plateSource.touched && form.plateSource.errors) }">
+                  <ion-select-option *ngFor="let row of plateSourceList" [value]="row">
+                    {{setLanguage==='ar' ? row.name_ar : row.name_eng}}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+              <div *ngIf="!submitted||(form.plateSource.touched && form.plateSource.invalid)">
+                <small class="form-text error-message" *ngIf="form.plateSource.errors">{{'Emirate Name is Required' |
+                  translate}}</small>
+              </div>
+            </ion-col>
+            
           </ion-row>
         </ion-grid>
         <!-- Vehicle no label *ngIf="commparamvalue=='0'"-->
@@ -596,25 +605,10 @@
               </div>
             </ion-col>
 
-            <!-- <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6">
-              <ion-item>
-                <ion-label position="stacked">{{'PLATE_COLOR' | translate}}</ion-label>
-                <ion-input placeholder="{{'ENTER_PLATE_COLOR' | translate}}" formControlName="plateColor"></ion-input>
-              </ion-item>
-            </ion-col> -->
-
-            <!-- <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6">
-              <ion-item>
-                <ion-label position="stacked">{{'OLD_CODE' | translate}}</ion-label>
-                <ion-select placeholder="Old Code" [(ngModel)]="selectedOldCode" formControlName="oldCode">
-                  <ion-select-option *ngFor="let row of oldCodeDataList" [value]="row.class_code">
-                    {{row.class_name_eng}}
-                  </ion-select-option>
-                </ion-select>
-              </ion-item>
-            </ion-col> -->
+           
           </ion-row>
         </ion-grid>
+
         <ion-grid>
           <ion-row>
             <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6">
@@ -634,29 +628,6 @@
                   translate}}</small>
               </div>
             </ion-col>
-
-            <!-- <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="warning_required">
-              <ion-item>
-                <ion-label position="stacked">{{'WARNING_SPECIFICATION' | translate}} <ng-container>*</ng-container></ion-label>
-                <ion-select 
-                  placeholder="{{'SELECT' | translate}} {{'WARNING_SPECIFICATION' | translate}}"   
-                  formControlName="warningSpecification"
-                  (ionChange)="handleWarningSpecification($event)"
-                  [interfaceOptions]="setLanguage==='ar' ?{cssClass: 'ar'}:''"
-                  [ngClass]="{ 'is-invalid': (!submitted && form.warningSpecification.errors) || (form.warningSpecification.touched && form.warningSpecification.errors) }"
-                  >
-                  <ion-select-option *ngFor="let row of specificationList" [value]="row">
-                    {{setLanguage==='ar' ? row.name_ar : row.name}}
-                  </ion-select-option>
-                </ion-select>
-              </ion-item>
-              <div *ngIf="!submitted||(form.warningSpecification.touched && form.warningSpecification.invalid)">
-                <small class="form-text error-message" *ngIf="form.warningSpecification.errors">
-                  {{'WARNING_SPECIFICATION_REQUIRED' | translate}}
-                </small>
-              </div>
-            </ion-col> -->
-
             <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf=" !defaultwarning && warning_required">
               <ion-item class="no-ripple">
                 <ion-label position="stacked">{{'WARNING_DURATION' | translate}} *</ion-label>
@@ -1219,22 +1190,6 @@
             </ion-col>
           </ion-row>
         </ion-grid>
-
-
-        <!-- <ion-grid>
-          <ion-row>
-            <ion-col col-6 *ngFor="let photo of basePhotos">
-              <ion-card class="block">
-                <ion-icon name="trash" class="deleteIcon"></ion-icon>
-                <img [src]="photo" *ngIf="photo" height="150" width="150">
-              </ion-card>
-            </ion-col>
-          </ion-row>
-        </ion-grid> -->
-
-        <!-- <img [src]="photo" *ngIf="photo" height="150" width="150"> -->
-
-
 
         <div class="container">
 

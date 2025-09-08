@@ -377,7 +377,6 @@ export class CreateviolationPage implements OnInit {
         console.log(error)
       };
     this.getVoilationTypeData();
-    this.getPlateSourceData();
     this.getDocumentTypeData();
     this.getReservedCodeList();
     this.getAreaData();
@@ -898,7 +897,7 @@ export class CreateviolationPage implements OnInit {
   }
 
   addLicense() {
-    //this.licenseNumberList.push({ license_no: this.licenseNumber });
+    // this.licenseNumberList.push({ license_no: this.licenseNumber });
     if (this.licenseNumber != "") {
       this.licenseNumberList = [{ license_no: this.licenseNumber }, ...this.licenseNumberList];
       this.licenseNumberComponent.hideAddItemTemplate();
@@ -1143,7 +1142,7 @@ export class CreateviolationPage implements OnInit {
       };
   }
 
-  svtypeValue(event) {
+  async svtypeValue(event) {
     this.documentNumber = "";
     this.licenseNumber = "";
     this.platecodeNumber = "";
@@ -1163,9 +1162,13 @@ export class CreateviolationPage implements OnInit {
     this.svtSelected = event.target.value;
     this.abercheckbox = false;
     this.getViolationCategoryData(this.svtSelected);
-    //this.creatViolation.reset();
+    await this.getPlateSourceData();
+    this.applyValidatorsBasedOnSvyt(this.svtSelected);
+    this.getVoilationTitle(this.svtSelected);
+  }
 
-    if (this.svtSelected == 3) {
+  applyValidatorsBasedOnSvyt(type: any){
+        if (this.svtSelected == 3) {
 
       this.isVehicle = true;
       this.isCommercial = false;
@@ -1188,7 +1191,7 @@ export class CreateviolationPage implements OnInit {
       this.creatViolation.controls['recipientMobile'].updateValueAndValidity();
       // this.creatViolation.controls['ownername'].setValidators([Validators.required]);
       // this.creatViolation.controls['ownername'].updateValueAndValidity();
-      this.creatViolation.controls['ownerphone'].setValidators([Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]);
+    this.creatViolation.controls['ownerphone'].setValidators([Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]);
       this.creatViolation.controls['ownerphone'].updateValueAndValidity();
       this.creatViolation.controls['ownerdescription'].setValidators([]);
       this.creatViolation.controls['ownerdescription'].updateValueAndValidity();
@@ -1247,10 +1250,15 @@ export class CreateviolationPage implements OnInit {
       this.getReservationSites();
     }
     else if (this.svtSelected == 2) {
+
       this.ownerPhoneRequired = true;
       this.isCommercial = true;
       this.isVehicle = false;
       this.isIndividual = false;
+      this.plateSourceList = this.plateSourceList.filter(
+        (item: any) => item.show_commercial === "1"
+      );
+   
       this.creatViolation.controls['licenseNo'].setValidators([Validators.required]);
       this.creatViolation.controls['licenseNo'].updateValueAndValidity();
       this.creatViolation.controls['recipientPerson'].setValidators([]);
@@ -1273,7 +1281,7 @@ export class CreateviolationPage implements OnInit {
       this.creatViolation.controls['documentNo'].updateValueAndValidity();
       this.creatViolation.controls['plateNo'].setValidators([]);
       this.creatViolation.controls['plateNo'].updateValueAndValidity();
-      this.creatViolation.controls['plateSource'].setValidators([]);
+      this.creatViolation.controls['plateSource'].setValidators([Validators.required]);
       this.creatViolation.controls['plateSource'].updateValueAndValidity();
       this.creatViolation.controls['plateCategory'].setValidators([]);
       this.creatViolation.controls['plateCategory'].updateValueAndValidity();
@@ -1328,7 +1336,6 @@ export class CreateviolationPage implements OnInit {
       this.creatViolation.controls['reservationSiteAreas'].setValidators([]);
       this.creatViolation.controls['reservationSiteAreas'].updateValueAndValidity();
     }
-    this.getVoilationTitle(this.svtSelected);
   }
 
   sideCodeValueData(idval) {
@@ -1510,52 +1517,48 @@ export class CreateviolationPage implements OnInit {
   }
 
 
-  getPlateSourceData() {
-
+getPlateSourceData(): Promise<any> {
+  return new Promise((resolve, reject) => {
     if (localStorage.getItem('isOnline') === "true") {
       let payload = {
         "source_id": this.sourceId
-      }
-      this.moduleService.getPlateSource(payload).subscribe((result: any) => {
+      };
 
-        this.plateSourceList = result.data;
-        console.log('PlateSource', this.plateSourceList);
-      }),
-        (error) => {
-          console.log(error)
-        };
-    }
-    else {
-      console.log("App is offline")
-      this.dbservice.fetchPlateSources().subscribe((res) => {
-        this.plateSourceList = res;
-        console.log('PlateSource', this.plateSourceList);
+      this.moduleService.getPlateSource(payload).subscribe({
+        next: (result: any) => {
+          this.plateSourceList = result.data;
+          console.log('PlateSource', this.plateSourceList);
+          resolve(this.plateSourceList); // ✅ return data
+        },
+        error: (err) => {
+          console.log(err);
+          reject(err);
+        }
+      });
+    } else {
+      console.log("App is offline");
+      this.dbservice.fetchPlateSources().subscribe({
+        next: (res) => {
+          this.plateSourceList = res;
+          console.log('PlateSource (offline)', this.plateSourceList);
+          resolve(this.plateSourceList); // ✅ return data
+        },
+        error: (err) => {
+          console.log(err);
+          reject(err);
+        }
       });
     }
- 
+  });
+}
 
 
-  }
-
-  getSourceValue(event: any){
+   getSourceValue(event: any){
     this.creatViolation.controls['plateCategory'].setValue('');
     const selectedOption = event.detail.value;
     this.carsId = selectedOption.car_sid;
     console.log(selectedOption);
     console.log(this.carsId);
-    // if(this.sourceId == 1){
-    //   this.creatViolation.controls['plateSource'].setValue(selectedOption.aber_code);
-    //   // this.creatViolation.value.plateSource = selectedOption.aber_code;
-    //   this.selectedPlateSource = event.detail.value.car_sid;
-    //   this.selectedPlateSourceCode = event.detail.value.aber_code;
-    // }
-    // else{
-    //   this.creatViolation.controls['plateSource'].setValue(selectedOption.raqab_code);
-    //   // this.creatViolation.value.plateSource = selectedOption.raqab_code;
-    //   this.selectedPlateSource = event.detail.value.car_sid;
-    //   this.selectedPlateSourceCode = event.detail.value.raqab_code;
-    // }
-    // this.selectedPlateSource = event.detail.value;
     if(this.sourceId == 1){
       this.selectedPlateSource = event.detail.value.car_sid;
       this.selectedPlateSourceCode = event.detail.value.aber_code;
@@ -1564,23 +1567,28 @@ export class CreateviolationPage implements OnInit {
     else{
       this.selectedPlateSource = event.detail.value.car_sid;
       this.selectedPlateSourceCode = event.detail.value.raqab_code;
-      this.creatViolation.value['plateSource'] =  this.selectedPlateSourceCode;
+      if(this.svtSelected == 2){
+        this.creatViolation.value['plateSource'] =  this.selectedPlateSource;
+      }
+      else{
+        this.creatViolation.value['plateSource'] =  this.selectedPlateSourceCode;
+      }
     }
     
-    // this.selectedPlateSource = event;
-    // localStorage.setItem('plateSourceId',this.selectedPlateSource)
-    // this.creatViolation.controls['plate_source'].setValue(this.selectedPlateSource);
     console.log("this.selectedPlateSource = event.target.value;",this.selectedPlateSource);
     if (this.selectedPlateSourceCode != '0') {
       this.isPlateSourceselectedOther = false;
       this.creatViolation.controls['other_plate_source'].setValue('');
       this.creatViolation.controls['other_plate_source'].setValidators([]);
       this.creatViolation.controls['other_plate_source'].updateValueAndValidity();
+
+      if(this.svtSelected == 3){
       this.creatViolation.controls['plateCode'].setValidators([Validators.required]);
       this.creatViolation.controls['plateCode'].updateValueAndValidity();
       this.creatViolation.controls['plateCategory'].setValidators([Validators.required]);
       this.creatViolation.controls['plateCategory'].updateValueAndValidity();
-      this.getPlateCategoryData();
+       this.getPlateCategoryData();
+      }
     }
     else {
       console.log("othersssssssssss");
@@ -1836,77 +1844,6 @@ export class CreateviolationPage implements OnInit {
 
   }
 
-  // fineCodeChange(event: {
-  //   component: IonicSelectableComponent,
-  //   value: any
-  // }) {
-  //   if (this.platecodeNumber == '' && this.documentNumber == '' && this.licenseNumber == '') {
-  //     this.fineCodeComponent.clear();
-  //     this.finecode={};
-  //     this.creatViolation.controls['fineAmount'].setValue('');
-  //     this.toastService.showError("Please enter the document/Plat/License Number to select the fine code.","Alert")
-  //   }
-  //   else {
-  //     this.finecodeValue = event.value['fine_code_id'];
-  //     if(event.value['warning_required'] == 1){
-  //       this.warning_required = true;
-  //       this.creatViolation.controls['warningSpecification'].setValidators([Validators.required]);
-  //       this.creatViolation.controls['warningSpecification'].updateValueAndValidity();
-  //       if (localStorage.getItem('isOnline') === "true") {
-
-  //         console.log(event.value);
-  //         //this.finecode=event.value['fine_code_id'];
-  
-  //         this.getFineAmountData(event.value['fine_code_id']);
-  //         const warningHours = event.value['fc_warning_hours'];
-  //         const warningHourstitle = event.value['fc_warning_hours_title'];
-  //         if (warningHours !== null && warningHours !== '') {
-  //           this.creatViolation.controls['fc_warning_hours'].setValue(warningHours);
-  //           this.creatViolation.controls['fc_warning_hours_title'].setValue(warningHourstitle);
-  //           this.defaultwarning = true;
-  //           this.creatViolation = warningHours;
-  //           this.creatViolation.controls['warningDuration'].setValidators([]);
-  //           this.creatViolation.controls['warningDuration'].updateValueAndValidity();
-  //         } else {
-  //           this.defaultwarning = false;
-  //           this.creatViolation.controls['warningDuration'].setValidators([Validators.required]);
-  //           this.creatViolation.controls['warningDuration'].updateValueAndValidity();
-  //         }
-  //         console.log('defaultwarning', this.defaultwarning);
-  
-  //       } else {
-  //         let fine_amount = this.fineCodeList.filter((item: any) => {
-  //           return item.fine_code_id == event.value['fine_code_id']
-  //         })[0].fine_amount
-  //         this.creatViolation.controls['fineAmount'].setValue(fine_amount);
-  //         this.creatViolation.controls['finecodecount'].setValidators([]);
-  //         this.creatViolation.controls['finecodecount'].updateValueAndValidity();
-  //         this.finecodecount = false;
-  //       }
-  //     }
-  //     else{
-  //       this.warning_required = false;
-  //       this.creatViolation.controls['warningSpecification'].setValidators([]);
-  //       this.creatViolation.controls['warningSpecification'].updateValueAndValidity();
-  //       if (localStorage.getItem('isOnline') === "true") {
-
-  //         console.log(event.value);
-  //         //this.finecode=event.value['fine_code_id'];
-  
-  //         this.getFineAmountData(event.value['fine_code_id']);
-  
-  //       } else {
-  //         let fine_amount = this.fineCodeList.filter((item: any) => {
-  //           return item.fine_code_id == event.value['fine_code_id']
-  //         })[0].fine_amount
-  //         this.creatViolation.controls['fineAmount'].setValue(fine_amount);
-  //         this.creatViolation.controls['finecodecount'].setValidators([]);
-  //         this.creatViolation.controls['finecodecount'].updateValueAndValidity();
-  //         this.finecodecount = false;
-  //       }
-  //     }      
-  //   }
-  // }
 
   fineCodeChange(event: { component: IonicSelectableComponent, value: any }) {
       this.wImg = '';
