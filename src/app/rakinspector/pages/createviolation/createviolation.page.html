@@ -37,6 +37,7 @@
               </div>
             </ion-col>
 
+           
             <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6">
               <ion-item class="no-ripple">
                 <ion-label position="stacked">{{'VIOLATION_CATEGORY' | translate}} *</ion-label>
@@ -53,6 +54,25 @@
                   *ngIf="form.violationCategory.errors">{{'VIOLATION_CATEGORY_REQUIRED' | translate}}</small>
               </div>
             </ion-col>
+
+             <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" *ngIf="isCommercial">
+              <ion-item>
+                <ion-label position="stacked">{{'License Emirate' | translate}} *</ion-label>
+                <ion-select #source [value]="selectedSourceVal" placeholder="{{'Select License Emirate' | translate}}"
+                  (ionChange)="getSourceValue($event)" formControlName="plateSource"
+                  [interfaceOptions]="setLanguage==='ar' ?{cssClass: 'ar'}:''"
+                  [ngClass]="{ 'is-invalid': (!submitted && form.plateSource.errors) || (form.plateSource.touched && form.plateSource.errors) }">
+                  <ion-select-option *ngFor="let row of plateSourceList" [value]="row">
+                    {{setLanguage==='ar' ? row.name_ar : row.name_eng}}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+              <div *ngIf="!submitted||(form.plateSource.touched && form.plateSource.invalid)">
+                <small class="form-text error-message" *ngIf="form.plateSource.errors">{{'License Emirate is Required' |
+                  translate}}</small>
+              </div>
+            </ion-col>
+
 
 
             <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6" style="display: none;">
@@ -308,7 +328,7 @@
                   (onChange)="licenseNumberChange($event)" itemValueField="license_no" itemTextField="license_no"
                   [canSearch]="true" [canClear]="onClear" closeButtonSlot="end" (onClear)="onClearlicenseNo($event)"
                   [ngClass]="{ 'is-invalid': (!submitted && form.licenseNo.errors) || (form.licenseNo.touched && form.licenseNo.errors) }"
-                  placeholder="{{'ENTER_LICENSE_NO' | translate }}.">
+                  placeholder="{{'ENTER_LICENSE_NO' | translate }}." *ngIf="showSelectable"  >
                   <ng-template ionicSelectableAddItemTemplate let-port="value">
                     <ion-list>
                       <ion-item>
@@ -368,28 +388,22 @@
                     </ion-footer>
                   </ng-template>
                 </ionic-selectable>
+
+                <ion-input placeholder="{{'ENTER_LICENSE_NO' | translate}}" formControlName="licenseNo" *ngIf="!showSelectable"  [(ngModel)]="licenseNumber"
+                  [ngClass]="{ 'is-invalid': (!submitted && form.licenseNo.errors) || (form.licenseNo.touched && form.licenseNo.errors) }">
+                </ion-input>
+
                 <!-- </ng-container> -->
               </ion-item>
+                <div *ngIf="!submitted||(form.licenseNo.touched && form.licenseNo.invalid)">
+                <small class="form-text error-message" *ngIf="form.licenseNo.errors">{{'LICENSE_NO'
+                  | translate}} {{'IS_REQUIRED' | translate}}
+                  </small>
+                </div>
               <!-- Commercial License End -->
             </ion-col>
 
-            <ion-col size="12" sizeLg="4" sizeMd="6" sizeSm="6">
-              <ion-item>
-                <ion-label position="stacked">{{'Emirate Name' | translate}} *</ion-label>
-                <ion-select #source [value]="selectedSourceVal" placeholder="{{'Select Emirate Name' | translate}}"
-                  (ionChange)="getSourceValue($event)" formControlName="plateSource"
-                  [interfaceOptions]="setLanguage==='ar' ?{cssClass: 'ar'}:''"
-                  [ngClass]="{ 'is-invalid': (!submitted && form.plateSource.errors) || (form.plateSource.touched && form.plateSource.errors) }">
-                  <ion-select-option *ngFor="let row of plateSourceList" [value]="row">
-                    {{setLanguage==='ar' ? row.name_ar : row.name_eng}}
-                  </ion-select-option>
-                </ion-select>
-              </ion-item>
-              <div *ngIf="!submitted||(form.plateSource.touched && form.plateSource.invalid)">
-                <small class="form-text error-message" *ngIf="form.plateSource.errors">{{'Emirate Name is Required' |
-                  translate}}</small>
-              </div>
-            </ion-col>
+
             
           </ion-row>
         </ion-grid>

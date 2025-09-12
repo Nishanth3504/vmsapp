@@ -201,6 +201,7 @@ ngOnInit() {
             this.sourceId = res.data[0].source_id;
             const menuAccess : any = res.menuAccessByRoles;
             console.log("menuAccess", menuAccess);
+            const dedAccess : any = res.dedSelectedEmirate;
 
             localStorage.setItem('sourceId', res.data[0].source_id)
             localStorage.setItem('currentUser', this.username);//userInfo[0].email_id);
@@ -211,6 +212,7 @@ ngOnInit() {
             localStorage.setItem('last_name', userInfo[0].last_name);
             localStorage.setItem('offlineMode', offlineMode);
             localStorage.setItem('menuAccessbyUserRole', JSON.stringify(menuAccess));
+            localStorage.setItem('dedSelectedEmirate', JSON.stringify(dedAccess));
 
             localStorage.setItem('language', 'en');
             this.toastService.showSuccess('Login Successfully', 'Success');

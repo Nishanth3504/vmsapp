@@ -218,7 +218,7 @@ export class CreateviolationPage implements OnInit {
   durationData: any;
   durationSelected: any;
   defaultwarning: boolean;
-
+  dedSelectedEmirates : any;
   constructor(
     private zone: NgZone,
     private modalController: ModalController,
@@ -253,6 +253,8 @@ export class CreateviolationPage implements OnInit {
   ) {
     this.sourceId = localStorage.getItem('sourceId');
     console.log("sourceeeee", this.sourceId);
+    this.dedSelectedEmirates = JSON.parse(localStorage.getItem('dedSelectedEmirate'));
+    
     
     this.httpClient = new HttpClient(httpBackend);
     console.log(moment.tz("Asia/Dubai").format('yyyy-MM-dd H:mm:ss'));
@@ -327,6 +329,15 @@ export class CreateviolationPage implements OnInit {
       street_name:['']
     });
   }
+  get showSelectable(): boolean {
+  if (this.selectedPlateSourceCode == null || !Array.isArray(this.dedSelectedEmirates)) {
+    return false;
+  }
+
+  // Convert both to string for comparison → avoids type mismatch
+  return this.dedSelectedEmirates.map(x => String(x)).includes(String(this.selectedPlateSourceCode));
+}
+
 
   onInput($event: any) {
     if ($event.target.value.length > 10) {
@@ -1528,6 +1539,8 @@ getPlateSourceData(): Promise<any> {
         next: (result: any) => {
           this.plateSourceList = result.data;
           console.log('PlateSource', this.plateSourceList);
+          if(this.svtSelected == 2) {this.setDefaultEmirate(this.plateSourceList); this.selectedPlateSourceCode = 4}
+          
           resolve(this.plateSourceList); // ✅ return data
         },
         error: (err) => {
@@ -1550,6 +1563,18 @@ getPlateSourceData(): Promise<any> {
       });
     }
   });
+}
+
+private setDefaultEmirate(list: any[]) {
+  const defaultEmirate = list.find((item: any) => item.is_default_show === "1");
+  if (defaultEmirate) {
+    this.form['plateSource'].setValue(defaultEmirate);
+    this.selectedSourceVal = defaultEmirate;
+  } else if (list.length > 0) {
+    // fallback if no default flag found
+    this.form['plateSource'].setValue(list[0]);
+    this.selectedSourceVal = list[0];
+  }
 }
 
 
@@ -3301,30 +3326,30 @@ saveStandard(receivedStandardInfo: any) {
     }
   
     // Additional document validations
-    if (this.isCustomerwithproof == "Yes") {
-      if (this.identityDocPhotos.length === 0) {
-        this.toastService.showError(
-          this.setLanguage == "ar" ? "الرجاء إدخال صورة الهوية" : "Identity Document Required", 
-          this.setLanguage == "ar" ? "تنبيه " : "Alert"
-        );
-        this.submitted = false;
-        return;
-      }
-    }
+    // if (this.isCustomerwithproof == "Yes") {
+    //   if (this.identityDocPhotos.length === 0) {
+    //     this.toastService.showError(
+    //       this.setLanguage == "ar" ? "الرجاء إدخال صورة الهوية" : "Identity Document Required", 
+    //       this.setLanguage == "ar" ? "تنبيه " : "Alert"
+    //     );
+    //     this.submitted = false;
+    //     return;
+    //   }
+    // }
   
-    if (this.svtSelected != 3 && this.svtSelected != 4) {
-      if (this.photos.length === 0) {
-        this.toastService.showError("Violation Document Required", this.setLanguage == "ar" ? "تنبيه " : "Alert");
-        this.submitted = false;
-        return;
-      }
-    }
+    // if (this.svtSelected != 3 && this.svtSelected != 4) {
+    //   if (this.photos.length === 0) {
+    //     this.toastService.showError("Violation Document Required", this.setLanguage == "ar" ? "تنبيه " : "Alert");
+    //     this.submitted = false;
+    //     return;
+    //   }
+    // }
   
-    if (this.isvideoCaptured === true && this.fName === ''){ 
-      this.toastService.showError("video Document Required", this.setLanguage == "ar" ? "تنبيه " : "Alert");
-      this.submitted = false;
-      return;
-    }
+    // if (this.isvideoCaptured === true && this.fName === ''){ 
+    //   this.toastService.showError("video Document Required", this.setLanguage == "ar" ? "تنبيه " : "Alert");
+    //   this.submitted = false;
+    //   return;
+    // }
   
     // Prepare base data
     let data = {
