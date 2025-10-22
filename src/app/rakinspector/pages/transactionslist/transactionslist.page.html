@@ -78,16 +78,16 @@
               </div>
             </ion-button>
          
-            <ion-button class="iconBt" *ngIf="user_type == 12" routerLink="/edittransactionlist/{{row.id}}" >
+            <ion-button class="iconBt" *ngIf="user_type == 12 || user_type == 32" routerLink="/edittransactionlist/{{row.id}}" >
               <ion-icon name="create-outline"></ion-icon>
             </ion-button>
 
            
-              <ion-button *ngIf="!row.status && user_type == 12" class="iconBt" routerLink="/editviolation/{{row.id}}">
+              <ion-button *ngIf="!row.status && user_type == 12 || user_type == 32" class="iconBt" routerLink="/editviolation/{{row.id}}">
                   <ion-icon name="receipt-outline"></ion-icon>
               </ion-button>
 
-              <ion-button class="iconBt" *ngIf="!row.status && user_type == 12" (click)="cancelviolation(row.id)">
+              <ion-button class="iconBt" *ngIf="!row.status && user_type == 12 || user_type == 32" (click)="cancelviolation(row.id)">
                   <ion-icon name="close-outline"></ion-icon>
               </ion-button>
             <ion-button class="iconBt" routerLink="/violationdetails/{{row.id}}">

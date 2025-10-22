@@ -580,7 +580,7 @@
   </ion-card>
 
   <div class="PublishBt"
-    *ngIf="violationData.ViolatiionList.amend_request_raised != 'Pending' && violationData.ViolatiionList.is_delete_approved_status != 'Sent For Delete Approval By INSPECTOR' && user_type == 12">
+    *ngIf="violationData.ViolatiionList.amend_request_raised != 'Pending' && violationData.ViolatiionList.is_delete_approved_status != 'Sent For Delete Approval By INSPECTOR' && (user_type == 12 || user_type == 32)">
     <ion-button (click)="publishViolation()" expand="block" size="large" class="linearGradientGreen"
       [disabled]="publishdisabled">{{'PUBLISH' |translate }}
     </ion-button>

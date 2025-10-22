@@ -124,7 +124,7 @@ export class DashboardPage implements OnInit, OnDestroy {
     this.checkoffline = localStorage.getItem('offlineMode');
     console.log("this.check", this.checkoffline);
     const userTypeString = this.user_type || '';
-    this.showInspector = userTypeString.includes('12');
+    this.showInspector = userTypeString.includes('12') || userTypeString.includes('32');
     console.log(this.showInspector);
 
     this.platform.ready()
@@ -155,7 +155,7 @@ export class DashboardPage implements OnInit, OnDestroy {
         console.log(online)
 
         if (online) {
-          if(this.user_type == 12){
+          if(this.user_type == 12 || this.user_type == 32){
           this.getViolationList();
           }
         }

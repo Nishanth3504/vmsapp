@@ -9,7 +9,7 @@
   <ion-toolbar  class="searchBlock permitSearchBt">
     <ion-item>
       <ion-searchbar showCancelButton="never" (ionInput)="SearchWarnings($event)"></ion-searchbar>
-      <ion-button  *ngIf="user_type == 12" (click)="toggleFilterOptions()" color="#f0f5fd"><ion-icon style="color: #31385B" name="filter-outline"></ion-icon></ion-button>
+      <ion-button  *ngIf="user_type == 12 || user_type == 32" (click)="toggleFilterOptions()" color="#f0f5fd"><ion-icon style="color: #31385B" name="filter-outline"></ion-icon></ion-button>
     </ion-item>
 
     <ion-list  *ngIf="showFilterOptions" class="filter-dropdown">
