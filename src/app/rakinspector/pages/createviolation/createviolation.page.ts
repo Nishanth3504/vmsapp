@@ -219,6 +219,7 @@ export class CreateviolationPage implements OnInit {
   durationSelected: any;
   defaultwarning: boolean;
   dedSelectedEmirates : any;
+  user_type: any;
   constructor(
     private zone: NgZone,
     private modalController: ModalController,
@@ -252,6 +253,7 @@ export class CreateviolationPage implements OnInit {
     private videoEditor: VideoEditor
   ) {
     this.sourceId = localStorage.getItem('sourceId');
+    this.user_type = localStorage.getItem('user_type');
     console.log("sourceeeee", this.sourceId);
     this.dedSelectedEmirates = JSON.parse(localStorage.getItem('dedSelectedEmirate'));
     
@@ -1753,7 +1755,8 @@ private setDefaultEmirate(list: any[]) {
       console.log('selected vTypeId', id);
      let payload = {
         "side_type": id,
-        "source_id":this.sourceId
+        "source_id":this.sourceId,
+        "user_type":this.user_type
       }
        this.moduleService.getViolationCategory(payload).subscribe((result: any) => {
         console.log('ViolationCategoryData', result);

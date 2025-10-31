@@ -213,7 +213,7 @@ ngOnInit() {
             localStorage.setItem('offlineMode', offlineMode);
             localStorage.setItem('menuAccessbyUserRole', JSON.stringify(menuAccess));
             localStorage.setItem('dedSelectedEmirate', JSON.stringify(dedAccess));
-
+            localStorage.setItem('userRoles',userInfo[0].user_role_names);
             localStorage.setItem('language', 'en');
             this.toastService.showSuccess('Login Successfully', 'Success');
             this.loginForm.reset();

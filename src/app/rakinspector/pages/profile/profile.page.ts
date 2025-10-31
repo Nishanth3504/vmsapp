@@ -15,6 +15,7 @@ export class ProfilePage implements OnInit {
   fullname: any;
   setLanguage: any;
   selectedLang: any;
+  rolename: any;
   constructor(private auth: AuthenticationService,
     private translateService: TranslateService,
     private moduleService: ModuleService, private routerServices: Router, private connectivity: ConnectivityService
@@ -27,7 +28,7 @@ export class ProfilePage implements OnInit {
     this.selectedLang = localStorage.getItem('language');
 
     this.fullname = localStorage.getItem('first_name') + ' ' + localStorage.getItem('last_name');
-
+    this.rolename = localStorage.getItem('userRoles');
     this.moduleService.languageEvent.subscribe((result: any) => {
       this.translateService.use(result);
     }),
